@@ -55,10 +55,10 @@
 #define MICRO_FREQUENCY_UP_THRESHOLD_L		(60)
 #define MICRO_FREQUENCY_UP_STEP_LEVEL_B		(1200000)
 #define MICRO_FREQUENCY_UP_STEP_LEVEL_L		(600000)
-#define MICRO_FREQUENCY_DOWN_STEP_LEVEL		(250000)
+#define MICRO_FREQUENCY_DOWN_STEP_LEVEL		(200000)
 #define MICRO_FREQUENCY_DOWN_DIFFER_L		(5)
-#define MIN_FREQUENCY_UP_STEP_LEVEL		(250000)
-#define MAX_FREQUENCY_UP_STEP_LEVEL		(1800000)
+#define MIN_FREQUENCY_UP_STEP_LEVEL		(200000)
+#define MAX_FREQUENCY_UP_STEP_LEVEL		(1600000)
 
 /*
  * The polling frequency of this governor depends on the capability of
@@ -70,7 +70,7 @@
  * this governor will not work.
  * All times here are in uS.
  */
-#define MIN_SAMPLING_RATE_RATIO			(1)
+#define MIN_SAMPLING_RATE_RATIO			(2)
 
 static unsigned int min_sampling_rate;
 
@@ -79,7 +79,7 @@ static bool lcd_is_on;
 #endif
 
 #define LATENCY_MULTIPLIER			(1000)
-#define MIN_LATENCY_MULTIPLIER			(100)
+#define MIN_LATENCY_MULTIPLIER			(20)
 #define TRANSITION_LATENCY_LIMIT		(10 * 1000 * 1000)
 
 static struct workqueue_struct *ondemand_wq;
