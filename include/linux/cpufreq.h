@@ -373,9 +373,6 @@ extern struct cpufreq_governor cpufreq_gov_userspace;
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND)
 extern struct cpufreq_governor cpufreq_gov_ondemand;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_ondemand)
-#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND_SEC)
-extern struct cpufreq_governor cpufreq_gov_ondemand_sec;
-#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_ondemand_sec)
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_INTELLIACTIVE)
 extern struct cpufreq_governor cpufreq_gov_intelliactive;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_intelliactive)
