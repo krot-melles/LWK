@@ -1,7 +1,7 @@
 /*
  *
  * Automatically generated file; DO NOT EDIT.
- * Linux/arm 3.4.40 Kernel Configuration
+ * Linux/arm 3.4.44 Kernel Configuration
  *
  */
 #define CONFIG_IP6_NF_MATCH_AH 1
@@ -455,7 +455,6 @@
 #define CONFIG_CRYPTO_HASH2 1
 #define CONFIG_DEFAULT_HOSTNAME "(none)"
 #define CONFIG_USB_GADGET_STORAGE_NUM_BUFFERS 2
-#define CONFIG_CPU_FREQ_GOV_POWERSAVE 1
 #define CONFIG_BLK_DEV_IO_TRACE 1
 #define CONFIG_XPS 1
 #define CONFIG_INET_ESP 1
@@ -1002,7 +1001,6 @@
 #define CONFIG_IOMMU_API 1
 #define CONFIG_TRACING_SUPPORT 1
 #define CONFIG_UNIX98_PTYS 1
-#define CONFIG_CPU_FREQ_GOV_ONDEMAND_SEC 1
 #define CONFIG_NETFILTER_XT_TARGET_CONNMARK 1
 #define CONFIG_MOBICORE_API 1
 #define CONFIG_CRYPTO_ANSI_CPRNG 1

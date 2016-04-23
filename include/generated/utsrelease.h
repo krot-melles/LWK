@@ -1,1 +1,1 @@
-#define UTS_RELEASE "3.4.40LWK-7"
+#define UTS_RELEASE "3.4.44LWK-7"
