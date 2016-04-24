@@ -1,7 +1,7 @@
 /*
  *
  * Automatically generated file; DO NOT EDIT.
- * Linux/arm 3.4.44 Kernel Configuration
+ * Linux/arm 3.4.55 Kernel Configuration
  *
  */
 #define CONFIG_IP6_NF_MATCH_AH 1
@@ -230,7 +230,6 @@
 #define CONFIG_POWER_SUPPLY 1
 #define CONFIG_CPU_CACHE_VIPT 1
 #define CONFIG_NETFILTER_XT_TARGET_NFQUEUE 1
-#define CONFIG_SECURITY_SELINUX_BOOTPARAM 1
 #define CONFIG_V4L_USB_DRIVERS 1
 #define CONFIG_WEXT_CORE 1
 #define CONFIG_GENERIC_IRQ_CHIP 1
@@ -286,7 +285,6 @@
 #define CONFIG_IPV6_MULTIPLE_TABLES 1
 #define CONFIG_USB_ANNOUNCE_NEW_DEVICES 1
 #define CONFIG_IP_NF_TARGET_MASQUERADE 1
-#define CONFIG_SECURITY_SELINUX_DISABLE 1
 #define CONFIG_NF_CONNTRACK_BROADCAST 1
 #define CONFIG_IR_RC5_SZ_DECODER 1
 #define CONFIG_PROC_PAGE_MONITOR 1
@@ -368,7 +366,6 @@
 #define CONFIG_INET_XFRM_MODE_TRANSPORT 1
 #define CONFIG_CRYPTO_MD5 1
 #define CONFIG_DEBUG_USER 1
-#define CONFIG_SECURITY_SELINUX_BOOTPARAM_VALUE 0
 #define CONFIG_MEDIA_TUNER_TEA5767 1
 #define CONFIG_HAVE_GENERIC_HARDIRQS 1
 #define CONFIG_BINFMT_ELF 1
@@ -576,7 +573,6 @@
 #define CONFIG_SUSPEND_TIME 1
 #define CONFIG_IPV6_PRIVACY 1
 #define CONFIG_CPU_FREQ_GOV_ZZMOOVE 1
-#define CONFIG_DUMMY 1
 #define CONFIG_USB_GADGET_DUALSPEED 1
 #define CONFIG_WATCHDOG 1
 #define CONFIG_HAS_IOMEM 1
@@ -738,7 +734,7 @@
 #define CONFIG_DEFAULT_MMAP_MIN_ADDR 4096
 #define CONFIG_MEDIA_TUNER_TDA18218 1
 #define CONFIG_IP_NF_IPTABLES 1
-#define CONFIG_CMDLINE "console=ttySAC2,115200n8 vmalloc=512M androidboot.console=ttySAC2 androidboot.hardware=universal5410 androidboot.selinux=disabled zswap.enabled=1 zswap.compressor=snappy"
+#define CONFIG_CMDLINE "console=ttySAC2,115200n8 vmalloc=512M androidboot.console=ttySAC2 androidboot.selinux=permissive zswap.enabled=1 zswap.compressor=snappy"
 #define CONFIG_EXYNOS5_C2_STATE_IDLE 1
 #define CONFIG_SPI_GPIO 1
 #define CONFIG_VIDEOBUF2_DMA_CONTIG 1
@@ -822,7 +818,6 @@
 #define CONFIG_IP6_NF_MATCH_IPV6HEADER 1
 #define CONFIG_SENSORS_SSP_BMP182 1
 #define CONFIG_ARCH_EXYNOS5 1
-#define CONFIG_PROFILING 1
 #define CONFIG_MMC_DW_PLTFM 1
 #define CONFIG_INET6_XFRM_MODE_TRANSPORT 1
 #define CONFIG_CRYPTO_ARC4 1
