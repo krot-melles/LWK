@@ -81,7 +81,7 @@
 #define MAX_CORES					(4)
 
 // ZZ: enable/disable hotplug support
-#define ENABLE_HOTPLUGGING
+// #define ENABLE_HOTPLUGGING
 
 // ZZ: enable support for native hotplugging on snapdragon platform
 // #define SNAP_NATIVE_HOTPLUGGING
@@ -90,10 +90,10 @@
 // #define CPU_IDLE_TIME_IN_CPUFREQ
 
 // ZZ: enable/disable music limits
-#define ENABLE_MUSIC_LIMITS
+// #define ENABLE_MUSIC_LIMITS
 
 // ZZ: enable/disable freq auto adjusting
-#define ENABLE_AUTO_ADJUST_FREQ
+// #define ENABLE_AUTO_ADJUST_FREQ
 
 // ZZ: enable/disable profiles support
 #define ENABLE_PROFILES_SUPPORT
@@ -125,7 +125,7 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
 #define MIN_SAMPLING_RATE_RATIO				(2)	// ZZ: default min sampling rate ratio
 
 // ZZ: general tuneable defaults
-#define DEF_FREQUENCY_UP_THRESHOLD			(70)	// ZZ: default regular scaling up threshold
+#define DEF_FREQUENCY_UP_THRESHOLD			(85)	// ZZ: default regular scaling up threshold
 #ifdef ENABLE_HOTPLUGGING
 #define DEF_FREQUENCY_UP_THRESHOLD_HOTPLUG		(68)	// ZZ: default hotplug up threshold for all cpus (cpu0 stays allways on)
 #define DEF_FREQUENCY_UP_THRESHOLD_HOTPLUG_FREQ		(0)	// Yank: default hotplug up threshold frequency for all cpus (0 = disabled)
