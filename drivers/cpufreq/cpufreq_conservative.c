@@ -29,7 +29,7 @@
  * It helps to keep variable names smaller, simpler
  */
 
-#define DEF_FREQUENCY_UP_THRESHOLD		(95)
+#define DEF_FREQUENCY_UP_THRESHOLD		(90)
 #define DEF_FREQUENCY_DOWN_THRESHOLD		(20)
 
 /*
@@ -42,12 +42,12 @@
  * this governor will not work.
  * All times here are in uS.
  */
-#define MIN_SAMPLING_RATE_RATIO			(1)
+#define MIN_SAMPLING_RATE_RATIO			(2)
 
 static unsigned int min_sampling_rate;
 
 #define LATENCY_MULTIPLIER			(1000)
-#define MIN_LATENCY_MULTIPLIER			(30)
+#define MIN_LATENCY_MULTIPLIER			(20)
 #define DEF_SAMPLING_DOWN_FACTOR		(5)
 #define MAX_SAMPLING_DOWN_FACTOR		(10)
 #define TRANSITION_LATENCY_LIMIT		(10 * 1000 * 1000)
