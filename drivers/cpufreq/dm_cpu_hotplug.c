@@ -26,7 +26,7 @@
 
 #define	COLD_THRESHOLD	20
 #define NORMALMAX_FREQ	1600000
-#define NORMALMIN_FREQ	100000
+#define NORMALMIN_FREQ	200000
 #define POLLING_MSEC	90
 
 struct cpu_load_info {
