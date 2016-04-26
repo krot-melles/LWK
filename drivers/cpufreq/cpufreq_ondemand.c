@@ -38,26 +38,26 @@
 #define DEF_FREQUENCY_STEP_ZONE			(800000)
 #define MAX_SAMPLING_DOWN_FACTOR		(100000)
 #define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(5)
-#define MICRO_FREQUENCY_UP_THRESHOLD		(90)
+#define MICRO_FREQUENCY_UP_THRESHOLD		(84)
 #define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(50000)
 #define MIN_FREQUENCY_UP_THRESHOLD		(10)
 #define MAX_FREQUENCY_UP_THRESHOLD		(100)
 #define MAX_FREQ_BLANK				(1400000)
 
 #define DEF_FREQUENCY_UP_THRESHOLD_L		(50)
-#define DEF_FREQUENCY_UP_STEP_LEVEL_B		(1000000)
-#define DEF_FREQUENCY_UP_STEP_LEVEL_L		(400000)
+#define DEF_FREQUENCY_UP_STEP_LEVEL_B		(1200000)
+#define DEF_FREQUENCY_UP_STEP_LEVEL_L		(600000)
 #define DEF_FREQUENCY_DOWN_STEP_LEVEL           (700000)
 #define DEF_FREQUENCY_DOWN_DIFFER_L		(5)
-#define DEF_FREQUENCY_HIGH_ZONE			(1200000)
+#define DEF_FREQUENCY_HIGH_ZONE			(1400000)
 #define DEF_FREQUENCY_CONSERVATIVE_STEP		(100000)
-#define MICRO_FREQUENCY_UP_THRESHOLD_H		(90)
+#define MICRO_FREQUENCY_UP_THRESHOLD_H		(84)
 #define MICRO_FREQUENCY_UP_THRESHOLD_L		(60)
-#define MICRO_FREQUENCY_UP_STEP_LEVEL_B		(1000000)
-#define MICRO_FREQUENCY_UP_STEP_LEVEL_L		(400000)
-#define MICRO_FREQUENCY_DOWN_STEP_LEVEL		(100000)
+#define MICRO_FREQUENCY_UP_STEP_LEVEL_B		(1200000)
+#define MICRO_FREQUENCY_UP_STEP_LEVEL_L		(600000)
+#define MICRO_FREQUENCY_DOWN_STEP_LEVEL		(200000)
 #define MICRO_FREQUENCY_DOWN_DIFFER_L		(5)
-#define MIN_FREQUENCY_UP_STEP_LEVEL		(100000)
+#define MIN_FREQUENCY_UP_STEP_LEVEL		(200000)
 #define MAX_FREQUENCY_UP_STEP_LEVEL		(1400000)
 
 /*
@@ -74,12 +74,8 @@
 
 static unsigned int min_sampling_rate;
 
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-static bool lcd_is_on;
-#endif
-
 #define LATENCY_MULTIPLIER			(1000)
-#define MIN_LATENCY_MULTIPLIER			(20)
+#define MIN_LATENCY_MULTIPLIER			(50)
 #define TRANSITION_LATENCY_LIMIT		(10 * 1000 * 1000)
 
 static struct workqueue_struct *ondemand_wq;
@@ -157,7 +153,7 @@ static struct dbs_tuners {
 	.sampling_down_factor = DEF_SAMPLING_DOWN_FACTOR,
 	.down_differential = DEF_FREQUENCY_DOWN_DIFFERENTIAL,
 	.ignore_nice = 0,
-	.powersave_bias = 1,
+	.powersave_bias = 0,
 	.up_threshold_l = DEF_FREQUENCY_UP_THRESHOLD_L,
 	.up_threshold_h = MICRO_FREQUENCY_UP_THRESHOLD_L,
 	.up_step_level_b = DEF_FREQUENCY_UP_STEP_LEVEL_B,
@@ -170,117 +166,6 @@ static struct dbs_tuners {
 	.max_freq_blank = MAX_FREQ_BLANK,
 	.boost_mode = false,
 };
-
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-#define HOTPLUG_OUT_LOAD		10
-#define HOTPLUG_OUT_CNT			5
-
-#define HOTPLUG_TRANS			100000
-#define HOTPLUG_TRANS_CPUS		1
-
-#define UP_THRESHOLD_FB_BLANK		(80)
-
-/*
- * Increase this value if cpu load is less than base load of hotplug
- * out condition.
- */
-static int hotplug_out_cnt;
-
-struct cpumask out_cpus = CPU_MASK_NONE;
-static struct cpumask to_be_out_cpus;
-static struct work_struct qos_change;
-bool hotplug_out;
-
-DEFINE_MUTEX(hotplug_mutex);
-
-void __do_hotplug(void)
-{
-	unsigned int cpu, ret;
-
-	pr_debug("%s: %s\n", __func__, hotplug_out ? "OUT" : "IN");
-
-	if (hotplug_out) {
-		for_each_cpu(cpu, &to_be_out_cpus) {
-			if (cpu == 0)
-				continue;
-
-			ret = cpu_down(cpu);
-			if (ret) {
-				pr_debug("%s: CPU%d down fail: %d\n",
-					__func__, cpu, ret);
-				continue;
-			} else {
-				cpumask_set_cpu(cpu, &out_cpus);
-			}
-		}
-		cpumask_clear(&to_be_out_cpus);
-	} else {
-		for_each_cpu(cpu, &out_cpus) {
-			if (cpu == 0)
-				continue;
-
-			ret = cpu_up(cpu);
-			if (ret) {
-				pr_debug("%s: CPU%d up fail: %d\n",
-					__func__, cpu, ret);
-				continue;
-			} else {
-				cpumask_clear_cpu(cpu, &out_cpus);
-			}
-		}
-	}
-	pr_debug("%s: exit\n", __func__);
-}
-
-static void change_cpu_qos(struct work_struct *work)
-{
-	/*
-	 * LCD blank CPU qos is set by exynos-ikcs-cpufreq
-	 * This line of code release max limit when LCD is
-	 * turned on.
-	 */
-	if (pm_qos_request_active(&max_cpu_qos_blank))
-		pm_qos_remove_request(&max_cpu_qos_blank);
-
-	return;
-}
-
-static int fb_state_change(struct notifier_block *nb,
-		unsigned long val, void *data)
-{
-	struct fb_event *evdata = data;
-	unsigned int blank;
-
-	if (val != FB_EVENT_BLANK)
-		return 0;
-
-	blank = *(int *)evdata->data;
-
-	switch (blank) {
-	case FB_BLANK_POWERDOWN:
-		dbs_tuners_ins.up_threshold_l = UP_THRESHOLD_FB_BLANK;
-		lcd_is_on = false;
-		break;
-	case FB_BLANK_UNBLANK:
-		/*
-		 * To prevent lock inversion problem when aquringconsole_lock()
-		 * Do not call pm_qos request on cpufreq in fb notifier callback.
-		 */
-		schedule_work_on(0, &qos_change);
-		dbs_tuners_ins.up_threshold_l = MICRO_FREQUENCY_UP_THRESHOLD_L;
-		lcd_is_on = true;
-		break;
-	default:
-		break;
-	}
-
-	return NOTIFY_OK;
-}
-
-static struct notifier_block fb_block = {
-	.notifier_call = fb_state_change,
-};
-#endif
 
 static inline u64 get_cpu_idle_time_jiffy(unsigned int cpu, u64 *wall)
 {
@@ -809,10 +694,6 @@ static void dbs_freq_increase(struct cpufreq_policy *p, unsigned int freq)
 	if (dbs_tuners_ins.powersave_bias)
 		freq = powersave_bias_target(p, freq, CPUFREQ_RELATION_H);
 
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-	if (!lcd_is_on && freq > dbs_tuners_ins.max_freq_blank)
-		freq = dbs_tuners_ins.max_freq_blank;
-#endif
 
 	__cpufreq_driver_target(p, freq, dbs_tuners_ins.powersave_bias ?
 			CPUFREQ_RELATION_L : CPUFREQ_RELATION_H);
@@ -912,9 +793,6 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 			max_load_freq = load_freq;
 	}
 
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-	mutex_lock(&hotplug_mutex);
-#endif
 	if (policy->cur < dbs_tuners_ins.up_step_level_l) {
 		/*
 		 * If current freq is under 600MHz, and load freq is bigger than
@@ -922,16 +800,6 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 		 */
 		if (max_load_freq > dbs_tuners_ins.up_threshold_l * policy->cur) {
 			dbs_freq_increase(policy, dbs_tuners_ins.up_step_level_l);
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-			/*
-			 * Hotplug In:
-			 * - If frequency up from KFC 500Mhz(HOTPLUG_TRANS)
-			 */
-			if (!cpumask_empty(&out_cpus)) {
-				hotplug_out = false;
-				__do_hotplug();
-			}
-#endif
 			goto exit;
 		}
 	} else if (policy->cur < dbs_tuners_ins.up_step_level_b ||
@@ -960,39 +828,6 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 			goto exit;
 	        }
 	}
-
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-	/*
-	 * Hotplug Out:
-	 * - Frequency stay at lowest level
-	 */
-	if ((policy->cur > HOTPLUG_TRANS) ||
-			num_online_cpus() <= HOTPLUG_TRANS_CPUS ||
-			lcd_is_on)
-		goto skip_hotplug_out_2;
-
-	if (cpu_util_sum <
-		dbs_tuners_ins.up_threshold_l - dbs_tuners_ins.down_differ_l) {
-
-		hotplug_out_cnt++;
-
-		if (hotplug_out_cnt > HOTPLUG_OUT_CNT) {
-			cpumask_setall(&to_be_out_cpus);
-			cpumask_clear_cpu(0, &to_be_out_cpus);
-			hotplug_out_cnt = 0;
-		}
-	} else {
-		/* Reset out trigger counter */
-		hotplug_out_cnt = 0;
-	}
-
-	if (!cpumask_empty(&to_be_out_cpus)) {
-		hotplug_out = true;
-		__do_hotplug();
-	}
-
-skip_hotplug_out_2:
-#endif
 
 	/* Check for frequency decrease */
 	/* if we cannot reduce the frequency anymore, break out early */
@@ -1066,9 +901,6 @@ skip_hotplug_out_2:
 	}
 
 exit:
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-	mutex_unlock(&hotplug_mutex);
-#endif
 	return;
 }
 
@@ -1227,11 +1059,6 @@ static int cpufreq_governor_dbs(struct cpufreq_policy *policy,
 
 		mutex_init(&this_dbs_info->timer_mutex);
 		dbs_timer_init(this_dbs_info);
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-		cpumask_clear(&out_cpus);
-		cpumask_clear(&to_be_out_cpus);
-		INIT_WORK(&qos_change, change_cpu_qos);
-#endif
 		break;
 
 	case CPUFREQ_GOV_STOP:
@@ -1244,15 +1071,6 @@ static int cpufreq_governor_dbs(struct cpufreq_policy *policy,
 		if (!dbs_enable)
 			sysfs_remove_group(cpufreq_global_kobject,
 					   &dbs_attr_group);
-
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-		cancel_work_sync(&qos_change);
-		for_each_cpu(j, &out_cpus)
-			cpu_up(j);
-
-		cpumask_clear(&out_cpus);
-		cpumask_clear(&to_be_out_cpus);
-#endif
 		break;
 
 	case CPUFREQ_GOV_LIMITS:
@@ -1299,13 +1117,6 @@ static int __init cpufreq_gov_dbs_init(void)
 		min_sampling_rate =
 			MIN_SAMPLING_RATE_RATIO * jiffies_to_usecs(10);
 	}
-
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-	fb_register_client(&fb_block);
-
-	lcd_is_on = true;
-#endif
-
 	return cpufreq_register_governor(&cpufreq_gov_ondemand);
 }
 
