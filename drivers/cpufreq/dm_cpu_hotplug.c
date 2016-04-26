@@ -27,7 +27,7 @@
 #define	COLD_THRESHOLD	20
 #define NORMALMAX_FREQ	1600000
 #define NORMALMIN_FREQ	1000000
-#define POLLING_MSEC	50
+#define POLLING_MSEC	90
 
 struct cpu_load_info {
 	cputime64_t cpu_idle;
@@ -54,7 +54,7 @@ static unsigned int delay = POLLING_MSEC;
 
 static bool exynos_dm_hotplug_disable;
 
-int screen_on_hotplug = 1; // lets see !
+int screen_on_hotplug = 1;
 module_param(screen_on_hotplug, int, 0660);
 
 int hotplug_freq = NORMALMIN_FREQ;
