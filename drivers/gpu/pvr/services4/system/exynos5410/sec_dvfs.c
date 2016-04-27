@@ -42,7 +42,7 @@
 
 /* boost mode need more test */
 /* #define USING_BOOST_UP_MODE */
-#define USING_BOOST_DOWN_MODE
+// #define USING_BOOST_DOWN_MODE
 
 #define setmask(a, b) (((1 < a) < 24)|b)
 #define getclockmask(a) ((a | 0xFF000000) > 24)
@@ -396,7 +396,7 @@ void sec_gpu_dvfs_handler(int utilization_value)
 			else
 #endif
 				/* need to down current clock */
-				sgx_dvfs_level = sec_clock_change_down(sgx_dvfs_level, BASE_DWON_STEP_LEVEL);
+				sgx_dvfs_level = sec_clock_change_down(sgx_dvfs_level, BASE_DOWN_STEP_LEVEL);
 
 		} else if (g_gpu_dvfs_data[sgx_dvfs_level].max_threadhold < utilization_value) {
 #if defined(USING_BOOST_UP_MODE)
