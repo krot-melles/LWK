@@ -21,7 +21,10 @@
 #include <linux/jiffies.h>
 #include <linux/kthread.h>
 #include <linux/moduleparam.h>
+<<<<<<< HEAD
 #include <linux/sysfs_helpers.h>
+=======
+>>>>>>> 6ea586e2c150f31213e22d2ad1e3b68ef22aea03
 
 struct cpu_sync {
 	struct task_struct *thread;
@@ -63,9 +66,13 @@ static int boost_adjust_notify(struct notifier_block *nb, unsigned long val, voi
 	pr_debug("CPU%u policy min before boost: %u kHz\n",
 		 cpu, policy->min);
 	pr_debug("CPU%u boost min: %u kHz\n", cpu, min);
+<<<<<<< HEAD
 
 	cpufreq_verify_within_limits(policy, min, UINT_MAX);
 
+=======
+	cpufreq_verify_within_limits(policy, min, UINT_MAX);
+>>>>>>> 6ea586e2c150f31213e22d2ad1e3b68ef22aea03
 	pr_debug("CPU%u policy min after boost: %u kHz\n",
 		 cpu, policy->min);
 
