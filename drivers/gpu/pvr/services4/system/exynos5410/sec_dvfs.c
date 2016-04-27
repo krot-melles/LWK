@@ -30,19 +30,19 @@
 #include "sec_control_pwr_clk.h"
 #include "sec_clock.h"
 
-#define MAX_DVFS_LEVEL			4
+#define MAX_DVFS_LEVEL			3
 #define BASE_START_LEVEL		0
 #define BASE_UP_STEP_LEVEL		1
-#define BASE_DWON_STEP_LEVEL		1
-#define BASE_QUICK_UP_LEVEL		2
-#define BASE_QUICK_DOWN_LEVEL		1
-#define BASE_WAKE_UP_LEVEL		3
-#define DOWN_REQUIREMENT_THRESHOLD	3
-#define GPU_DVFS_MAX_LEVEL		4
+#define BASE_DOWN_STEP_LEVEL		1
+#define BASE_QUICK_UP_LEVEL		1
+#define BASE_QUICK_DOWN_LEVEL		0
+#define BASE_WAKE_UP_LEVEL		0
+#define DOWN_REQUIREMENT_THRESHOLD	2
+#define GPU_DVFS_MAX_LEVEL		3
 
 /* boost mode need more test */
 /* #define USING_BOOST_UP_MODE */
-// #define USING_BOOST_DOWN_MODE
+#define USING_BOOST_DOWN_MODE
 
 #define setmask(a, b) (((1 < a) < 24)|b)
 #define getclockmask(a) ((a | 0xFF000000) > 24)
@@ -54,11 +54,11 @@ static GPU_DVFS_DATA default_dvfs_data[] = {
 //	{ 0,    700, 1250000,     700, 260, 256,   229, 256, 1, 0, 0 },
 //	{ 1,    640, 1225000,     640, 250, 256,   219, 250, 1, 0, 0 },
 //	{ 2,    600, 1200000,     600, 240, 256,   209, 250, 1, 0, 0 },
-//	{ 0,    532, 1150000,     532, 230, 256,   199, 250, 1, 0, 0 },
-	{ 0,    480, 1000000,     480, 186, 256,   164, 256, 0, 0, 0 },
-	{ 1,    350,  915000,     350, 185, 244,   158, 250, 0, 0, 0 },
-	{ 2,    266,  800000,     266, 162, 244,    83, 250, 0, 0, 0 },
-	{ 3,    177,  750000,     177,   0, 244,     0, 250, 0, 0, 0 },
+//	{ 3,    532, 1150000,     532, 230, 256,   199, 250, 1, 0, 0 },
+//	{ 4,    480, 1000000,     480, 186, 256,   164, 256, 0, 0, 0 },
+	{ 0,    350,  915000,     350, 185, 244,   158, 250, 0, 0, 0 },
+	{ 1,    266,  800000,     266, 162, 244,    83, 250, 0, 0, 0 },
+	{ 2,    177,  750000,     177,   0, 244,     0, 250, 0, 0, 0 },
 };
 
 /* end define DVFS info */
