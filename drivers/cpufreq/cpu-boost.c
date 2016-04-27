@@ -21,10 +21,6 @@
 #include <linux/jiffies.h>
 #include <linux/kthread.h>
 #include <linux/moduleparam.h>
-<<<<<<< HEAD
-#include <linux/sysfs_helpers.h>
-=======
->>>>>>> 6ea586e2c150f31213e22d2ad1e3b68ef22aea03
 
 struct cpu_sync {
 	struct task_struct *thread;
