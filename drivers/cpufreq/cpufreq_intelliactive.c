@@ -131,7 +131,7 @@ static bool io_is_busy = 1;
  */
 static unsigned int up_threshold_any_cpu_load = 95;
 static unsigned int sync_freq = 400000;
-static unsigned int up_threshold_any_cpu_freq = 700000;
+static unsigned int up_threshold_any_cpu_freq = 600000;
 
 static int two_phase_freq_array[NR_CPUS] = {[0 ... NR_CPUS-1] = 700000} ;
 
