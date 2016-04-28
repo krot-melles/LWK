@@ -36,7 +36,7 @@
 #define DEF_FREQUENCY_UP_THRESHOLD		(75)
 #define DEF_SAMPLING_DOWN_FACTOR		(1)
 #define DEF_FREQUENCY_STEP_ZONE			(800000)
-#define MAX_SAMPLING_DOWN_FACTOR		(100000)
+#define MAX_SAMPLING_DOWN_FACTOR		(50000)
 #define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(5)
 #define MICRO_FREQUENCY_UP_THRESHOLD		(90)
 #define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(30000)
@@ -49,12 +49,12 @@
 #define DEF_FREQUENCY_UP_STEP_LEVEL_L		(600000)
 #define DEF_FREQUENCY_DOWN_STEP_LEVEL           (700000)
 #define DEF_FREQUENCY_DOWN_DIFFER_L		(5)
-#define DEF_FREQUENCY_HIGH_ZONE			(1900000)
+#define DEF_FREQUENCY_HIGH_ZONE			(1600000)
 #define DEF_FREQUENCY_CONSERVATIVE_STEP		(100000)
 #define MICRO_FREQUENCY_UP_THRESHOLD_H		(90)
-#define MICRO_FREQUENCY_UP_THRESHOLD_L		(50)
-#define MICRO_FREQUENCY_UP_STEP_LEVEL_B		(1200000)
-#define MICRO_FREQUENCY_UP_STEP_LEVEL_L		(600000)
+#define MICRO_FREQUENCY_UP_THRESHOLD_L		(85)
+#define MICRO_FREQUENCY_UP_STEP_LEVEL_B		(650000)
+#define MICRO_FREQUENCY_UP_STEP_LEVEL_L		(500000)
 #define MICRO_FREQUENCY_DOWN_STEP_LEVEL		(250000)
 #define MICRO_FREQUENCY_DOWN_DIFFER_L		(5)
 #define MIN_FREQUENCY_UP_STEP_LEVEL		(250000)
@@ -70,12 +70,12 @@
  * this governor will not work.
  * All times here are in uS.
  */
-#define MIN_SAMPLING_RATE_RATIO			(1)
+#define MIN_SAMPLING_RATE_RATIO			(2)
 
 static unsigned int min_sampling_rate;
 
 #define LATENCY_MULTIPLIER			(1000)
-#define MIN_LATENCY_MULTIPLIER			(20)
+#define MIN_LATENCY_MULTIPLIER			(100)
 #define TRANSITION_LATENCY_LIMIT		(10 * 1000 * 1000)
 
 static struct workqueue_struct *ondemand_wq;
@@ -162,7 +162,7 @@ static struct dbs_tuners {
 	.down_differ_l = DEF_FREQUENCY_DOWN_DIFFER_L,
 	.high_freq_zone = DEF_FREQUENCY_HIGH_ZONE,
 	.conservative_step = DEF_FREQUENCY_CONSERVATIVE_STEP,
-	.up_conservative_mode = false,
+	.up_conservative_mode = true,
 	.max_freq_blank = MAX_FREQ_BLANK,
 	.boost_mode = false,
 };
