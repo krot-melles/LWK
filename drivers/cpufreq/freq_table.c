@@ -43,9 +43,9 @@ int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy,
 	policy->min = policy->cpuinfo.min_freq = min_freq;
 	policy->max = policy->cpuinfo.max_freq = max_freq;
 
-	/* reset policy at custom speeds */
-//	policy->max = 1600000; only used in case of overclock
-//	policy->min = 500000;
+	/* reset policy at STOCK speeds */
+	policy->max = 1600000;
+	policy->min = 250000;
 
 	if (policy->min == ~0)
 		return -EINVAL;
@@ -192,10 +192,17 @@ static ssize_t show_available_freqs(struct cpufreq_policy *policy, char *buf)
 	table = per_cpu(cpufreq_show_table, cpu);
 
 	for (i = 0; (table[i].frequency != CPUFREQ_TABLE_END); i++) {
-		if (table[i].frequency == CPUFREQ_ENTRY_INVALID)
+	}
+	i--;
+
+	for (i = i; i != 0; i--) {
+		if (table[i].frequency == CPUFREQ_ENTRY_INVALID
+				|| table[i].frequency > policy->cpuinfo.max_freq
+				|| table[i].frequency < policy->cpuinfo.min_freq)
 			continue;
 		count += sprintf(&buf[count], "%d ", table[i].frequency);
 	}
+
 	count += sprintf(&buf[count], "\n");
 
 	return count;
