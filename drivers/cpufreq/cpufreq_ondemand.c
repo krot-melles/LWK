@@ -38,7 +38,7 @@
 #define DEF_FREQUENCY_STEP_ZONE			(800000)
 #define MAX_SAMPLING_DOWN_FACTOR		(50000)
 #define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(5)
-#define MICRO_FREQUENCY_UP_THRESHOLD		(90)
+#define MICRO_FREQUENCY_UP_THRESHOLD		(80)
 #define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(30000)
 #define MIN_FREQUENCY_UP_THRESHOLD		(10)
 #define MAX_FREQUENCY_UP_THRESHOLD		(100)
@@ -51,10 +51,10 @@
 #define DEF_FREQUENCY_DOWN_DIFFER_L		(5)
 #define DEF_FREQUENCY_HIGH_ZONE			(1600000)
 #define DEF_FREQUENCY_CONSERVATIVE_STEP		(100000)
-#define MICRO_FREQUENCY_UP_THRESHOLD_H		(90)
-#define MICRO_FREQUENCY_UP_THRESHOLD_L		(85)
-#define MICRO_FREQUENCY_UP_STEP_LEVEL_B		(650000)
-#define MICRO_FREQUENCY_UP_STEP_LEVEL_L		(500000)
+#define MICRO_FREQUENCY_UP_THRESHOLD_H		(99)
+#define MICRO_FREQUENCY_UP_THRESHOLD_L		(20)
+#define MICRO_FREQUENCY_UP_STEP_LEVEL_B		(1200000)
+#define MICRO_FREQUENCY_UP_STEP_LEVEL_L		(600000)
 #define MICRO_FREQUENCY_DOWN_STEP_LEVEL		(250000)
 #define MICRO_FREQUENCY_DOWN_DIFFER_L		(5)
 #define MIN_FREQUENCY_UP_STEP_LEVEL		(250000)
@@ -153,7 +153,7 @@ static struct dbs_tuners {
 	.sampling_down_factor = DEF_SAMPLING_DOWN_FACTOR,
 	.down_differential = DEF_FREQUENCY_DOWN_DIFFERENTIAL,
 	.ignore_nice = 0,
-	.powersave_bias = 0,
+	.powersave_bias = 1,
 	.up_threshold_l = DEF_FREQUENCY_UP_THRESHOLD_L,
 	.up_threshold_h = MICRO_FREQUENCY_UP_THRESHOLD_L,
 	.up_step_level_b = DEF_FREQUENCY_UP_STEP_LEVEL_B,
@@ -162,7 +162,7 @@ static struct dbs_tuners {
 	.down_differ_l = DEF_FREQUENCY_DOWN_DIFFER_L,
 	.high_freq_zone = DEF_FREQUENCY_HIGH_ZONE,
 	.conservative_step = DEF_FREQUENCY_CONSERVATIVE_STEP,
-	.up_conservative_mode = true,
+	.up_conservative_mode = false,
 	.max_freq_blank = MAX_FREQ_BLANK,
 	.boost_mode = false,
 };
