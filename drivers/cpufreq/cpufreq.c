@@ -71,7 +71,7 @@ static DEFINE_PER_CPU(struct rw_semaphore, cpu_policy_rwsem);
 static unsigned int hotplug_enabled_flag = 1;
 static unsigned int hotplug_cpu_up_load_value = 9;
 static unsigned int hotplug_cpu_up_boost_value = 10;
-static unsigned int normalmin_freq_value = 1000000;
+static unsigned int normalmin_freq_value = 1200000;
 static unsigned int hotplug_cpu_down_hysteresis_value = 0;
 #endif
 
