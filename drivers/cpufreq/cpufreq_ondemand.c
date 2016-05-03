@@ -52,13 +52,13 @@
 #define DEF_FREQUENCY_HIGH_ZONE			(1600000)
 #define DEF_FREQUENCY_CONSERVATIVE_STEP		(100000)
 #define MICRO_FREQUENCY_UP_THRESHOLD_H		(80)
-#define MICRO_FREQUENCY_UP_THRESHOLD_L		(50)
+#define MICRO_FREQUENCY_UP_THRESHOLD_L		(20)
 #define MICRO_FREQUENCY_UP_STEP_LEVEL_B		(1200000)
 #define MICRO_FREQUENCY_UP_STEP_LEVEL_L		(600000)
 #define MICRO_FREQUENCY_DOWN_STEP_LEVEL		(250000)
 #define MICRO_FREQUENCY_DOWN_DIFFER_L		(5)
 #define MIN_FREQUENCY_UP_STEP_LEVEL		(250000)
-#define MAX_FREQUENCY_UP_STEP_LEVEL		(1600000)
+#define MAX_FREQUENCY_UP_STEP_LEVEL		(1200000)
 
 /*
  * The polling frequency of this governor depends on the capability of
@@ -70,7 +70,7 @@
  * this governor will not work.
  * All times here are in uS.
  */
-#define MIN_SAMPLING_RATE_RATIO			(2)
+#define MIN_SAMPLING_RATE_RATIO			(1)
 
 static unsigned int min_sampling_rate;
 
@@ -153,7 +153,7 @@ static struct dbs_tuners {
 	.sampling_down_factor = DEF_SAMPLING_DOWN_FACTOR,
 	.down_differential = DEF_FREQUENCY_DOWN_DIFFERENTIAL,
 	.ignore_nice = 0,
-	.powersave_bias = 1,
+	.powersave_bias = 0,
 	.up_threshold_l = DEF_FREQUENCY_UP_THRESHOLD_L,
 	.up_threshold_h = MICRO_FREQUENCY_UP_THRESHOLD_L,
 	.up_step_level_b = DEF_FREQUENCY_UP_STEP_LEVEL_B,
