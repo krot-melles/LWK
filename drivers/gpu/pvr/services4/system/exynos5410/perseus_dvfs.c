@@ -73,10 +73,8 @@ int sgx_dvfs_custom_clock = 1;
 int sgx_dvfs_min_lock = 177;
 int sgx_dvfs_max_lock = 350;
 int sgx_dvfs_down_requirement = 2;
-
 int custom_min_lock_level = 1;
 int custom_max_lock_level = 3;
-
 char sgx_dvfs_table_string[256]={0};
 char* sgx_dvfs_table;
 

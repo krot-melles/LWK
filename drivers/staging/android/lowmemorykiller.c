@@ -137,11 +137,10 @@ static int lowmem_adj_size = 4;
 static int lowmem_minfree[6] = {
 	1 * 512,	/* 6MB */
 	1 * 1024,	/* 8MB */
-	2 * 1024,	/* 16MB */
-	32 * 1024,	/* 64MB */
+	1 * 1024,	/* 16MB */
+	64 * 1024,	/* 64MB */
 };
-static int lowmem_minfree_size = 6;
-
+static int lowmem_minfree_size = 8;
 
 static unsigned int offlining;
 #ifdef ENHANCED_LMK_ROUTINE

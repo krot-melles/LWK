@@ -67,14 +67,6 @@ static DEFINE_SPINLOCK(cpufreq_driver_lock);
 static DEFINE_PER_CPU(int, cpufreq_policy_cpu);
 static DEFINE_PER_CPU(struct rw_semaphore, cpu_policy_rwsem);
 
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-static unsigned int hotplug_enabled_flag = 1;
-static unsigned int hotplug_cpu_up_load_value = 1;
-static unsigned int hotplug_cpu_up_boost_value = 90;
-static unsigned int normalmin_freq_value = 250000;
-static unsigned int hotplug_cpu_down_hysteresis_value = 20;
-#endif
-
 #define lock_policy_rwsem(mode, cpu)					\
 static int lock_policy_rwsem_##mode					\
 (int cpu)								\
@@ -379,22 +371,7 @@ show_one(cpuinfo_max_freq, cpuinfo.max_freq);
 show_one(cpuinfo_transition_latency, cpuinfo.transition_latency);
 show_one(scaling_min_freq, min);
 show_one(scaling_max_freq, max);
-show_one(cpu_utilization, util);
-#ifdef CONFIG_SEC_PM
-show_one(cpu_load, load_at_max);
-#endif
-
-static ssize_t show_scaling_cur_freq(
-	struct cpufreq_policy *policy, char *buf)
-{
-	ssize_t ret;
-
-	if (cpufreq_driver && cpufreq_driver->setpolicy && cpufreq_driver->get)
-		ret = sprintf(buf, "%u\n", cpufreq_driver->get(policy->cpu));
-	else
-		ret = sprintf(buf, "%u\n", policy->cur);
-	return ret;
-}
+show_one(scaling_cur_freq, cur);
 
 static int __cpufreq_set_policy(struct cpufreq_policy *data,
 				struct cpufreq_policy *policy);
@@ -489,156 +466,6 @@ static ssize_t store_scaling_governor(struct cpufreq_policy *policy,
 	else
 		return count;
 }
-
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-/* hotplug sysfs interface */
-
-unsigned int get_hotplug_enabled(void)
-{
-	return hotplug_enabled_flag;
-}
-
-void set_hotplug_enabled(unsigned int state)
-{
-	if (state == 0 || state == 1)
-		hotplug_enabled_flag = state;
-}
-
-unsigned int get_hotplug_cpu_up_load(void)
-{
-	return hotplug_cpu_up_load_value;
-}
-
-unsigned int get_hotplug_cpu_up_boost(void)
-{
-	return hotplug_cpu_up_boost_value;
-}
-
-unsigned int get_normalmin_freq(void)
-{
-	return normalmin_freq_value;
-}
-
-static ssize_t show_hotplug_cpu_down_hysteresis(struct cpufreq_policy *policy, char *buf)
-{
- return sprintf(buf, "%u\n", hotplug_cpu_down_hysteresis_value);
-}
-
-static ssize_t store_hotplug_cpu_down_hysteresis(struct cpufreq_policy *policy, const char *buf, size_t count)
-{
-	unsigned int ret = -EINVAL;
-	unsigned int value = 0;
-	
-	ret = sscanf(buf, "%u", &value);
-	if (ret != 1)
-	return -EINVAL;
-	
-	if (value >= 0 && value <= 100)
-		hotplug_cpu_down_hysteresis_value = value;
-	else
-		return
-			-EINVAL;
-		
-	return count;
-}
-
-unsigned int get_hotplug_cpu_down_hysteresis(void) {
-	return hotplug_cpu_down_hysteresis_value;
-}
-
-static ssize_t show_hotplug_enabled(struct cpufreq_policy *policy, char *buf)
-{
- return sprintf(buf, "%u\n", hotplug_enabled_flag);
-}
-
-static ssize_t store_hotplug_enabled(struct cpufreq_policy *policy, const char *buf, size_t count)
-{
- unsigned int ret = -EINVAL;
- unsigned int value = 0;
-
- ret = sscanf(buf, "%u", &value);
- if (ret != 1)
- return -EINVAL;
-
-if (value == 0 || value == 1)
-	hotplug_enabled_flag = value;
-else
-	return
-		-EINVAL;
-		
- return count;
-}
-
-static ssize_t show_hotplug_cpu_up_load(struct cpufreq_policy *policy, char *buf)
-{
- return sprintf(buf, "%u\n", hotplug_cpu_up_load_value);
-}
-
-static ssize_t store_hotplug_cpu_up_load(struct cpufreq_policy *policy, const char *buf, size_t count)
-{
- unsigned int ret = -EINVAL;
- unsigned int value = 0;
-
- ret = sscanf(buf, "%u", &value);
- if (ret != 1)
- return -EINVAL;
-
-if (value >= 0 && value <= 101)
-	hotplug_cpu_up_load_value = value;
-else
-	return
-		-EINVAL;
-		
- return count;
-}
-
-static ssize_t show_hotplug_cpu_up_boost(struct cpufreq_policy *policy, char *buf)
-{
- return sprintf(buf, "%u\n", hotplug_cpu_up_boost_value);
-}
-
-static ssize_t store_hotplug_cpu_up_boost(struct cpufreq_policy *policy, const char *buf, size_t count)
-{
- unsigned int ret = -EINVAL;
- unsigned int value = 0;
-
- ret = sscanf(buf, "%u", &value);
- if (ret != 1)
- return -EINVAL;
-
-if (value >= 0 && value <= 101)
-	hotplug_cpu_up_boost_value = value;
-else
-	return
-		-EINVAL;
-		
- return count;
-}
-
-static ssize_t show_normalmin_freq(struct cpufreq_policy *policy, char *buf)
-{
- return sprintf(buf, "%u\n", normalmin_freq_value);
-}
-
-static ssize_t store_normalmin_freq(struct cpufreq_policy *policy, const char *buf, size_t count)
-{
- unsigned int ret = -EINVAL;
- unsigned int value = 0;
-
- ret = sscanf(buf, "%u", &value);
- if (ret != 1)
- return -EINVAL;
-
-if (value >= 100000 && value <= 2100000)
-	normalmin_freq_value = value;
-else
-	return
-		-EINVAL;
-		
- return count;
-}
-#endif
-
 
 /**
  * show_scaling_driver - show the cpufreq driver currently loaded
@@ -765,13 +592,6 @@ cpufreq_freq_attr_rw(scaling_governor);
 cpufreq_freq_attr_rw(scaling_setspeed);
 cpufreq_freq_attr_rw(UV_mV_table);
 cpufreq_freq_attr_rw(UV_uV_table);
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-cpufreq_freq_attr_rw(hotplug_enabled);
-cpufreq_freq_attr_rw(hotplug_cpu_up_load);
-cpufreq_freq_attr_rw(hotplug_cpu_up_boost);
-cpufreq_freq_attr_rw(normalmin_freq);
-cpufreq_freq_attr_rw(hotplug_cpu_down_hysteresis);
-#endif
 
 static struct attribute *default_attrs[] = {
 	&cpuinfo_min_freq.attr,
@@ -783,18 +603,10 @@ static struct attribute *default_attrs[] = {
 	&related_cpus.attr,
 	&scaling_governor.attr,
 	&scaling_driver.attr,
-	&cpufreq_freq_attr_scaling_available_freqs.attr,
 	&scaling_available_governors.attr,
 	&scaling_setspeed.attr,
 	&UV_mV_table.attr,
 	&UV_uV_table.attr,
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-	&hotplug_enabled.attr,
-	&hotplug_cpu_up_load.attr,
-	&hotplug_cpu_up_boost.attr,
-	&normalmin_freq.attr,
-	&hotplug_cpu_down_hysteresis.attr,
-#endif
 	NULL
 };
 
@@ -1010,11 +822,11 @@ static int cpufreq_add_dev_interface(unsigned int cpu,
 		if (ret)
 			goto err_out_kobj_put;
 	}
-
-	ret = sysfs_create_file(&policy->kobj, &scaling_cur_freq.attr);
-	if (ret)
-		goto err_out_kobj_put;
-
+	if (cpufreq_driver->target) {
+		ret = sysfs_create_file(&policy->kobj, &scaling_cur_freq.attr);
+		if (ret)
+			goto err_out_kobj_put;
+	}
 	if (cpufreq_driver->bios_limit) {
 		ret = sysfs_create_file(&policy->kobj, &bios_limit.attr);
 		if (ret)
@@ -1828,6 +1640,7 @@ int cpufreq_get_policy(struct cpufreq_policy *policy, unsigned int cpu)
 }
 EXPORT_SYMBOL(cpufreq_get_policy);
 
+extern void exynos_enforce_policy(struct cpufreq_policy *policy);
 
 /*
  * data   : current policy.
@@ -1848,6 +1661,8 @@ static int __cpufreq_set_policy(struct cpufreq_policy *data,
 		ret = -EINVAL;
 		goto error_out;
 	}
+
+	exynos_enforce_policy(policy);
 
 	/* verify the cpu speed can be set within this limit */
 	ret = cpufreq_driver->verify(policy);
@@ -2129,3 +1944,4 @@ static int __init cpufreq_core_init(void)
 	return 0;
 }
 core_initcall(cpufreq_core_init);
+

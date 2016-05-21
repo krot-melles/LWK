@@ -64,8 +64,13 @@ static unsigned long lpj[CA_END];
 #define DOWN_STEP_NEW		600000
 #define UP_STEP_OLD		550000
 #define UP_STEP_NEW		600000
+<<<<<<< HEAD
 #define STEP_LEVEL_CA7_MAX	650000
 #define STEP_LEVEL_CA15_MIN	700000
+=======
+#define STEP_LEVEL_CA7_MAX	600000
+#define STEP_LEVEL_CA15_MIN	800000
+>>>>>>> c0e6bff89aedad8e2edc25ab9b40d985f650f564
 
 #define LIMIT_COLD_VOLTAGE	1250000
 #define CPU_MAX_COUNT		4
