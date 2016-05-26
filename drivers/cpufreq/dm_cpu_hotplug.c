@@ -41,7 +41,7 @@ static DEFINE_MUTEX(dm_hotplug_lock);
 
 static int cpu_util[NR_CPUS];
 static struct pm_qos_request max_cpu_qos_hotplug;
-static unsigned int cur_load_freq = 0;
+static unsigned int cur_load_freq = 600000;
 static bool lcd_is_on;
 
 enum hotplug_mode {
