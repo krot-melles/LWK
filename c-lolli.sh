@@ -8,5 +8,5 @@ make clean && make mrproper;
 make lwkll_defconfig CROSS_COMPILE="../tc/bin/arm-architoolchain-linux-gnueabihf-";
 
 # Compile Kernel
-make -j5 ARCH=arm SUBARCH=arm CROSS_COMPILE="../tc/bin/arm-architoolchain-linux-gnueabihf-";
+make -j4 ARCH=arm SUBARCH=arm CROSS_COMPILE="../tc/bin/arm-architoolchain-linux-gnueabihf-";
 
