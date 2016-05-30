@@ -5,8 +5,8 @@
 make clean && make mrproper;
 
 # defconfig !
-make lwkmm_defconfig CROSS_COMPILE="../tc/bin/arm-architoolchain-linux-gnueabihf-";
+make lwkmm_defconfig CROSS_COMPILE="../tc/bin/arm-eabi-";
 
 # Compile Kernel
-make -j4 ARCH=arm SUBARCH=arm CROSS_COMPILE="../tc/bin/arm-architoolchain-linux-gnueabihf-";
+make -j4 ARCH=arm SUBARCH=arm CROSS_COMPILE="../tc/bin/arm-eabi-";
 
