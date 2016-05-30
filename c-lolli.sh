@@ -5,8 +5,8 @@
 make clean && make mrproper;
 
 # defconfig !
-make lwkll_defconfig CROSS_COMPILE="../tc/bin/arm-eabi-";
+make lwkll_defconfig CROSS_COMPILE="../tc/bin/arm-cortex-linux-gnueabi-";
 
 # Compile Kernel
-make -j4 ARCH=arm SUBARCH=arm CROSS_COMPILE="../tc/bin/arm-eabi-";
+make -j4 ARCH=arm SUBARCH=arm CROSS_COMPILE="../tc/bin/arm-cortex-linux-gnueabi-";
 
