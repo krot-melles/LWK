@@ -25,8 +25,8 @@
 #include <linux/suspend.h>
 
 #define	COLD_THRESHOLD	20
-#define NORMALMAX_FREQ	1600000
-#define NORMALMIN_FREQ	250000
+#define NORMALMAX_FREQ	1200000
+#define NORMALMIN_FREQ	600000
 #define POLLING_MSEC	10
 
 struct cpu_load_info {
@@ -42,7 +42,7 @@ static DEFINE_MUTEX(dm_hotplug_lock);
 static int cpu_util[NR_CPUS];
 static unsigned int freq_loads[NR_CPUS];
 static struct pm_qos_request max_cpu_qos_hotplug;
-static unsigned int cur_load_freq = 250000;
+static unsigned int cur_load_freq;
 static bool lcd_is_on;
 extern unsigned int get_hotplug_enabled(void);
 extern unsigned int get_hotplug_cpu_up_load(void);

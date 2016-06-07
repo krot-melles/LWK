@@ -193,7 +193,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
 ARCH		?=arm
-CROSS_COMPILE	?=../tc5/bin/arm-eabi-
+CROSS_COMPILE	?=../tc/bin/arm-eabi-
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -347,20 +347,11 @@ CHECK		= sparse
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
-LDFLAGS = -O1 --as-needed --sort-common -S --enable-new-dtags --hash-style=gnu -znow
+LDFLAGS =
 CFLAGS_MODULE   = -munaligned-access -fno-pic
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  = $(LDFLAGS) --strip-debug
-CFLAGS_KERNEL	= -marm -munaligned-access -mfpu=neon-vfpv4 -ffast-math \
- 					-ftree-vectorize -mvectorize-with-neon-quad \
- 					-fgcse-sm -fgcse-las -fgcse-after-reload \
- 					-floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block -fgraphite-identity \
- 					-ftree-loop-im -ftree-loop-ivcanon -fivopts -funroll-loops -funswitch-loops -frerun-cse-after-loop \
- 					-fweb -ftracer \
- 					-fsched-spec-load -fforce-addr -fsingle-precision-constant \
- 					-fsection-anchors -frename-registers \
- 					-fmodulo-sched -fmodulo-sched-allow-regmoves \
- 					-fomit-frame-pointer -fno-inline-functions
+CFLAGS_KERNEL	=
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -386,7 +377,6 @@ KBUILD_CFLAGS   := -DNDEBUG -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
  		   -Wno-error=unused-but-set-variable \
  		   -Wno-error=maybe-uninitialized \
  		   -fno-exceptions -Wno-multichar \
- 		   $(CFLAGS_KERNEL)
 
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
@@ -578,9 +568,9 @@ endif # $(dot-config)
 all: vmlinux
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,array-bounds) -fno-inline-functions
+KBUILD_CFLAGS	+= -Os
 else
-KBUILD_CFLAGS	+= -O2 $(call cc-disable-warning,maybe-uninitialized,array-bounds) -fno-inline-functions
+KBUILD_CFLAGS	+= -O2
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
