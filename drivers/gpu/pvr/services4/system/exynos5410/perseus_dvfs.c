@@ -24,13 +24,13 @@
 #include "sec_control_pwr_clk.h"
 #include "sec_clock.h"
 
-#define MAX_DVFS_LEVEL			3
+#define MAX_DVFS_LEVEL			2
 #define BASE_START_LEVEL		0
 #define BASE_UP_STEP_LEVEL		1
 #define BASE_DOWN_STEP_LEVEL		1
 #define BASE_WAKE_UP_LEVEL		2
 #define DOWN_REQUIREMENT_THRESHOLD	3
-#define GPU_DVFS_MAX_LEVEL		3
+#define GPU_DVFS_MAX_LEVEL		2
 #define G3D_MAX_VOLT			1150000
 
 #define setmask(a, b) (((1 < a) < 24)|b)
@@ -56,9 +56,9 @@ static struct gpu_dvfs_data default_dvfs_data[] = {
 /* level, clock, voltage, src clk, min, max, qmin, qmax, stay, mask, etc */
 //	{ 0,    532, 1150000,     532, 180, 240,   170, 250, 1, 0, 0 },
 //	{ 1,    480, 1100000,     480, 170, 200,   160, 250, 2, 0, 0 },
-	{ 0,    350,  925000,     350, 160, 190,   150, 250, 3, 0, 0 },
-	{ 1,    266,  900000,     266, 150, 200,   140, 250, 3, 0, 0 },
-	{ 2,    177,  875000,     177,   0, 200,     0, 220, 3, 0, 0 },
+//	{ 0,    350,  925000,     350, 160, 190,   150, 250, 3, 0, 0 },
+	{ 0,    266,  900000,     266, 150, 200,   140, 250, 3, 0, 0 },
+	{ 1,    177,  875000,     177,   0, 200,     0, 220, 3, 0, 0 },
 };
 
 /* end define DVFS info */
