@@ -41,3 +41,4 @@ void sec_gpu_dvfs_down_requirement_reset(void);
 int sec_custom_threshold_set(void);
 void sec_gpu_dvfs_handler(int utilization_value);
 #endif /*__SEC_DVFS_H__*/
+

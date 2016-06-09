@@ -69,7 +69,7 @@ static DEFINE_PER_CPU(struct rw_semaphore, cpu_policy_rwsem);
 
 #ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
 static unsigned int hotplug_enabled_flag = 1;
-static unsigned int hotplug_cpu_up_load_value = 4;
+static unsigned int hotplug_cpu_up_load_value = 2;
 static unsigned int hotplug_cpu_up_boost_value = 90;
 static unsigned int normalmin_freq_value = 900000;
 static unsigned int hotplug_cpu_down_hysteresis_value = 20;
