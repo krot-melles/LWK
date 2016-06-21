@@ -25,9 +25,9 @@
 #include <linux/suspend.h>
 
 #define	COLD_THRESHOLD	20
-#define NORMALMAX_FREQ	1200000
-#define NORMALMIN_FREQ	600000
-#define POLLING_MSEC	5
+#define NORMALMAX_FREQ	1600000
+#define NORMALMIN_FREQ	300000
+#define POLLING_MSEC	100
 
 struct cpu_load_info {
 	cputime64_t cpu_idle;
