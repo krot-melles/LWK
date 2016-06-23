@@ -24,14 +24,14 @@
 #include "sec_control_pwr_clk.h"
 #include "sec_clock.h"
 
-#define MAX_DVFS_LEVEL			10
+#define MAX_DVFS_LEVEL			8
 #define BASE_START_LEVEL		0
 #define BASE_UP_STEP_LEVEL		1
-#define BASE_DOWN_STEP_LEVEL		1
+#define BASE_DOWN_STEP_LEVEL	3
 #define BASE_WAKE_UP_LEVEL		3
 #define DOWN_REQUIREMENT_THRESHOLD	3
 #define GPU_DVFS_MAX_LEVEL		8
-#define G3D_MAX_VOLT			1150000
+#define G3D_MAX_VOLT			1250000
 
 #define setmask(a, b) (((1 < a) < 24)|b)
 #define getclockmask(a) ((a | 0xFF000000) > 24)
@@ -58,10 +58,10 @@ static struct gpu_dvfs_data default_dvfs_data[] = {
 	{ 1,    640, 1225000,     640, 200, 240,   190, 250, 1, 0, 0 },
 	{ 2,    600, 1200000,     600, 190, 240,   180, 250, 1, 0, 0 },
 	{ 3,    532, 1150000,     532, 180, 240,   170, 250, 1, 0, 0 },
-	{ 4,    480, 1100000,     480, 170, 200,   160, 250, 2, 0, 0 },
-	{ 5,    350,  925000,     350, 160, 190,   150, 250, 3, 0, 0 },
-	{ 6,    266,  900000,     266, 150, 200,   140, 250, 3, 0, 0 },
-	{ 7,    177,  900000,     177,   0, 200,     0, 220, 3, 0, 0 },
+	{ 4,    480,  975000,     480, 170, 200,   160, 250, 2, 0, 0 },
+	{ 5,    350,  900000,     350, 160, 190,   150, 250, 3, 0, 0 },
+	{ 6,    266,  875000,     266, 150, 200,   140, 250, 3, 0, 0 },
+	{ 7,    177,  875000,     177,   0, 200,     0, 220, 3, 0, 0 },
 };
 
 /* end define DVFS info */
@@ -69,7 +69,7 @@ struct gpu_dvfs_data gdata[MAX_DVFS_LEVEL];
 
 int sgx_dvfs_level = -1;
 /* this value is dvfs mode- 0: auto, others: custom lock */
-int sgx_dvfs_custom_clock;
+int sgx_dvfs_custom_clock = 0;
 int sgx_dvfs_min_lock;
 int sgx_dvfs_max_lock;
 int sgx_dvfs_down_requirement;
