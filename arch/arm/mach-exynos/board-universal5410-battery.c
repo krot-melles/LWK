@@ -58,18 +58,18 @@ unsigned int lpcharge;
 EXPORT_SYMBOL(lpcharge);
 
 static sec_charging_current_t charging_current_table[] = {
-	{1900,	1600,	200,	40 * 60},
+	{1900,	1800,	200,	40 * 60},
 	{0,	0,	0,	0},
 	{0,	0,	0,	0},
-	{1900,	1600,	200,	40*60},
+	{1900,	1800,	200,	40*60},
 	{460,	460,	200,	40*60},
 	{1000,	1000,	200,	40*60},
 	{1000,	1000,	200,	40*60},
 	{460,	460,	200,	40*60},
-	{1700,	1600,	200,	40*60},
+	{1900,	1800,	200,	40*60},
 	{0,	0,	0,	0},
 	{650,	750,	200,	40*60},
-	{1900,	1600,	200,	40*60},
+	{1900,	1800,	200,	40*60},
 	{0,	0,	0,	0},
 	{0,	0,	0,	0},
 	{0, 0,	0,	0},/*lan hub*/
@@ -139,16 +139,6 @@ static int sec_bat_is_lpm_check(char *str)
 	return lpcharge;
 }
 __setup("androidboot.mode=", sec_bat_is_lpm_check);
-
-static int legacy_sec_bat_is_lpm_check(char *str)
-{
-	get_option(&str, &lpcharge);
-
-	pr_info("%s: Low power charging mode: %d\n", __func__, lpcharge);
-
-	return lpcharge;
-}
-__setup("lpcharge=", legacy_sec_bat_is_lpm_check);
 
 static bool sec_bat_is_lpm(void)
 {
