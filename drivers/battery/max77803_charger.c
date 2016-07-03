@@ -1229,7 +1229,7 @@ static irqreturn_t max77803_bypass_irq(int irq, void *data)
 	return IRQ_HANDLED;
 }
 
-bool unstable_power_detection = true;
+bool unstable_power_detection = false;
 
 static void max77803_chgin_isr_work(struct work_struct *work)
 {

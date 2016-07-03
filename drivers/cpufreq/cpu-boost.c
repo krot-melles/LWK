@@ -39,7 +39,7 @@ static struct workqueue_struct *boost_rem_wq;
 static unsigned int boost_ms = 50;
 module_param(boost_ms, uint, 0644);
 
-static unsigned int sync_threshold = 800000;
+static unsigned int sync_threshold = 600000;
 module_param(sync_threshold, uint, 0644);
 /*
  * The CPUFREQ_ADJUST notifier is used to override the current policy min to
