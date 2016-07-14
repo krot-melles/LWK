@@ -36,10 +36,10 @@ struct cpu_sync {
 static DEFINE_PER_CPU(struct cpu_sync, sync_info);
 static struct workqueue_struct *boost_rem_wq;
 
-static unsigned int boost_ms = 50;
+static unsigned int boost_ms = 0;
 module_param(boost_ms, uint, 0644);
 
-static unsigned int sync_threshold = 600000;
+static unsigned int sync_threshold;
 module_param(sync_threshold, uint, 0644);
 /*
  * The CPUFREQ_ADJUST notifier is used to override the current policy min to
