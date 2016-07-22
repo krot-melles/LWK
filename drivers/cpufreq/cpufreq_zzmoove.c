@@ -81,10 +81,10 @@
 #define MAX_CORES					(4)
 
 // ZZ: enable/disable hotplug support
-// #define ENABLE_HOTPLUGGING
+#define ENABLE_HOTPLUGGING
 
 // ZZ: enable support for native hotplugging on snapdragon platform
-#define SNAP_NATIVE_HOTPLUGGING
+// #define SNAP_NATIVE_HOTPLUGGING
 
 // ZZ: enable for sources with backported cpufreq implementation of 3.10 kernel
 // #define CPU_IDLE_TIME_IN_CPUFREQ
@@ -138,7 +138,7 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
 #endif /* ENABLE_HOTPLUGGING */
 #define DEF_IGNORE_NICE					(0)	// ZZ: default ignore nice load
 #ifdef ENABLE_AUTO_ADJUST_FREQ
-#define DEF_AUTO_ADJUST_FREQ				(0)	// ZZ: default auto adjust frequency thresholds
+#define DEF_AUTO_ADJUST_FREQ				(1)	// ZZ: default auto adjust frequency thresholds
 #endif /* ENABLE_AUTO_ADJUST_FREQ */
 
 // ZZ: hotplug-switch, -block, -idle, -limit and scaling-block, -fastdown, -responiveness, -proportional tuneable defaults
