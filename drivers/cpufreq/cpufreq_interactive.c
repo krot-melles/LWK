@@ -65,7 +65,7 @@ static spinlock_t speedchange_cpumask_lock;
 static struct mutex gov_lock;
 
 /* Hi speed to bump to from lo speed when load burst (default max) */
-static unsigned int hispeed_freq = 600000;
+static unsigned int hispeed_freq;
 
 /* Go to hi speed when CPU load at or above this value. */
 #define DEFAULT_GO_HISPEED_LOAD 99
@@ -75,7 +75,7 @@ static unsigned long go_hispeed_load = DEFAULT_GO_HISPEED_LOAD;
 static unsigned int sampling_down_factor;
 
 /* Target load.  Lower values result in higher CPU speeds. */
-#define DEFAULT_TARGET_LOAD 85
+#define DEFAULT_TARGET_LOAD 90
 static unsigned int default_target_loads[] = {DEFAULT_TARGET_LOAD};
 static spinlock_t target_loads_lock;
 static unsigned int *target_loads = default_target_loads;
@@ -84,13 +84,13 @@ static int ntarget_loads = ARRAY_SIZE(default_target_loads);
 /*
  * The minimum amount of time to spend at a frequency before we can ramp down.
  */
-#define DEFAULT_MIN_SAMPLE_TIME (20 * USEC_PER_MSEC)
+#define DEFAULT_MIN_SAMPLE_TIME (80 * USEC_PER_MSEC)
 static unsigned long min_sample_time = DEFAULT_MIN_SAMPLE_TIME;
 
 /*
  * The sample rate of the timer used to increase frequency
  */
-#define DEFAULT_TIMER_RATE (80 * USEC_PER_MSEC)
+#define DEFAULT_TIMER_RATE (20 * USEC_PER_MSEC)
 static unsigned long timer_rate = DEFAULT_TIMER_RATE;
 
 /* Busy SDF parameters*/
@@ -121,7 +121,7 @@ static u64 boostpulse_endtime;
 #define DEFAULT_TIMER_SLACK (4 * DEFAULT_TIMER_RATE)
 static int timer_slack_val = DEFAULT_TIMER_SLACK;
 
-static bool io_is_busy = 1;
+static bool io_is_busy;
 
 /*
  * If the max load among other CPUs is higher than up_threshold_any_cpu_load
@@ -130,7 +130,7 @@ static bool io_is_busy = 1;
  * sync_freq
  */
 static unsigned int up_threshold_any_cpu_load;
-static unsigned int sync_freq = 600000;
+static unsigned int sync_freq;
 static unsigned int up_threshold_any_cpu_freq;
 
 static int cpufreq_governor_interactive(struct cpufreq_policy *policy,
@@ -1414,3 +1414,4 @@ MODULE_AUTHOR("Mike Chan <mike@android.com>");
 MODULE_DESCRIPTION("'cpufreq_interactive' - A cpufreq governor for "
 	"Latency sensitive workloads");
 MODULE_LICENSE("GPL");
+

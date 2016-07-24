@@ -14,6 +14,11 @@
  *
  *  v1.4 - add a hybrid-kernel mode, accepting both kernel hooks (first wins)
  *
+ *  v1.6 - duki994 --> yank555-lu disabled autosleep and hybrid hooks on shamu. 
+ *                     I left them for slte device
+ *
+ *  v1.7 - do only run state change if change actually requests a new state
+ *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
  * may be copied, distributed, and modified under those terms.
@@ -31,9 +36,9 @@
 #include <linux/workqueue.h>
 
 #define MAJOR_VERSION	1
-#define MINOR_VERSION	5
+#define MINOR_VERSION	7
 
-//#define POWER_SUSPEND_DEBUG // Add debugging prints in dmesg
+// #define POWER_SUSPEND_DEBUG // Add debugging prints in dmesg
 
 struct workqueue_struct *suspend_work_queue;
 
@@ -140,21 +145,27 @@ void set_power_suspend_state(int new_state)
 {
 	unsigned long irqflags;
 
-	spin_lock_irqsave(&state_lock, irqflags);
-	if (state == POWER_SUSPEND_INACTIVE && new_state == POWER_SUSPEND_ACTIVE) {
-		#ifdef POWER_SUSPEND_DEBUG
-		pr_info("[POWERSUSPEND] state activated.\n");
-		#endif
-		state = new_state;
-		queue_work(suspend_work_queue, &power_suspend_work);
-	} else if (state == POWER_SUSPEND_ACTIVE && new_state == POWER_SUSPEND_INACTIVE) {
-		#ifdef POWER_SUSPEND_DEBUG
-		pr_info("[POWERSUSPEND] state deactivated.\n");
-		#endif
-		state = new_state;
-		queue_work(suspend_work_queue, &power_resume_work);
+	if (state != new_state) {
+		spin_lock_irqsave(&state_lock, irqflags);
+		if (state == POWER_SUSPEND_INACTIVE && new_state == POWER_SUSPEND_ACTIVE) {
+			#ifdef POWER_SUSPEND_DEBUG
+			pr_info("[POWERSUSPEND] state activated.\n");
+			#endif
+			state = new_state;
+			queue_work(suspend_work_queue, &power_suspend_work);
+		} else if (state == POWER_SUSPEND_ACTIVE && new_state == POWER_SUSPEND_INACTIVE) {
+			#ifdef POWER_SUSPEND_DEBUG
+			pr_info("[POWERSUSPEND] state deactivated.\n");
+			#endif
+			state = new_state;
+			queue_work(suspend_work_queue, &power_resume_work);
+		}
+		spin_unlock_irqrestore(&state_lock, irqflags);
+	#ifdef CONFIG_POWERSUSPEND_DEBUG
+	} else {
+		pr_info("[POWERSUSPEND] state change requested, but unchanged ?! Ignored !\n");
+	#endif
 	}
-	spin_unlock_irqrestore(&state_lock, irqflags);
 }
 
 void set_power_suspend_state_autosleep_hook(int new_state)

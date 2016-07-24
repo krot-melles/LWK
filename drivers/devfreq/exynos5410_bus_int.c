@@ -1157,3 +1157,4 @@ static void __exit exynos5_busfreq_int_exit(void)
 	platform_driver_unregister(&exynos5_busfreq_int_driver);
 }
 module_exit(exynos5_busfreq_int_exit);
+

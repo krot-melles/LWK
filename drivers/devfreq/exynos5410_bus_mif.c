@@ -1383,3 +1383,4 @@ static void __exit exynos5_busfreq_mif_exit(void)
 	platform_driver_unregister(&exynos5_busfreq_mif_driver);
 }
 module_exit(exynos5_busfreq_mif_exit);
+

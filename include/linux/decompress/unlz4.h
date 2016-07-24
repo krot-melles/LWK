@@ -8,3 +8,4 @@ int unlz4(unsigned char *inbuf, int len,
 	int *pos,
 	void(*error)(char *x));
 #endif
+

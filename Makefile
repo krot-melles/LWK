@@ -193,7 +193,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
 ARCH		?=arm
-CROSS_COMPILE	?=../tc/bin/arm-eabi-
+CROSS_COMPILE	?=../tc/bin/arm-linux-gnueabi-
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -243,10 +243,10 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
 	  else echo sh; fi ; fi)
 
-HOSTCC       = gcc
-HOSTCXX      = g++
-HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fgraphite -fno-tree-vectorize -fomit-frame-pointer
-HOSTCXXFLAGS = -O2 -fgraphite -fno-tree-vectorize
+HOSTCC       = ccache gcc
+HOSTCXX      = ccache g++
+HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fgraphite -fno-tree-vectorize -fomit-frame-pointer -std=gnu89 -fgcse-las
+HOSTCXXFLAGS = -O2 -fgraphite -fno-tree-vectorize -std=gnu89 -fgcse-las
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -365,18 +365,16 @@ LINUXINCLUDE    := -I$(srctree)/arch/$(hdr-arch)/include \
 
 KBUILD_CPPFLAGS := -D__KERNEL__
 
-KBUILD_CFLAGS   := -DNDEBUG -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
- 		   -fno-strict-aliasing -fno-common \
- 		   -Wno-format-security -Wno-unused \
- 		   -fno-delete-null-pointer-checks \
- 		   -Wno-maybe-uninitialized \
- 		   -Wno-array-bounds \
- 		   -fno-schedule-insns2 \
- 		   -Wno-sizeof-pointer-memaccess \
- 		   -Wno-error=unused-parameter \
- 		   -Wno-error=unused-but-set-variable \
- 		   -Wno-error=maybe-uninitialized \
- 		   -fno-exceptions -Wno-multichar \
+KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+ 				-fno-strict-aliasing -fno-common \
+ 				-Wno-format-security -Wno-unused \
+ 				-fno-delete-null-pointer-checks \
+ 				-Wno-maybe-uninitialized \
+ 				-Wno-sizeof-pointer-memaccess \
+ 				-Wno-error=unused-parameter -Wno-error=unused-but-set-variable \
+ 				-fno-exceptions -Wno-multichar -Wno-sequence-point \
+				-fno-delete-null-pointer-checks \
+ 				-std=gnu89
 
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=

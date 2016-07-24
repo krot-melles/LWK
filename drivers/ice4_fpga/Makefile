@@ -3,3 +3,4 @@
 #
 
 obj-$(CONFIG_ICE4_FPGA)	+= ice4_fpga.o
+
