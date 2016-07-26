@@ -49,4 +49,3 @@ static inline int mls_level_dom(struct mls_level *l1, struct mls_level *l2)
  mls_level_dom(&(r1).level[1], &(r2).level[1]))
 
 #endif	/* _SS_MLS_TYPES_H_ */
-

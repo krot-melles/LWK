@@ -539,4 +539,3 @@ int ebitmap_write(struct ebitmap *e, void *fp)
 	}
 	return 0;
 }
-

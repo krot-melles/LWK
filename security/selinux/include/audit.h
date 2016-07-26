@@ -63,4 +63,3 @@ int selinux_audit_rule_known(struct audit_krule *krule);
 
 #endif /* _SELINUX_AUDIT_H */
 
-

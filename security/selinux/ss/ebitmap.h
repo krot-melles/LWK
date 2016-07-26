@@ -143,4 +143,3 @@ static inline int ebitmap_netlbl_import(struct ebitmap *ebmap,
 #endif
 
 #endif	/* _SS_EBITMAP_H_ */
-

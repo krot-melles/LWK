@@ -147,4 +147,3 @@ static inline int selinux_netlbl_socket_connect(struct sock *sk,
 #endif /* CONFIG_NETLABEL */
 
 #endif
-
