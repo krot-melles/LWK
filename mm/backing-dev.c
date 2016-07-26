@@ -805,6 +805,20 @@ void set_bdi_congested(struct backing_dev_info *bdi, int sync)
 }
 EXPORT_SYMBOL(set_bdi_congested);
 
+long congestion_wait_kswapd(int sync, long timeout)
+{
+	long ret;
+	DEFINE_WAIT(wait);
+	wait_queue_head_t *wqh = &congestion_wqh[sync];
+
+	prepare_to_wait(wqh, &wait, TASK_UNINTERRUPTIBLE);
+	ret = schedule_timeout(timeout);
+	finish_wait(wqh, &wait);
+
+	return ret;
+}
+EXPORT_SYMBOL(congestion_wait_kswapd);
+
 /**
  * congestion_wait - wait for a backing_dev to become uncongested
  * @sync: SYNC or ASYNC IO
