@@ -20,3 +20,4 @@ int security_set_bools(int len, int *values);
 int security_get_bool_value(int bool);
 
 #endif
+

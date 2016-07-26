@@ -284,6 +284,9 @@ static __init int sel_netif_init(void)
 {
 	int i, err;
 
+#ifdef CONFIG_ALWAYS_ENFORCE
+	selinux_enabled = 1;
+#endif
 	if (!selinux_enabled)
 		return 0;
 
@@ -301,4 +304,5 @@ static __init int sel_netif_init(void)
 }
 
 __initcall(sel_netif_init);
+
 

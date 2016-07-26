@@ -2,6 +2,12 @@
 # Makefile for building the SELinux module as part of the kernel tree.
 #
 
+ifeq ($(SEC_BUILD_OPTION_PRODUCT_SHIP), true)
+ifeq ($(SEC_BUILD_OPTION_SELINUX_ENFORCE),true)
+EXTRA_CFLAGS += -DCONFIG_ALWAYS_ENFORCE=true
+endif
+endif
+
 obj-$(CONFIG_SECURITY_SELINUX) := selinux.o
 
 selinux-y := avc.o hooks.o selinuxfs.o netlink.o nlmsgtab.o netif.o \
@@ -23,3 +29,4 @@ quiet_cmd_flask = GEN     $(obj)/flask.h $(obj)/av_permissions.h
 targets += flask.h av_permissions.h
 $(obj)/flask.h: $(src)/include/classmap.h FORCE
 	$(call if_changed,flask)
+

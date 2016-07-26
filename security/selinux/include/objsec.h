@@ -120,3 +120,4 @@ struct key_security_struct {
 extern unsigned int selinux_checkreqprot;
 
 #endif /* _SELINUX_OBJSEC_H_ */
+

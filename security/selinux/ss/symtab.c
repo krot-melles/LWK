@@ -41,3 +41,4 @@ int symtab_init(struct symtab *s, unsigned int size)
 	return 0;
 }
 
+

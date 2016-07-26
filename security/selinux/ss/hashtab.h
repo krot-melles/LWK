@@ -85,3 +85,4 @@ int hashtab_map(struct hashtab *h,
 void hashtab_stat(struct hashtab *h, struct hashtab_info *info);
 
 #endif	/* _SS_HASHTAB_H */
+

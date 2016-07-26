@@ -154,3 +154,4 @@ struct security_class_mapping secclass_map[] = {
 	{ "binder", { "impersonate", "call", "set_context_mgr", "transfer", NULL } },
 	{ NULL }
   };
+
