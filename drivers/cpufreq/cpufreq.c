@@ -166,7 +166,7 @@ struct cpufreq_policy *cpufreq_cpu_get(unsigned int cpu)
 	if (!data)
 		goto err_out_put_module;
 
-	if (!sysfs && !kobject_get(data->kobj))
+	if (!kobject_get(data->kobj))
 		goto err_out_put_module;
 
 	spin_unlock_irqrestore(&cpufreq_driver_lock, flags);
@@ -284,7 +284,7 @@ void cpufreq_notify_transition(struct cpufreq_freqs *freqs, unsigned int state)
 		if (likely(policy) && likely(policy->cpu == freqs->cpu))
 			policy->cur = freqs->new;
 		sysfs_notify(policy->kobj, NULL, "scaling_cur_freq");
-		}
+
 		break;
 	}
 }

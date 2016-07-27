@@ -210,7 +210,6 @@ asmlinkage void __do_softirq(void)
 {
 	struct softirq_action *h;
 	__u32 pending;
-	unsigned long end = jiffies + MAX_SOFTIRQ_TIME;
 	int cpu;
 	unsigned long end = jiffies + MAX_SOFTIRQ_TIME;
 
