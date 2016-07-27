@@ -124,9 +124,9 @@ static ssize_t ac_charge_level_store(struct kobject *kobj,
 	else {
 
 		switch (new_ac_charge_level) {
-			case AC_CHARGE_1000:
 			case AC_CHARGE_1300:
 			case AC_CHARGE_1600:
+			case AC_CHARGE_1900:
 				ac_charge_level = new_ac_charge_level;
 				return count;
 			default:
@@ -216,7 +216,7 @@ static ssize_t failsafe_store(struct kobject *kobj,
 	switch (new_failsafe) {
 		case FAIL_SAFE_ENABLED:
 			usb_charge_level = USB_CHARGE_460;
-			ac_charge_level = AC_CHARGE_1000;
+			ac_charge_level = AC_CHARGE_1300;
 			failsafe = new_failsafe;
 			return count;
 		case FAIL_SAFE_DISABLED:
@@ -314,8 +314,8 @@ int force_fast_charge_init(void)
 
 	/* Forced fast charge disabled by default */
 	force_fast_charge = FAST_CHARGE_DISABLED;
-	/* Default AC charge level to 1000mA/h    */
-	ac_charge_level   = AC_CHARGE_1000;
+	/* Default AC charge level to 1300mA/h    */
+	ac_charge_level   = AC_CHARGE_1300;
 	/* Default USB charge level to 460mA/h    */
 	usb_charge_level  = USB_CHARGE_460;
 	/* Allow only values in list by default   */
