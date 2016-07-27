@@ -163,7 +163,7 @@ struct cpufreq_policy *cpufreq_cpu_get(unsigned int cpu)
 	if (!data)
 		goto err_out_put_module;
 
-	if (!kobject_get(data->kobj))
+	if (!kobject_get(&data->kobj))
 		goto err_out_put_module;
 
 	spin_unlock_irqrestore(&cpufreq_driver_lock, flags);
