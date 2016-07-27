@@ -2176,12 +2176,12 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		50,		// down_threshold_hotplug3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
-		55,		// down_threshold_hotplug4
-		55,		// down_threshold_hotplug5
+		50,		// down_threshold_hotplug4
+		50,		// down_threshold_hotplug5
 #endif /* (MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 8)
-		55,		// down_threshold_hotplug6
-		55,		// down_threshold_hotplug7
+		50,		// down_threshold_hotplug6
+		50,		// down_threshold_hotplug7
 #endif /* (MAX_CORES == 8) */
 		250000,		// down_threshold_hotplug_freq1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
@@ -2189,12 +2189,12 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		250000,	// down_threshold_hotplug_freq3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
-		0,		// down_threshold_hotplug_freq4
-		0,		// down_threshold_hotplug_freq5
+		250000,		// down_threshold_hotplug_freq4
+		250000,		// down_threshold_hotplug_freq5
 #endif /* (MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 8)
-		0,		// down_threshold_hotplug_freq6
-		0,		// down_threshold_hotplug_freq7
+		250000,		// down_threshold_hotplug_freq6
+		250000,		// down_threshold_hotplug_freq7
 #endif /* (MAX_CORES == 8) */
 #endif /* ENABLE_HOTPLUGGING */
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
@@ -2302,29 +2302,29 @@ struct zzmoove_profile zzmoove_profiles[] = {
 #ifdef ENABLE_HOTPLUGGING
 		20,		// up_threshold_hotplug1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
-		100,		// up_threshold_hotplug2
-		100,		// up_threshold_hotplug3
+		60,		// up_threshold_hotplug2
+		70,		// up_threshold_hotplug3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
-		68,		// up_threshold_hotplug4
-		68,		// up_threshold_hotplug5
+		80,		// up_threshold_hotplug4
+		90,		// up_threshold_hotplug5
 #endif /* (MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 8)
-		68,		// up_threshold_hotplug6
-		68,		// up_threshold_hotplug7
+		95,		// up_threshold_hotplug6
+		100,		// up_threshold_hotplug7
 #endif /* (MAX_CORES == 8) */
 		250000,		// up_threshold_hotplug_freq1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
-		1200000,	// up_threshold_hotplug_freq2
-		1200000,	// up_threshold_hotplug_freq3
+		1000000,	// up_threshold_hotplug_freq2
+		1000000,	// up_threshold_hotplug_freq3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
-		0,		// up_threshold_hotplug_freq4
-		0,		// up_threshold_hotplug_freq5
+		1000000,		// up_threshold_hotplug_freq4
+		1000000,		// up_threshold_hotplug_freq5
 #endif /* (MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 8)
-		0,		// up_threshold_hotplug_freq6
-		0,		// up_threshold_hotplug_freq7
+		1000000,		// up_threshold_hotplug_freq6
+		1000000,		// up_threshold_hotplug_freq7
 #endif /* (MAX_CORES == 8) */
 #endif /* ENABLE_HOTPLUGGING */
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
