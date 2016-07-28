@@ -2248,7 +2248,7 @@ struct zzmoove_profile zzmoove_profiles[] = {
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
 		0,		// hotplug_engage_freq
 		0,		// hotplug_max_limit
-		0,		// hotplug_min_limit
+		2,		// hotplug_min_limit
 		0,		// hotplug_lock
 #endif /* ENABLE_HOTPLUGGING */
 		0,		// ignore_nice_load
