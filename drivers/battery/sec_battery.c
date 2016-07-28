@@ -10,6 +10,7 @@
  * published by the Free Software Foundation.
  */
 
+#define DEBUG
 
 #include <linux/battery/sec_battery.h>
 
@@ -79,7 +80,6 @@ static enum power_supply_property sec_battery_props[] = {
 	POWER_SUPPLY_PROP_VOLTAGE_AVG,
 	POWER_SUPPLY_PROP_CURRENT_NOW,
 	POWER_SUPPLY_PROP_CURRENT_AVG,
-	POWER_SUPPLY_PROP_CURRENT_MAX,
 	POWER_SUPPLY_PROP_CHARGE_NOW,
 	POWER_SUPPLY_PROP_CAPACITY,
 	POWER_SUPPLY_PROP_TEMP,
@@ -663,8 +663,7 @@ check_recharge_check_count:
 
 static bool sec_bat_voltage_check(struct sec_battery_info *battery)
 {
-	if ((battery->status == POWER_SUPPLY_STATUS_DISCHARGING) ||
-		(battery->cable_type == POWER_SUPPLY_TYPE_BATTERY)) {
+	if (battery->status == POWER_SUPPLY_STATUS_DISCHARGING) {
 		dev_dbg(battery->dev,
 			"%s: Charging Disabled\n", __func__);
 		return true;
@@ -1155,7 +1154,7 @@ static bool sec_bat_time_management(
 #endif
 
 	if (battery->charging_start_time == 0) {
-		dev_dbg(battery->dev,
+		dev_info(battery->dev,
 			"%s: Charging Disabled\n", __func__);
 		return true;
 	}
@@ -1479,6 +1478,76 @@ static bool sec_bat_fullcharged_check(
 	return true;
 };
 
+#define DISCHARGE_SAMPLE_CNT 20
+static int discharge_cnt=0;
+static int all_vcell[20] = {0,};
+
+/* if ret < 0, discharge */
+static int sec_bat_check_discharge(struct sec_battery_info *battery)
+{
+	int i, cnt, ret = 0;
+
+	all_vcell[discharge_cnt++] = battery->voltage_now;
+	if (discharge_cnt >= DISCHARGE_SAMPLE_CNT)
+		discharge_cnt = 0;
+
+	cnt = discharge_cnt;
+
+	/* check after last value is set */
+	if (all_vcell[cnt] == 0)
+		return 0;
+
+	for (i = 0; i < DISCHARGE_SAMPLE_CNT; i++) {
+		if (cnt == i)
+			continue;
+		if (all_vcell[cnt] > all_vcell[i])
+			ret--;
+		else
+			ret++;
+	}
+	return ret;
+}
+
+/* judge power off or not by current_avg */
+static int sec_bat_get_current_average(
+				struct sec_battery_info *battery)
+{
+	int curr_avg;
+	int check_discharge;
+
+	pr_debug("%s\n", __func__);
+	check_discharge = sec_bat_check_discharge(battery);
+	/* if 0% && under 3.4v && low power charging(1000mA), power off */
+	if (!battery->pdata->is_lpm() &&
+		(battery->capacity <= 0) &&
+		(battery->voltage_now < 3400) &&
+			(check_discharge < 0) &&
+		((battery->current_now < 1000) ||
+		((battery->health == POWER_SUPPLY_HEALTH_OVERHEAT) ||
+		(battery->health == POWER_SUPPLY_HEALTH_COLD)))) {
+
+			pr_info("%s: SOC(%d), Vnow(%d), Vocv(%d), Inow(%d)\n",
+				__func__, battery->capacity,
+				battery->voltage_now,
+				battery->voltage_ocv,
+				battery->current_now);
+		curr_avg = -1;
+	} else {
+		curr_avg = battery->current_now;
+	}
+
+	return curr_avg;
+}
+
+void sec_bat_reset_discharge(struct sec_battery_info *battery)
+{
+	int i;
+
+	for (i = 0; i < DISCHARGE_SAMPLE_CNT ; i++)
+		all_vcell[i] = 0;
+	discharge_cnt = 0;
+}
+
 static void sec_bat_get_battery_info(
 				struct sec_battery_info *battery)
 {
@@ -1498,38 +1567,28 @@ static void sec_bat_get_battery_info(
 		POWER_SUPPLY_PROP_VOLTAGE_AVG, value);
 	battery->voltage_ocv = value.intval;
 
-	/* All current limits in charger */
-	
-	psy_do_property("sec-charger", get,
-		POWER_SUPPLY_PROP_CURRENT_AVG, value);
-	battery->current_avg = value.intval;
+	if (battery->pdata->get_fg_current) {
+		/* read from fuelgauge */
+		psy_do_property("sec-fuelgauge", get,
+			POWER_SUPPLY_PROP_CURRENT_NOW, value);
+		battery->current_now = value.intval;
 
-	psy_do_property("sec-charger", get,
-		POWER_SUPPLY_PROP_CURRENT_NOW, value);
-	battery->current_now = value.intval;
-
-	psy_do_property("sec-charger", get,
-		POWER_SUPPLY_PROP_CURRENT_MAX, value);
-	battery->current_max = value.intval;
+		psy_do_property("sec-fuelgauge", get,
+			POWER_SUPPLY_PROP_CURRENT_AVG, value);
+		battery->current_avg = value.intval;
+	} else {
+		/* read current info from charger */
+		psy_do_property("sec-charger", get,
+			POWER_SUPPLY_PROP_CURRENT_NOW, value);
+		battery->current_now = value.intval;
+		battery->current_avg = sec_bat_get_current_average(battery);
+	}
 
 	/* To get SOC value (NOT raw SOC), need to reset value */
 	value.intval = 0;
 	psy_do_property("sec-fuelgauge", get,
 		POWER_SUPPLY_PROP_CAPACITY, value);
-#ifdef CONFIG_MACH_J_CHN_CTC
-	if (battery->status == POWER_SUPPLY_STATUS_DISCHARGING) {
-		if ((battery->capacity > 0) && (battery->capacity < 100)
-					&& (battery->capacity < value.intval))
-			pr_info("%s: SOC invalid (%d, %d)\n",	__func__,
-				battery->capacity, value.intval);
-		else
-			battery->capacity = value.intval;
-	} else {
-		battery->capacity = value.intval;
-	}
-#else
 	battery->capacity = value.intval;
-#endif
 
 	switch (battery->pdata->thermal_source) {
 	case SEC_BATTERY_THERMAL_SOURCE_FG:
@@ -1572,18 +1631,16 @@ static void sec_bat_get_battery_info(
 	}
 
 	dev_info(battery->dev,
-		"%s:Vnow(%dmV),Inow(%dmA),Imax(%dmA),SOC(%d%%),Tbat(%d)\n",
-		__func__,
+		"%s:Vnow(%dmV),Inow(%dmA),SOC(%d%%),Tbat(%d)\n", __func__,
 		battery->voltage_now, battery->current_now,
-		battery->current_max, battery->capacity, battery->temperature);
+		battery->capacity, battery->temperature);
 	dev_dbg(battery->dev,
-		"%s,Vavg(%dmV),Vocv(%dmV),Tamb(%d),"
-		"Iavg(%dmA),Iadc(%d)\n",
+		"%s,Vavg(%dmV),Vocv(%dmV),Tamb(%d),Iavg(%dmA),Iadc(%d)\n",
 		battery->present ? "Connected" : "Disconnected",
 		battery->voltage_avg, battery->voltage_ocv,
 		battery->temper_amb,
 		battery->current_avg, battery->current_adc);
-}
+};
 
 static void sec_bat_polling_work(struct work_struct *work)
 {
@@ -3129,9 +3186,6 @@ static int __devinit sec_battery_probe(struct platform_device *pdev)
 
 	dev_dbg(battery->dev,
 		"%s: SEC Battery Driver Loaded\n", __func__);
-
-	charger_control_init(battery);
-
 	return 0;
 
 err_req_irq:
@@ -3218,6 +3272,8 @@ static int sec_battery_prepare(struct device *dev)
 
 	battery->polling_in_sleep = true;
 
+	dev_info(battery->dev,
+			"%s: Call sec_bat_set_polling\n", __func__);
 	sec_bat_set_polling(battery);
 
 	/* cancel work for polling
