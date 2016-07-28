@@ -2168,12 +2168,12 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		0,		// disable_hotplug_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
 #endif /* ENABLE_HOTPLUGGING */
-		50,		// down_threshold
+		30,		// down_threshold
 #ifdef ENABLE_HOTPLUGGING
-		0,		// down_threshold_hotplug1
+		20,		// down_threshold_hotplug1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
-		50,		// down_threshold_hotplug2
-		50,		// down_threshold_hotplug3
+		20,		// down_threshold_hotplug2
+		20,		// down_threshold_hotplug3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
 		50,		// down_threshold_hotplug4
@@ -2248,7 +2248,7 @@ struct zzmoove_profile zzmoove_profiles[] = {
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
 		0,		// hotplug_engage_freq
 		0,		// hotplug_max_limit
-		2,		// hotplug_min_limit
+		0,		// hotplug_min_limit
 		0,		// hotplug_lock
 #endif /* ENABLE_HOTPLUGGING */
 		0,		// ignore_nice_load
@@ -2272,9 +2272,9 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		0,		// scaling_block_freq
 		0,		// scaling_block_threshold
 		2,		// scaling_block_force_down
-		1200000,	// scaling_fastdown_freq
-		95,		// scaling_fastdown_up_threshold
-		90,		// scaling_fastdown_down_threshold
+		900000,	// scaling_fastdown_freq
+		85,		// scaling_fastdown_up_threshold
+		80,		// scaling_fastdown_down_threshold
 		600000,		// scaling_responsiveness_freq
 		30,		// scaling_responsiveness_up_threshold
 		1,		// scaling_proportional
@@ -2300,9 +2300,9 @@ struct zzmoove_profile zzmoove_profiles[] = {
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
 		75,		// up_threshold
 #ifdef ENABLE_HOTPLUGGING
-		20,		// up_threshold_hotplug1
+		30,		// up_threshold_hotplug1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
-		90,		// up_threshold_hotplug2
+		60,		// up_threshold_hotplug2
 		90,		// up_threshold_hotplug3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
@@ -2313,10 +2313,10 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		95,		// up_threshold_hotplug6
 		100,		// up_threshold_hotplug7
 #endif /* (MAX_CORES == 8) */
-		250000,		// up_threshold_hotplug_freq1
+		600000,		// up_threshold_hotplug_freq1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
-		1000000,	// up_threshold_hotplug_freq2
-		1000000,	// up_threshold_hotplug_freq3
+		600000,	// up_threshold_hotplug_freq2
+		600000,	// up_threshold_hotplug_freq3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
 		1000000,		// up_threshold_hotplug_freq4
