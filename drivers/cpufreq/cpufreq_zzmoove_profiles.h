@@ -2214,7 +2214,7 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		50,		// afs_threshold2
 		70,		// afs_threshold3
 		90,		// afs_threshold4
-		0,		// freq_limit
+		1200000,		// freq_limit
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		250000,		// freq_limit_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
@@ -2302,8 +2302,8 @@ struct zzmoove_profile zzmoove_profiles[] = {
 #ifdef ENABLE_HOTPLUGGING
 		20,		// up_threshold_hotplug1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
-		60,		// up_threshold_hotplug2
-		70,		// up_threshold_hotplug3
+		90,		// up_threshold_hotplug2
+		90,		// up_threshold_hotplug3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
 		80,		// up_threshold_hotplug4
