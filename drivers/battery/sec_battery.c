@@ -2735,7 +2735,6 @@ static int sec_bat_get_property(struct power_supply *psy,
 		val->intval = battery->current_avg;
 		break;
 	case POWER_SUPPLY_PROP_CURRENT_MAX:
-		val->intval = battery->current_max;
 		break;
 	/* charging mode (differ from power supply) */
 	case POWER_SUPPLY_PROP_CHARGE_NOW:
