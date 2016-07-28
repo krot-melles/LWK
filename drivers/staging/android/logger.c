@@ -30,7 +30,7 @@
 #include <asm/ioctls.h>
 #include <mach/sec_debug.h>
 
-static unsigned int enabled = 0;
+static unsigned int enabled = 1;
 module_param(enabled, uint, S_IWUSR | S_IRUGO);
 
 /*
