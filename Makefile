@@ -351,7 +351,7 @@ LDFLAGS =
 CFLAGS_MODULE   = -munaligned-access -fno-pic -mfpu=neon-vfpv4
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  = $(LDFLAGS) --strip-debug
-CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 -mtune=cortex-a15.cortex-a7 -marm \
+CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 -marm \
 		  -fgcse-after-reload -fgcse-sm \
 		  -fgcse-las -ftree-loop-im -ftree-loop-ivcanon -fweb \
 		  -frename-registers -ftree-loop-linear -ftree-vectorize \
