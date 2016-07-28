@@ -42,8 +42,16 @@
 #define WACOM_UMS_UPDATE
 #define WACOM_FW_PATH "/sdcard/firmware/wacom_firm.bin"
 
+#ifdef CONFIG_TOUCH_WAKE
+#include <linux/touch_wake.h>
+#endif
+
 unsigned char screen_rotate;
 unsigned char user_hand = 1;
+
+#ifdef CONFIG_TOUCH_WAKE
+static struct wacom_i2c *touchwake_pen_data;
+#endif
 
 static void wacom_enable_irq(struct wacom_i2c *wac_i2c, bool enable)
 {
@@ -102,18 +110,28 @@ static void wacom_power_on(struct wacom_i2c *wac_i2c)
 		wac_i2c->wac_pdata->resume_platform_hw();
 		cancel_delayed_work_sync(&wac_i2c->resume_work);
 		schedule_delayed_work(&wac_i2c->resume_work, HZ / 5);
-	}
+		}
+#ifdef CONFIG_TOUCH_WAKE
+ 	}
+#endif
 }
 
 static void wacom_power_off(struct wacom_i2c *wac_i2c)
 {
-	if (wac_i2c->power_enable) {
-		wacom_enable_irq(wac_i2c, false);
+#ifdef CONFIG_TOUCH_WAKE
+	// Don't change state if touchwake listening delay is active
+	if (!touchwake_is_active()) {
+		#ifdef TOUCHWAKE_DEBUG_PRINT
+		pr_info("[TOUCHWAKE] Wacom i2c disable\n");
+		#endif
+#endif
+		if (wac_i2c->power_enable) {
+			wacom_enable_irq(wac_i2c, false);
 
-		/* release pen, if it is pressed */
-		if (wac_i2c->pen_pressed || wac_i2c->side_pressed
-			|| wac_i2c->pen_prox)
-			forced_release(wac_i2c);
+			/* release pen, if it is pressed */
+			if (wac_i2c->pen_pressed || wac_i2c->side_pressed
+				|| wac_i2c->pen_prox)
+				forced_release(wac_i2c);
 
 		if (!wake_lock_active(&wac_i2c->wakelock)) {
 			wac_i2c->power_enable = false;
@@ -251,13 +269,44 @@ int wacom_i2c_firm_update(struct wacom_i2c *wac_i2c)
 
 		/* Reset IC */
 		wacom_i2c_reset_hw(wac_i2c->wac_pdata);
+		}
+#ifdef CONFIG_TOUCH_WAKE
 	}
-
+#endif
 	if (ret < 0)
 		return -1;
 
 	return 0;
 }
+
+#ifdef CONFIG_TOUCH_WAKE
+// Yank555.lu - Add hooks to enable / disable the digitizer for touchwake
+void touchscreen_pen_disable(void)
+{
+	#ifdef TOUCHWAKE_DEBUG_PRINT
+	pr_info("[TOUCHWAKE] Wacom disable\n");
+	#endif
+
+	if (touchwake_pen_data != NULL)
+		wacom_i2c_disable(touchwake_pen_data);
+
+	return;
+}
+EXPORT_SYMBOL(touchscreen_pen_disable);
+
+void touchscreen_pen_enable(void)
+{
+	#ifdef TOUCHWAKE_DEBUG_PRINT
+	pr_info("[TOUCHWAKE] Wacom enable\n");
+	#endif
+
+	if (touchwake_pen_data != NULL)
+		wacom_i2c_enable(touchwake_pen_data);
+
+	return;
+}
+EXPORT_SYMBOL(touchscreen_pen_enable);
+#endif
 
 static irqreturn_t wacom_interrupt(int irq, void *dev_id)
 {
@@ -279,6 +328,16 @@ static irqreturn_t wacom_interrupt_pdct(int irq, void *dev_id)
 	printk(KERN_DEBUG "epen:pdct %d(%d)\n",
 		wac_i2c->pen_pdct, wac_i2c->pen_prox);
 
+#ifdef CONFIG_TOUCH_WAKE
+	if (touchwake_is_active() && !wac_i2c->pen_pdct) {
+		#ifdef TOUCHWAKE_DEBUG_PRINT
+		pr_info("[TOUCHWAKE] Wacom Pen pressed\n");
+		#endif
+		touch_press(); // Yank555.lu - Screen touched by pen
+	}
+#endif
+
+#if 0
 	if (wac_i2c->pen_pdct == PDCT_NOSIGNAL) {
 		/* If rdy is 1, pen is still working*/
 		if (wac_i2c->pen_prox == 0)
@@ -359,6 +418,13 @@ static int init_pen_insert(struct wacom_i2c *wac_i2c)
 	/* update the current status */
 	schedule_delayed_work(&wac_i2c->pen_insert_dwork, HZ / 2);
 
+#ifdef CONFIG_TOUCH_WAKE
+	// Yank555.lu - Store the data for touchwake
+	touchwake_pen_data = wac_i2c;
+	if (touchwake_pen_data == NULL)
+		pr_err("[TOUCHWAKE] Failed to set Wacom touchwake_pen_data\n");
+#endif 
+
 	return 0;
 }
 
@@ -414,7 +480,15 @@ static void wacom_i2c_input_close(struct input_dev *dev)
 
 	stop_wacom(wac_i2c);
 
-	dev_info(&wac_i2c->client->dev, "%s\n", __func__);
+#ifdef CONFIG_TOUCH_WAKE
+	// Don't change state if touchwake listening delay is active
+	if (!touchwake_is_active()) {
+		#ifdef TOUCHWAKE_DEBUG_PRINT
+		pr_info("[TOUCHWAKE] Wacom i2c enable\n");
+		#endif
+#endif
+		dev_info(&wac_i2c->client->dev,
+				"%s\n", __func__);
 }
 
 
@@ -879,12 +953,12 @@ static ssize_t epen_saving_mode_store(struct device *dev,
 	if (sscanf(buf, "%u", &val) == 1)
 		wac_i2c->battery_saving_mode = !!val;
 
-	if (wac_i2c->battery_saving_mode) {
-		if (wac_i2c->pen_insert)
-			wacom_power_off(wac_i2c);
-	} else
-		wacom_power_on(wac_i2c);
-	return count;
+		if (wac_i2c->battery_saving_mode) {
+			if (wac_i2c->pen_insert)
+				wacom_power_off(wac_i2c);
+		} else
+			wacom_power_on(wac_i2c);
+		return count;
 }
 #endif
 
