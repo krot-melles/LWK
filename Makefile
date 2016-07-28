@@ -332,7 +332,7 @@ AS		= $(CROSS_COMPILE)as
 LD		= $(CROSS_COMPILE)ld
 CC		= ccache $(CROSS_COMPILE)gcc
 CPP		= $(CC) -E
-AR		= $(CROSS_COMPILE)ar
+AR		= $(CROSS_COMPILE)gcc-ar
 NM		= $(CROSS_COMPILE)nm
 STRIP		= $(CROSS_COMPILE)strip
 OBJCOPY		= $(CROSS_COMPILE)objcopy
@@ -351,7 +351,12 @@ LDFLAGS =
 CFLAGS_MODULE   = -munaligned-access -fno-pic -mfpu=neon-vfpv4
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  = $(LDFLAGS) --strip-debug
-CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4
+CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 -mtune=cortex-a15.cortex-a7 -marm \
+		  -fgcse-after-reload -fgcse-sm \
+		  -fgcse-las -ftree-loop-im -ftree-loop-ivcanon -fweb \
+		  -frename-registers -ftree-loop-linear -ftree-vectorize \
+		  -fmodulo-sched -ffast-math -pipe \
+		  -funsafe-math-optimizations
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -654,6 +659,8 @@ ifeq ($(TIMA_ENABLED),1)
        KBUILD_CFLAGS += -DTIMA_LKM_AUTH_ENABLED -Idrivers/gud/MobiCoreKernelApi/include/
        KBUILD_AFLAGS += -DTIMA_LKM_AUTH_ENABLED
 endif
+
+include ${srctree}/scripts/Makefile.lto
 
 # Add user supplied CPPFLAGS, AFLAGS and CFLAGS as the last assignments
 # But warn user when we do so
