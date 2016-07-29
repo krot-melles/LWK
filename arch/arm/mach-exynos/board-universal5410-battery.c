@@ -259,23 +259,23 @@ static int sec_bat_get_cable_from_extended_cable_type(
 				break;
 			case ONLINE_POWER_TYPE_MHL_500:
 				cable_type = POWER_SUPPLY_TYPE_MISC;
-				charge_current_max = 400;
-				charge_current = 400;
-				break;
-			case ONLINE_POWER_TYPE_MHL_900:
-				cable_type = POWER_SUPPLY_TYPE_MISC;
-				charge_current_max = 700;
-				charge_current = 700;
-				break;
-			case ONLINE_POWER_TYPE_MHL_1500:
-				cable_type = POWER_SUPPLY_TYPE_MISC;
 				charge_current_max = 1300;
 				charge_current = 1300;
 				break;
+			case ONLINE_POWER_TYPE_MHL_900:
+				cable_type = POWER_SUPPLY_TYPE_MISC;
+				charge_current_max = 1600;
+				charge_current = 1600;
+				break;
+			case ONLINE_POWER_TYPE_MHL_1500:
+				cable_type = POWER_SUPPLY_TYPE_MISC;
+				charge_current_max = 1900;
+				charge_current = 1900;
+				break;
 			case ONLINE_POWER_TYPE_USB:
 				cable_type = POWER_SUPPLY_TYPE_USB;
-				charge_current_max = 300;
-				charge_current = 300;
+				charge_current_max = 460;
+				charge_current = 460;
 				break;
 			default:
 				cable_type = cable_main;
@@ -283,17 +283,17 @@ static int sec_bat_get_cable_from_extended_cable_type(
 			break;
 		case ONLINE_SUB_TYPE_SMART_OTG:
 			cable_type = POWER_SUPPLY_TYPE_USB;
-			charge_current_max = 1000;
-			charge_current = 1000;
+			charge_current_max = 900;
+			charge_current = 900;
 			break;
 		case ONLINE_SUB_TYPE_SMART_NOTG:
 			cable_type = POWER_SUPPLY_TYPE_MAINS;
 			charge_current_max = 1900;
-			charge_current = 1600;
+			charge_current = 1900;
 			break;
 		default:
 			cable_type = cable_main;
-			charge_current_max = 0;
+			charge_current_max;
 			break;
 		}
 		break;
