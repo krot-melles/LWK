@@ -51,6 +51,7 @@ static unsigned int freq_min[CA_END] __read_mostly;	/* Minimum (Big/Little) cloc
 static unsigned int freq_max[CA_END] __read_mostly;	/* Maximum (Big/Little) clock frequency */
 static struct cpumask cluster_cpus[CA_END];	/* cpu number on (Big/Little) cluster */
 static unsigned long lpj[CA_END];
+
 #define ACTUAL_FREQ(x, cur)  ((cur == CA7) ? (x) << 1 : (x))
 #define VIRT_FREQ(x, cur)    ((cur == CA7) ? (x) >> 1 : (x))
 
@@ -64,13 +65,8 @@ static unsigned long lpj[CA_END];
 #define DOWN_STEP_NEW		600000
 #define UP_STEP_OLD		550000
 #define UP_STEP_NEW		600000
-<<<<<<< HEAD
-#define STEP_LEVEL_CA7_MAX	650000
-#define STEP_LEVEL_CA15_MIN	700000
-=======
 #define STEP_LEVEL_CA7_MAX	600000
 #define STEP_LEVEL_CA15_MIN	800000
->>>>>>> c0e6bff89aedad8e2edc25ab9b40d985f650f564
 
 #define LIMIT_COLD_VOLTAGE	1250000
 #define CPU_MAX_COUNT		4
@@ -134,14 +130,9 @@ static void init_cpumask_cluster_set(unsigned int cluster)
 	}
 }
 
-cluster_type get_cur_cluster(unsigned int cpu)
+static cluster_type get_cur_cluster(unsigned int cpu)
 {
 	return per_cpu(cpu_cur_cluster, cpu);
-}
-
-cluster_type get_boot_cluster()
-{
-	return boot_cluster;
 }
 
 static void set_cur_cluster(unsigned int cpu, cluster_type target_cluster)
@@ -615,7 +606,6 @@ done:
 		exynos_switch(policy, !cur);
 #endif
 out:
-
 	mutex_unlock(&cpufreq_lock);
 
 	return ret;
@@ -781,21 +771,15 @@ static int exynos_policy_notifier(struct notifier_block *nb,
 	if (!cpu_online(cpu))
 		return -EINVAL;
 
-	if (policy->max <= freq_max[CA7]) {
+	if (policy->max <= freq_max[CA7])
 		fake_policy[CA7][cpu].max = ACTUAL_FREQ(policy->max, CA7);
-		fake_policy[CA15][cpu].max = freq_max[CA15];
-	} else {
-		fake_policy[CA7][cpu].max = ACTUAL_FREQ(freq_max[CA7], CA7);
+	else
 		fake_policy[CA15][cpu].max = policy->max;
-	}
 
-	if (policy->min <= freq_max[CA7]) {
+	if (policy->min <= freq_max[CA7])
 		fake_policy[CA7][cpu].min = ACTUAL_FREQ(policy->min, CA7);
-		fake_policy[CA15][cpu].min = freq_min[CA15];
-	} else {
-		fake_policy[CA7][cpu].min = ACTUAL_FREQ(freq_min[CA7], CA7);
+	else
 		fake_policy[CA15][cpu].min = policy->min;
-	}
 
 	return 0;
 }
@@ -1221,7 +1205,6 @@ static int __init exynos_cpufreq_init(void)
 	pm_qos_add_notifier(PM_QOS_CPU_FREQ_MIN, &exynos_qos_notifier);
 
 	for_each_cpu(cpu, cpu_possible_mask) {
-		fake_policy[CA15][cpu].cpu = cpu;
 		fake_policy[CA15][cpu].max = freq_max[CA15];
 		fake_policy[CA15][cpu].min = freq_min[CA15];
 		fake_policy[CA7][cpu].max = ACTUAL_FREQ(freq_max[CA7], CA7);
@@ -1279,3 +1262,4 @@ err_alloc_info_CA7:
 }
 
 late_initcall(exynos_cpufreq_init);
+
