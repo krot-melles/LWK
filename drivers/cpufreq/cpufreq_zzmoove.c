@@ -93,7 +93,7 @@
 #define ENABLE_MUSIC_LIMITS
 
 // ZZ: enable/disable freq auto adjusting
-#define ENABLE_AUTO_ADJUST_FREQ
+// #define ENABLE_AUTO_ADJUST_FREQ
 
 // ZZ: enable/disable profiles support
 #define ENABLE_PROFILES_SUPPORT
