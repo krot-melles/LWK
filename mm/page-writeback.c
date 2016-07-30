@@ -1631,33 +1631,6 @@ static struct notifier_block __cpuinitdata ratelimit_nb = {
 	.next		= NULL,
 };
 
-static void dirty_early_suspend(struct power_suspend *handler)
-{
-	if (dirty_writeback_interval != resume_dirty_writeback_interval)
-		resume_dirty_writeback_interval = dirty_writeback_interval;
-	if (dirty_expire_interval != resume_dirty_expire_interval)
-		resume_dirty_expire_interval = dirty_expire_interval;
-
-	dirty_writeback_interval = suspend_dirty_writeback_interval;
-	dirty_expire_interval = suspend_dirty_expire_interval;
-}
-
-static void dirty_late_resume(struct power_suspend *handler)
-{
-	if (dirty_writeback_interval != suspend_dirty_writeback_interval)
-		suspend_dirty_writeback_interval = dirty_writeback_interval;
-	if (dirty_expire_interval != suspend_dirty_expire_interval)
-		suspend_dirty_expire_interval = dirty_expire_interval;
-
-	dirty_writeback_interval = resume_dirty_writeback_interval;
-	dirty_expire_interval = resume_dirty_expire_interval;
-}
-
-static struct power_suspend dirty_suspend = {
-	.suspend = dirty_early_suspend,
-	.resume = dirty_late_resume,
-};
-
 #ifdef CONFIG_POWERSUSPEND
 static void dirty_early_suspend(struct power_suspend *handler)
 {
@@ -1671,10 +1644,6 @@ static void dirty_late_resume(struct power_suspend *handler)
 	dirty_expire_interval = resume_dirty_expire_interval;
 }
 
-static struct power_suspend dirty_suspend = {
-	.suspend = dirty_early_suspend,
-	.resume = dirty_late_resume,
-};
 #endif
 
 /*
@@ -1707,14 +1676,10 @@ void __init page_writeback_init(void)
 	sleep_dirty_expire_interval = suspend_dirty_expire_interval =
 		DEFAULT_SUSPEND_DIRTY_EXPIRE_INTERVAL;
 
-	register_power_suspend(&dirty_suspend);
 #endif
 
 	writeback_set_ratelimit();
 	register_cpu_notifier(&ratelimit_nb);
-
-	shift = calc_period_shift();
-	prop_descriptor_init(&vm_completions, shift);
 }
 
 /**

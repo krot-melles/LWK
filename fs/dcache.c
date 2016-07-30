@@ -3059,27 +3059,6 @@ ino_t find_inode_number(struct dentry *dir, struct qstr *name)
 }
 EXPORT_SYMBOL(find_inode_number);
 
-static void cpressure_early_suspend(struct power_suspend *handler)
-{
-	if (sysctl_vfs_cache_pressure != resume_cache_pressure)
-		resume_cache_pressure = sysctl_vfs_cache_pressure;
-
-	sysctl_vfs_cache_pressure = suspend_cache_pressure;
-}
-
-static void cpressure_late_resume(struct power_suspend *handler)
-{
-	if (sysctl_vfs_cache_pressure != suspend_cache_pressure)
-		suspend_cache_pressure = sysctl_vfs_cache_pressure;
-
-	sysctl_vfs_cache_pressure = resume_cache_pressure;
-}
-
-static struct power_suspend cpressure_suspend = {
-	.suspend = cpressure_early_suspend,
-	.resume = cpressure_late_resume,
-};
-
 #ifdef CONFIG_POWERSUSPEND
 static void cpressure_early_suspend(struct power_suspend *handler)
 {
