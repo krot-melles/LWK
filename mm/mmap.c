@@ -1522,7 +1522,7 @@ full_search:
 		addr = vma->vm_end;
 	}
 }
-#endif	
+#endif
 
 void arch_unmap_area(struct mm_struct *mm, unsigned long addr)
 {
@@ -1628,7 +1628,7 @@ fail:
 
 	return addr;
 }
-#endif
+#endif	
 
 void arch_unmap_area_topdown(struct mm_struct *mm, unsigned long addr)
 {
