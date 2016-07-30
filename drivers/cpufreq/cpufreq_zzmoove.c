@@ -66,7 +66,7 @@
 #include <linux/msm_tsens.h>
 #endif /* defined(CONFIG_THERMAL_TSENS8974)... */
 
-// #define ENABLE_INPUTBOOSTER			// ZZ: enable/disable inputbooster support
+#define ENABLE_INPUTBOOSTER			// ZZ: enable/disable inputbooster support
 // #define ENABLE_WORK_RESTARTLOOP		// ZZ: enable/disable restart loop for touchboost (DO NOT ENABLE IN THIS VERSION -> NOT STABLE YET!)
 
 #ifdef ENABLE_INPUTBOOSTER
@@ -90,10 +90,10 @@
 // #define CPU_IDLE_TIME_IN_CPUFREQ
 
 // ZZ: enable/disable music limits
-// #define ENABLE_MUSIC_LIMITS
+#define ENABLE_MUSIC_LIMITS
 
 // ZZ: enable/disable freq auto adjusting
-// #define ENABLE_AUTO_ADJUST_FREQ
+#define ENABLE_AUTO_ADJUST_FREQ
 
 // ZZ: enable/disable profiles support
 #define ENABLE_PROFILES_SUPPORT
