@@ -306,7 +306,6 @@ static int sec_bat_get_cable_from_extended_cable_type(
 		is_wpc_cable_attached = true;
 	else
 		is_wpc_cable_attached = false;
-	}
 
 #ifdef CONFIG_FORCE_FAST_CHARGE
 	/* We are in basic Fast Charge mode, so we substitute AC to USB
@@ -361,7 +360,7 @@ static int sec_bat_get_cable_from_extended_cable_type(
 		charge_current =
 			charging_current_table[cable_type].
 			fast_charging_current;
-
+	}
 	value.intval = charge_current_max;
 	psy_do_property(sec_battery_pdata.charger_name, set,
 			POWER_SUPPLY_PROP_CURRENT_MAX, value);
