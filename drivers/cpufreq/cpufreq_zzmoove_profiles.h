@@ -2216,7 +2216,7 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		90,		// afs_threshold4
 		1000000,		// freq_limit
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
-		200000,		// freq_limit_sleep
+		300000,		// freq_limit_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
 		60,		// grad_up_threshold
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
