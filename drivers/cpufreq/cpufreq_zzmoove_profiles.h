@@ -2214,44 +2214,44 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		50,		// afs_threshold2
 		70,		// afs_threshold3
 		90,		// afs_threshold4
-		1000000,		// freq_limit
+		0,		// freq_limit
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
-		300000,		// freq_limit_sleep
+		200000,		// freq_limit_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
 		60,		// grad_up_threshold
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		28,		// grad_up_threshold_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
 #ifdef ENABLE_HOTPLUGGING
-		2,		// hotplug_block_up_cycles
-		1,		// block_up_multiplier_hotplug1
-		1,		// block_up_multiplier_hotplug2
+		1,		// hotplug_block_up_cycles
+		3,		// block_up_multiplier_hotplug1
+		2,		// block_up_multiplier_hotplug2
 		1,		// block_up_multiplier_hotplug3
-		1,		// block_up_multiplier_hotplug4
-		1,		// block_up_multiplier_hotplug5
-		1,		// block_up_multiplier_hotplug6
-		1,		// block_up_multiplier_hotplug7
-		0,		// hotplug_block_down_cycles
+		0,		// block_up_multiplier_hotplug4
+		0,		// block_up_multiplier_hotplug5
+		0,		// block_up_multiplier_hotplug6
+		0,		// block_up_multiplier_hotplug7
+		1,		// hotplug_block_down_cycles
 		1,		// block_down_multiplier_hotplug1
-		1,		// block_down_multiplier_hotplug2
-		1,		// block_down_multiplier_hotplug3
-		1,		// block_down_multiplier_hotplug4
-		1,		// block_down_multiplier_hotplug5
-		1,		// block_down_multiplier_hotplug6
-		1,		// block_down_multiplier_hotplug7
-		0,		// hotplug_stagger_up
-		0,		// hotplug_stagger_down
-		0,		// hotplug_idle_threshold
-		0,		// hotplug_idle_freq
+		2,		// block_down_multiplier_hotplug2
+		3,		// block_down_multiplier_hotplug3
+		0,		// block_down_multiplier_hotplug4
+		0,		// block_down_multiplier_hotplug5
+		0,		// block_down_multiplier_hotplug6
+		0,		// block_down_multiplier_hotplug7
+		1,		// hotplug_stagger_up
+		1,		// hotplug_stagger_down
+		90,		// hotplug_idle_threshold
+		600000,		// hotplug_idle_freq
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		1,		// hotplug_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
-		0,		// hotplug_engage_freq
+		600000,		// hotplug_engage_freq
 		0,		// hotplug_max_limit
 		0,		// hotplug_min_limit
 		0,		// hotplug_lock
 #endif /* ENABLE_HOTPLUGGING */
-		0,		// ignore_nice_load
+		1,		// ignore_nice_load
 		1,		// sampling_down_factor
 		0,		// sampling_down_max_momentum
 		50,		// sampling_down_momentum_sensitivity
@@ -2272,11 +2272,11 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		0,		// scaling_block_freq
 		0,		// scaling_block_threshold
 		2,		// scaling_block_force_down
-		600000,	// scaling_fastdown_freq
-		95,		// scaling_fastdown_up_threshold
-		60,		// scaling_fastdown_down_threshold
-		600000,		// scaling_responsiveness_freq
-		50,		// scaling_responsiveness_up_threshold
+		900000,	// scaling_fastdown_freq
+		99,		// scaling_fastdown_up_threshold
+		90,		// scaling_fastdown_down_threshold
+		400000,		// scaling_responsiveness_freq
+		20,		// scaling_responsiveness_up_threshold
 		1,		// scaling_proportional
 #ifdef ENABLE_INPUTBOOSTER
 		0,		// inputboost_cycles
@@ -2294,15 +2294,15 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		400000,		// music_min_freq
 		2,		// music_min_cores
 #endif /* ENABLE_MUSIC_LIMITS */
-		80,		// smooth_up
+		90,		// smooth_up
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		100,		// smooth_up_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
-		90,		// up_threshold
+		75,		// up_threshold
 #ifdef ENABLE_HOTPLUGGING
-		90,		// up_threshold_hotplug1
+		60,		// up_threshold_hotplug1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
-		90,		// up_threshold_hotplug2
+		75,		// up_threshold_hotplug2
 		90,		// up_threshold_hotplug3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
@@ -2316,15 +2316,15 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		600000,		// up_threshold_hotplug_freq1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
 		600000,	// up_threshold_hotplug_freq2
-		600000,	// up_threshold_hotplug_freq3
+		1000000,	// up_threshold_hotplug_freq3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
-		1000000,		// up_threshold_hotplug_freq4
-		1000000,		// up_threshold_hotplug_freq5
+		0,		// up_threshold_hotplug_freq4
+		0,		// up_threshold_hotplug_freq5
 #endif /* (MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 8)
-		1000000,		// up_threshold_hotplug_freq6
-		1000000,		// up_threshold_hotplug_freq7
+		0,		// up_threshold_hotplug_freq6
+		0,		// up_threshold_hotplug_freq7
 #endif /* (MAX_CORES == 8) */
 #endif /* ENABLE_HOTPLUGGING */
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)

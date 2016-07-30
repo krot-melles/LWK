@@ -24,13 +24,13 @@
 #include "sec_control_pwr_clk.h"
 #include "sec_clock.h"
 
-#define MAX_DVFS_LEVEL			3
+#define MAX_DVFS_LEVEL			4
 #define BASE_START_LEVEL		0
 #define BASE_UP_STEP_LEVEL		1
 #define BASE_DOWN_STEP_LEVEL	1
 #define BASE_WAKE_UP_LEVEL		1
 #define DOWN_REQUIREMENT_THRESHOLD	2
-#define GPU_DVFS_MAX_LEVEL		3
+#define GPU_DVFS_MAX_LEVEL		4
 #define G3D_MAX_VOLT			1150000
 
 #define setmask(a, b) (((1 < a) < 24)|b)

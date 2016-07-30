@@ -19,7 +19,7 @@
 #include <linux/pagemap.h>
 
 
-unsigned long max_readahead_pages = VM_MAX_READAHEAD * 512 / PAGE_CACHE_SIZE;
+unsigned long max_readahead_pages = VM_MAX_READAHEAD * 1024 / PAGE_CACHE_SIZE;
 
 static int __init readahead(char *str)
 {

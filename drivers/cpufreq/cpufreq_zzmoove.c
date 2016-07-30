@@ -90,7 +90,7 @@
 // #define CPU_IDLE_TIME_IN_CPUFREQ
 
 // ZZ: enable/disable music limits
-#define ENABLE_MUSIC_LIMITS
+// #define ENABLE_MUSIC_LIMITS
 
 // ZZ: enable/disable freq auto adjusting
 // #define ENABLE_AUTO_ADJUST_FREQ
