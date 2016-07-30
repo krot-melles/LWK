@@ -36,6 +36,9 @@
 #include <linux/bit_spinlock.h>
 #include <linux/rculist_bl.h>
 #include <linux/prefetch.h>
+#ifdef CONFIG_POWERSUSPEND
+#include <linux/powersuspend.h>
+#endif
 #include <linux/powersuspend.h>
 #include <linux/ratelimit.h>
 #include "internal.h"
@@ -80,10 +83,14 @@
  *     dentry2->d_lock
  */
 
+#ifdef CONFIG_POWERSUSPEND
 #define DEFAULT_VFS_CACHE_PRESSURE 60
 #define DEFAULT_VFS_SUSPEND_CACHE_PRESSURE 20
 int sysctl_vfs_cache_pressure __read_mostly, resume_cache_pressure;
 int sysctl_vfs_suspend_cache_pressure __read_mostly, suspend_cache_pressure;
+#else
+int sysctl_vfs_cache_pressure __read_mostly = 100;
+#endif
 
 EXPORT_SYMBOL_GPL(sysctl_vfs_cache_pressure);
 
@@ -3073,6 +3080,23 @@ static struct power_suspend cpressure_suspend = {
 	.resume = cpressure_late_resume,
 };
 
+#ifdef CONFIG_POWERSUSPEND
+static void cpressure_early_suspend(struct power_suspend *handler)
+{
+	sysctl_vfs_cache_pressure = suspend_cache_pressure;
+}
+
+static void cpressure_late_resume(struct power_suspend *handler)
+{
+	sysctl_vfs_cache_pressure = resume_cache_pressure;
+}
+
+static struct power_suspend cpressure_suspend = {
+	.suspend = cpressure_early_suspend,
+	.resume = cpressure_late_resume,
+};
+#endif
+
 static __initdata unsigned long dhash_entries;
 static int __init set_dhash_entries(char *str)
 {
@@ -3145,11 +3169,12 @@ EXPORT_SYMBOL(d_genocide);
 
 void __init vfs_caches_init_early(void)
 {
+#ifdef CONFIG_POWERSUSPEND
 	sysctl_vfs_cache_pressure = resume_cache_pressure =
 		DEFAULT_VFS_CACHE_PRESSURE;
 	sysctl_vfs_suspend_cache_pressure = suspend_cache_pressure =
 		DEFAULT_VFS_SUSPEND_CACHE_PRESSURE;
-
+#endif
 	dcache_init_early();
 	inode_init_early();
 }
@@ -3174,5 +3199,7 @@ void __init vfs_caches_init(unsigned long mempages)
 	bdev_cache_init();
 	chrdev_init();
 
+#ifdef CONFIG_POWERSUSPEND
 	register_power_suspend(&cpressure_suspend);
+#endif
 }
