@@ -259,8 +259,8 @@ static int sec_bat_get_cable_from_extended_cable_type(
 				break;
 			case ONLINE_POWER_TYPE_MHL_500:
 				cable_type = POWER_SUPPLY_TYPE_MISC;
-				charge_current_max = 400;
-				charge_current = 400;
+				charge_current_max = 460;
+				charge_current = 460;
 				break;
 			case ONLINE_POWER_TYPE_MHL_900:
 				cable_type = POWER_SUPPLY_TYPE_MISC;
@@ -289,7 +289,7 @@ static int sec_bat_get_cable_from_extended_cable_type(
 		case ONLINE_SUB_TYPE_SMART_NOTG:
 			cable_type = POWER_SUPPLY_TYPE_MAINS;
 			charge_current_max = 1900;
-			charge_current = 1600;
+			charge_current = 1900;
 			break;
 		default:
 			cable_type = cable_main;
@@ -500,10 +500,10 @@ static sec_bat_adc_region_t cable_adc_value_table[] = {
 };
 
 static int polling_time_table[] = {
-	40,	/* BASIC */
-	40,	/* CHARGING */
-	40,	/* DISCHARGING */
-	40,	/* NOT_CHARGING */
+	60,	/* BASIC */
+	60,	/* CHARGING */
+	60,	/* DISCHARGING */
+	60,	/* NOT_CHARGING */
 	3600,	/* SLEEP */
 };
 
