@@ -106,7 +106,7 @@ EXPORT_SYMBOL_GPL(dirty_writeback_interval);
 /*
  * The longest time for which data is allowed to remain dirty
  */
-#define DEFAULT_DIRTY_EXPIRE_INTERVAL 500 /* centiseconds */
+#define DEFAULT_DIRTY_EXPIRE_INTERVAL 600 /* centiseconds */
 #define DEFAULT_SUSPEND_DIRTY_EXPIRE_INTERVAL 12000 /* centiseconds */
 unsigned int dirty_expire_interval,
 	resume_dirty_expire_interval;
