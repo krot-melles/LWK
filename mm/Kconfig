@@ -487,7 +487,7 @@ config PGTABLE_MAPPING
 config ZSWAP
 	bool "In-kernel swap page compression"
 	depends on FRONTSWAP && CRYPTO
-	select CRYPTO_LZO
+	select CRYPTO_LZ4
 	select ZSMALLOC
 	default n
 	help
@@ -498,6 +498,9 @@ config ZSWAP
 	  from this compressed store much faster than most tradition
 	  swap devices resulting in reduced I/O and faster performance
 	  for many workloads.
+
+config SWAP_DISABLE_RUNTIME_DISCARD
+	def_bool n
 
 config ZSWAP_ENABLE_WRITEBACK
 	bool "Enable writeback"
