@@ -124,13 +124,6 @@ extern unsigned int exynos_cpufreq_direct_scale(unsigned int target_freq,
 						enum op_state state);
 extern int exynos_init_bL_info(struct cpu_info_alter *info);
 
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-extern struct mutex hotplug_mutex;
-extern bool hotplug_out;
-extern struct cpumask out_cpus;
-extern void __do_hotplug(void);
-#endif
-
 #if defined(CONFIG_ARM_EXYNOS_IKS_CPUFREQ) || defined(CONFIG_ARM_EXYNOS_CPUFREQ)
 extern void exynos_lowpower_for_cluster(cluster_type cluster, bool on);
 extern void reset_lpj_for_cluster(cluster_type cluster);
