@@ -2210,11 +2210,11 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		0,		// fast_scaling_sleep_up
 		0,		// fast_scaling_sleep_down
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
-		30,		// afs_threshold1
-		50,		// afs_threshold2
-		70,		// afs_threshold3
+		50,		// afs_threshold1
+		70,		// afs_threshold2
+		85,		// afs_threshold3
 		90,		// afs_threshold4
-		1200000,		// freq_limit
+		0,		// freq_limit
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		200000,		// freq_limit_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
@@ -2246,7 +2246,7 @@ struct zzmoove_profile zzmoove_profiles[] = {
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		1,		// hotplug_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
-		1200000,		// hotplug_engage_freq
+		0,		// hotplug_engage_freq
 		0,		// hotplug_max_limit
 		0,		// hotplug_min_limit
 		0,		// hotplug_lock
@@ -2255,7 +2255,7 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		1,		// sampling_down_factor
 		0,		// sampling_down_max_momentum
 		0,		// sampling_down_momentum_sensitivity
-		50000,		// sampling_rate
+		0,		// sampling_rate
 		200000,		// sampling_rate_idle
 		5,		// sampling_rate_idle_delay
 		60,		// sampling_rate_idle_threshold
