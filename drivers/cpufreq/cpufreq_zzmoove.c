@@ -66,7 +66,7 @@
 #include <linux/msm_tsens.h>
 #endif /* defined(CONFIG_THERMAL_TSENS8974)... */
 
-#define ENABLE_INPUTBOOSTER			// ZZ: enable/disable inputbooster support
+// #define ENABLE_INPUTBOOSTER			// ZZ: enable/disable inputbooster support
 // #define ENABLE_WORK_RESTARTLOOP		// ZZ: enable/disable restart loop for touchboost (DO NOT ENABLE IN THIS VERSION -> NOT STABLE YET!)
 
 #ifdef ENABLE_INPUTBOOSTER
@@ -81,7 +81,11 @@
 #define MAX_CORES					(4)
 
 // ZZ: enable/disable hotplug support
+#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
+//#define ENABLE_HOTPLUGGING
+#else
 #define ENABLE_HOTPLUGGING
+#endif
 
 // ZZ: enable support for native hotplugging on snapdragon platform
 // #define SNAP_NATIVE_HOTPLUGGING

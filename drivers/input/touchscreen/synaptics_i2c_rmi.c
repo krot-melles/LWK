@@ -4192,7 +4192,6 @@ static void synaptics_rmi4_input_close(struct input_dev *dev)
 }
 #endif
 
-#ifdef CONFIG_PM
 #ifdef CONFIG_HAS_EARLYSUSPEND
 #define synaptics_rmi4_suspend NULL
 #define synaptics_rmi4_resume NULL
