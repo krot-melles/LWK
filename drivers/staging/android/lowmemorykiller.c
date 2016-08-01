@@ -286,7 +286,7 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	read_lock(&tasklist_lock);
 #ifdef CONFIG_ANDROID_LMK_ADJ_RBTREE
  for (tsk = pick_first_task();
- tsk != pick_last_task();
+ 	tsk != pick_last_task() && tsk != NULL;
  tsk = pick_next_from_adj_tree(tsk)) {
 #else
 	for_each_process(tsk) {
@@ -515,6 +515,13 @@ static int android_oom_handler(struct notifier_block *nb,
 #else
 			continue;
 #endif
+		}
+	if (fatal_signal_pending(p) ||
+				((p->flags & PF_EXITING) &&
+					test_tsk_thread_flag(p, TIF_MEMDIE))) {
+			lowmem_print(2, "skip slow dying process %d\n", p->pid);
+			task_unlock(p);
+			continue;
 		}
 		tasksize = get_mm_rss(p->mm);
 		task_unlock(p);
@@ -990,7 +997,10 @@ void add_2_adj_tree(struct task_struct *task)
 void delete_from_adj_tree(struct task_struct *task)
 {
 	spin_lock(&lmk_lock);
-	rb_erase(&task->adj_node, &tasks_scoreadj);
+	if (!RB_EMPTY_NODE(&task->adj_node)) {
+		rb_erase(&task->adj_node, &tasks_scoreadj);
+		RB_CLEAR_NODE(&task->adj_node);
+	}
 	spin_unlock(&lmk_lock);
 }
 
