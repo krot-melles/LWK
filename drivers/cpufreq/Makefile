@@ -61,6 +61,3 @@ obj-$(CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG)	+= dm_cpu_hotplug.o
 # PowerPC platform drivers
 obj-$(CONFIG_CPU_FREQ_MAPLE)		+= maple-cpufreq.o
 
-# lazyplug
-obj-$(CONFIG_LAZYPLUG)			+= lazyplug.o
-CFLAGS_lazyplug.o			+= -finline-functions  -funroll-loops
