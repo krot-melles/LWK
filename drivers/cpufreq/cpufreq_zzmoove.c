@@ -81,11 +81,7 @@
 #define MAX_CORES					(4)
 
 // ZZ: enable/disable hotplug support
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
-//#define ENABLE_HOTPLUGGING
-#else
 #define ENABLE_HOTPLUGGING
-#endif
 
 // ZZ: enable support for native hotplugging on snapdragon platform
 // #define SNAP_NATIVE_HOTPLUGGING
