@@ -68,5 +68,3 @@ ifeq ($(TIMA_ENABLED),1)
 obj-$(CONFIG_TIMA_LOG)		+= tima_debug_log.o
 endif
 
-# Touchwake
-obj-$(CONFIG_TOUCH_WAKE)        += touch_wake.o

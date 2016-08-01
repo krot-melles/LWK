@@ -590,8 +590,3 @@ source "drivers/misc/modem_if/Kconfig"
 source "drivers/misc/2mic/Kconfig"
 endmenu
 
-config TOUCH_WAKE
-	bool "Support for Touch Wake"
-	default y
-	help
-		Say Y here to enable Touch Wake
