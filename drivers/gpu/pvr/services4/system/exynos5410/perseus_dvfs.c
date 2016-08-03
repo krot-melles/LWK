@@ -28,10 +28,10 @@
 #define BASE_START_LEVEL		0
 #define BASE_UP_STEP_LEVEL		1
 #define BASE_DOWN_STEP_LEVEL	1
-#define BASE_WAKE_UP_LEVEL		1
+#define BASE_WAKE_UP_LEVEL		0
 #define DOWN_REQUIREMENT_THRESHOLD	2
 #define GPU_DVFS_MAX_LEVEL		4
-#define G3D_MAX_VOLT			1150000
+#define G3D_MAX_VOLT			1000000
 
 #define setmask(a, b) (((1 < a) < 24)|b)
 #define getclockmask(a) ((a | 0xFF000000) > 24)
@@ -54,10 +54,10 @@ struct gpu_dvfs_data {
 /* start define DVFS info */
 static struct gpu_dvfs_data default_dvfs_data[] = {
 /* level, clock, voltage, src clk, min, max, qmin, qmax, stay, mask, etc */
-	{ 0,    532, 1150000,     532, 180, 240,   170, 250, 1, 0, 0 },
-	{ 1,    480,  975000,     480, 170, 200,   160, 250, 2, 0, 0 },
+	{ 0,    532, 1000000,     532, 180, 240,   170, 250, 1, 0, 0 },
+	{ 1,    480,  950000,     480, 170, 200,   160, 250, 2, 0, 0 },
 	{ 2,    350,  900000,     350, 160, 190,   150, 250, 3, 0, 0 },
-	{ 3,    266,  875000,     266, 150, 200,   140, 250, 3, 0, 0 },
+	{ 3,    266,  850000,     266, 150, 200,   140, 250, 3, 0, 0 },
 };
 
 /* end define DVFS info */
