@@ -351,7 +351,12 @@ LDFLAGS =
 CFLAGS_MODULE   = -munaligned-access -fno-pic -mfpu=neon-vfpv4
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  = $(LDFLAGS) --strip-debug
-CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4
+CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 -marm \
+		  -fgcse-after-reload -fgcse-sm \
+		  -fgcse-las -ftree-loop-im -ftree-loop-ivcanon -fweb \
+		  -frename-registers -ftree-loop-linear -ftree-vectorize \
+		  -fmodulo-sched -ffast-math -pipe \
+		  -funsafe-math-optimizations
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -567,7 +572,7 @@ all: vmlinux
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 # Did I just say size ? I meant speed !
-KBUILD_CFLAGS	+= -O3
+KBUILD_CFLAGS	+= -Ofast
 else
 KBUILD_CFLAGS	+= -O2
 endif
