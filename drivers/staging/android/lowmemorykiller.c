@@ -213,9 +213,6 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	int other_free = global_page_state(NR_FREE_PAGES) - totalreserve_pages;
 	int other_file = global_page_state(NR_FILE_PAGES) -
 						global_page_state(NR_SHMEM);
-#if defined(CONFIG_ZSWAP)
- 	int other_file -= total_swapcache_pages();
-#endif
 	struct zone *zone;
 
 	if (offlining) {

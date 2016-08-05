@@ -450,15 +450,6 @@ unsigned int get_hotplug_cpu_up_boost(void)
 	return hotplug_cpu_up_boost_value;
 }
 
-void set_min_gpu_freq(unsigned int freq)
-{
-	if (freq != gpu_min && freq >= 100 && freq <= 800)
-	{
-		gpu_min = freq;
-		hlpr_set_min_max_G3D(freq, gpu_max);
-	}
-}
-
 unsigned int get_normalmin_freq(void)
 {
 	return normalmin_freq_value;
