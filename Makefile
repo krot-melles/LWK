@@ -378,7 +378,7 @@ KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
  				-Wno-sizeof-pointer-memaccess \
  				-Wno-error=unused-parameter -Wno-error=unused-but-set-variable \
  				-fno-exceptions -Wno-multichar -Wno-sequence-point \
-				-fno-delete-null-pointer-checks \
+			  	-fno-schedule-insns2 \
  				-std=gnu89
 
 KBUILD_AFLAGS_KERNEL :=

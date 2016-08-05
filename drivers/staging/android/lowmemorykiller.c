@@ -51,8 +51,8 @@
 #include <linux/proc_fs.h>
 #endif
 
-// #define ENHANCED_LMK_ROUTINE
-// #define LMK_COUNT_READ
+#define ENHANCED_LMK_ROUTINE
+#define LMK_COUNT_READ
 
 #ifdef ENHANCED_LMK_ROUTINE
 #define LOWMEM_DEATHPENDING_DEPTH 3
@@ -213,9 +213,9 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	int other_free = global_page_state(NR_FREE_PAGES) - totalreserve_pages;
 	int other_file = global_page_state(NR_FILE_PAGES) -
 						global_page_state(NR_SHMEM);
-//#if defined(CONFIG_ZSWAP)
-// 	other_file -= total_swapcache_pages();
-//#endif
+#if defined(CONFIG_ZSWAP)
+ 	int other_file -= total_swapcache_pages();
+#endif
 	struct zone *zone;
 
 	if (offlining) {
@@ -862,6 +862,25 @@ static struct shrinker lowmem_shrinker = {
 	.seeks = DEFAULT_SEEKS * 16
 };
 
+#ifdef CONFIG_ANDROID_BG_SCAN_MEM
+static int lmk_task_migration_notify(struct notifier_block *nb,
+					unsigned long data, void *arg)
+{
+	struct shrink_control sc = {
+		.gfp_mask = GFP_KERNEL,
+		.nr_to_scan = 1,
+	};
+
+	lowmem_shrink(&lowmem_shrinker, &sc);
+
+	return NOTIFY_OK;
+}
+
+static struct notifier_block tsk_migration_nb = {
+	.notifier_call = lmk_task_migration_notify,
+};
+#endif
+
 static int __init lowmem_init(void)
 {
 	task_free_register(&task_nb);
@@ -872,6 +891,10 @@ static int __init lowmem_init(void)
 #ifdef CONFIG_ANDROID_OOM_KILLER
 	register_oom_notifier(&android_oom_notifier);
 #endif
+#ifdef CONFIG_ANDROID_BG_SCAN_MEM
+	raw_notifier_chain_register(&bgtsk_migration_notifier_head,
+					&tsk_migration_nb);
+#endif
 	return 0;
 }
 
@@ -879,7 +902,10 @@ static void __exit lowmem_exit(void)
 {
 	unregister_shrinker(&lowmem_shrinker);
 	task_free_unregister(&task_nb);
-
+#ifdef CONFIG_ANDROID_BG_SCAN_MEM
+	raw_notifier_chain_unregister(&bgtsk_migration_notifier_head,
+					&tsk_migration_nb);
+#endif
 }
 
 #ifdef CONFIG_ANDROID_LOW_MEMORY_KILLER_AUTODETECT_OOM_ADJ_VALUES

@@ -1383,7 +1383,8 @@ static int __init exynos_cpufreq_init(void)
 
 	INIT_WORK(&blank_qos_change, change_blank_cpu_qos);
 	fb_register_client(&fb_block);
-
+//Dynamic Hotplug
+	dm_cpu_hotplug_init();
 	return 0;
 
 err_cpufreq:
