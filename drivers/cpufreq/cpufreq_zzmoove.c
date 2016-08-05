@@ -78,10 +78,10 @@
 #define ZZMOOVE_VERSION "1.0 beta8"
 
 // ZZ: support for 2,4,6 or 8 cores (this will enable/disable hotplug threshold tuneables and limit hotplug max limit tuneable)
-#define MAX_CORES					(4)
+// #define MAX_CORES					(4)
 
 // ZZ: enable/disable hotplug support
-#define ENABLE_HOTPLUGGING
+// #define ENABLE_HOTPLUGGING
 
 // ZZ: enable support for native hotplugging on snapdragon platform
 // #define SNAP_NATIVE_HOTPLUGGING
@@ -90,13 +90,13 @@
 // #define CPU_IDLE_TIME_IN_CPUFREQ
 
 // ZZ: enable/disable music limits
-#define ENABLE_MUSIC_LIMITS
+// #define ENABLE_MUSIC_LIMITS
 
 // ZZ: enable/disable freq auto adjusting
-#define ENABLE_AUTO_ADJUST_FREQ
+// #define ENABLE_AUTO_ADJUST_FREQ
 
 // ZZ: enable/disable profiles support
-#define ENABLE_PROFILES_SUPPORT
+// #define ENABLE_PROFILES_SUPPORT
 
 // ZZ: include profiles header file and set name for 'custom' profile (informational for a changed profile value)
 #ifdef ENABLE_PROFILES_SUPPORT
@@ -120,12 +120,12 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
  * this governor will not work. All times here are in uS.
  */
 #define TRANSITION_LATENCY_LIMIT	    (10 * 1000 * 1000)	// ZZ: default transition latency limit
-#define LATENCY_MULTIPLIER				(1000)	// ZZ: default latency multiplier
+#define LATENCY_MULTIPLIER				(500)	// ZZ: default latency multiplier
 #define MIN_LATENCY_MULTIPLIER				(20)	// ZZ: default min latency multiplier
 #define MIN_SAMPLING_RATE_RATIO				(2)	// ZZ: default min sampling rate ratio
 
 // ZZ: general tuneable defaults
-#define DEF_FREQUENCY_UP_THRESHOLD			(85)	// ZZ: default regular scaling up threshold
+#define DEF_FREQUENCY_UP_THRESHOLD			(75)	// ZZ: default regular scaling up threshold
 #ifdef ENABLE_HOTPLUGGING
 #define DEF_FREQUENCY_UP_THRESHOLD_HOTPLUG		(68)	// ZZ: default hotplug up threshold for all cpus (cpu0 stays allways on)
 #define DEF_FREQUENCY_UP_THRESHOLD_HOTPLUG_FREQ		(0)	// Yank: default hotplug up threshold frequency for all cpus (0 = disabled)
@@ -188,7 +188,7 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
 #define DEF_SCALING_FASTDOWN_UP_THRESHOLD		(95)	// ZZ: default scaling fastdown up threshold. the up threshold when scaling fastdown freq has been exceeded (ffolkes)
 #define DEF_SCALING_FASTDOWN_DOWN_THRESHOLD		(90)	// ZZ: default scaling fastdown up threshold. the down threshold when scaling fastdown freq has been exceeded (ffolkes)
 #define DEF_SCALING_RESPONSIVENESS_FREQ			(0)	// ZZ: default frequency below which we use a lower up threshold (ffolkes)
-#define DEF_SCALING_RESPONSIVENESS_UP_THRESHOLD		(30)	// ZZ: default up threshold we use when below scaling responsiveness freq (ffolkes)
+#define DEF_SCALING_RESPONSIVENESS_UP_THRESHOLD		(60)	// ZZ: default up threshold we use when below scaling responsiveness freq (ffolkes)
 #define DEF_SCALING_PROPORTIONAL			(0)	// ZZ: default proportional scaling
 
 // ZZ: sampling rate idle and sampling down momentum tuneable defaults
@@ -230,7 +230,7 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
 #endif /* ENABLE_HOTPLUGGING */
 
 // ZZ: tuneable defaults for Early Demand
-#define DEF_GRAD_UP_THRESHOLD				(25)	// ZZ: default grad up threshold
+#define DEF_GRAD_UP_THRESHOLD				(60)	// ZZ: default grad up threshold
 #define DEF_EARLY_DEMAND				(0)	// ZZ: default early demand, default off
 
 /*
