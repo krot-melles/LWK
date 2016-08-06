@@ -69,10 +69,10 @@ static DEFINE_PER_CPU(int, cpufreq_policy_cpu);
 static DEFINE_PER_CPU(struct rw_semaphore, cpu_policy_rwsem);
 // Dynamic Hotplug
 static unsigned int hotplug_enabled_flag = 1;
-static unsigned int hotplug_cpu_up_load_value = 75;
-static unsigned int hotplug_cpu_up_boost_value = 75;
-static unsigned int normalmin_freq_value = 100000;
-static unsigned int hotplug_cpu_down_hysteresis_value = 0;
+static unsigned int hotplug_cpu_up_load_value = 25;
+static unsigned int hotplug_cpu_up_boost_value = 50;
+static unsigned int normalmin_freq_value = 250000;
+static unsigned int hotplug_cpu_down_hysteresis_value = 50;
 
 #define lock_policy_rwsem(mode, cpu)					\
 static int lock_policy_rwsem_##mode					\

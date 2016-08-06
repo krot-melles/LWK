@@ -27,7 +27,7 @@
 #define	COLD_THRESHOLD	20
 #define NORMALMAX_FREQ	1600000
 #define NORMALMIN_FREQ	100000
-#define POLLING_MSEC	500
+#define POLLING_MSEC	250
 
 struct cpu_load_info {
 	cputime64_t cpu_idle;
