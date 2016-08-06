@@ -7178,8 +7178,8 @@ void __init sched_init(void)
 {
 	int i, j;
 	unsigned long alloc_size = 0, ptr;
-//	sec_gaf_supply_rqinfo(offsetof(struct curr),
-//			      offsetof(struct cfs_rq, rq));
+	sec_gaf_supply_rqinfo(offsetof(struct rq, curr),
+			      offsetof(struct cfs_rq, rq));
 
 #ifdef CONFIG_FAIR_GROUP_SCHED
 	alloc_size += 2 * nr_cpu_ids * sizeof(void **);
@@ -7984,7 +7984,7 @@ static void cpu_cgroup_attach(struct cgroup *cgrp,
 	cgroup_taskset_for_each(task, cgrp, tset) {
 		sched_move_task(task);
 #ifdef CONFIG_ANDROID_BG_SCAN_MEM
-		if (task_notify_on_migrate(task) && thread_group_leader(task))
+//		if (task_notify_on_migrate(task) && thread_group_leader(task))
 			raw_notifier_call_chain(&bgtsk_migration_notifier_head,
 						0, NULL);
 #endif
@@ -8562,3 +8562,4 @@ struct cgroup_subsys cpuacct_subsys = {
 	.subsys_id = cpuacct_subsys_id,
 };
 #endif	/* CONFIG_CGROUP_CPUACCT */
+

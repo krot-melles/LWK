@@ -193,7 +193,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
 ARCH		?=arm
-CROSS_COMPILE	?=../tc/bin/arm-cortex-linux-gnueabi-
+CROSS_COMPILE	?=../tc-Linaro/bin/arm-eabi-
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -245,8 +245,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = ccache gcc
 HOSTCXX      = ccache g++
-HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -Ofast
-HOSTCXXFLAGS = -Ofast -fgraphite
+HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2
+HOSTCXXFLAGS = -O2 -fgraphite -fno-tree-vectorize -std=gnu89 -fgcse-las
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -351,12 +351,7 @@ LDFLAGS =
 CFLAGS_MODULE   = -munaligned-access -fno-pic -mfpu=neon-vfpv4
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  = $(LDFLAGS) --strip-debug
-CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 -marm \
-		  -fgcse-after-reload -fgcse-sm \
-		  -fgcse-las -ftree-loop-im -ftree-loop-ivcanon -fweb \
-		  -frename-registers -ftree-loop-linear -ftree-vectorize \
-		  -fmodulo-sched -ffast-math -pipe \
-		  -funsafe-math-optimizations
+CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 -marm
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -378,7 +373,6 @@ KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
  				-Wno-sizeof-pointer-memaccess \
  				-Wno-error=unused-parameter -Wno-error=unused-but-set-variable \
  				-fno-exceptions -Wno-multichar -Wno-sequence-point \
-			  	-fno-schedule-insns2 \
  				-std=gnu89
 
 KBUILD_AFLAGS_KERNEL :=
@@ -573,7 +567,7 @@ all: vmlinux
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os
 else
-KBUILD_CFLAGS	+= -Ofast
+KBUILD_CFLAGS	+= -O2
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
