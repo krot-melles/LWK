@@ -70,7 +70,7 @@ static sec_charging_current_t charging_current_table[] = {
 	{1000,	1000,	200,	40*60},
 	{1000,	1000,	200,	40*60},
 	{1000,	1000,	200,	40*60},
-	{1900,	1800,	200,	40*60},
+	{1900,	1900,	200,	40*60},
 	{0,	0,	0,	0},
 	{750,	750,	200,	40*60},
 	{1900,	1900,	200,	40*60},
@@ -701,12 +701,7 @@ sec_battery_platform_data_t sec_battery_pdata = {
 		SEC_BATTERY_FULL_CONDITION_NOTIMEFULL |
 		SEC_BATTERY_FULL_CONDITION_VCELL,
 	.full_condition_soc = 97,
-#if defined(CONFIG_MACH_J_CHN_CTC)
-	.full_condition_vcell = 4150,
-#else
 	.full_condition_vcell = 4300,
-#endif
-
 	.recharge_check_count = 2,
 	.recharge_condition_type =
 		SEC_BATTERY_RECHARGE_CONDITION_VCELL,

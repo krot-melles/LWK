@@ -398,13 +398,6 @@ config EXYNOS5_C2_STATE_IDLE
 	  Enable C2 State Idle support when CPU_IDLE is
 	  enabled
 
-config EXYNOS5_DYNAMIC_CPU_HOTPLUG
-	bool "Dynamic CPU Hotplug support"
-	depends on SOC_EXYNOS5410
-	default y
-	help
-	  Enable Dynamic CPU Hotplug
-
 config ASV_MARGIN_TEST
 	bool "Enable margin test"
 	default n

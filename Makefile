@@ -193,7 +193,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
 ARCH		?=arm
-CROSS_COMPILE	?=../tc/bin/arm-linux-androideabi-
+CROSS_COMPILE	?=../tc/bin/arm-eabi-
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -366,14 +366,12 @@ LINUXINCLUDE    := -I$(srctree)/arch/$(hdr-arch)/include \
 KBUILD_CPPFLAGS := -D__KERNEL__
 
 KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
- 				-fno-strict-aliasing -fno-common \
- 				-Wno-format-security -Wno-unused \
- 				-fno-delete-null-pointer-checks \
- 				-Wno-maybe-uninitialized \
- 				-Wno-sizeof-pointer-memaccess \
- 				-Wno-error=unused-parameter -Wno-error=unused-but-set-variable \
- 				-fno-exceptions -Wno-multichar -Wno-sequence-point \
- 				-std=gnu89
+ 		   -fno-strict-aliasing -fno-common \
+ 		   -Wno-format-security -Wno-unused \
+		   -fno-delete-null-pointer-checks \
+		   -Wno-discarded-qualifiers \
+		   -Wno-deprecated-declarations \
+		   -Wno-bool-compare
 
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
