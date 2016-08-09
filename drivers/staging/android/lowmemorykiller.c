@@ -481,7 +481,7 @@ static int android_oom_handler(struct notifier_block *nb,
 	show_mem(SHOW_MEM_FILTER_NODES);
 	dump_tasks_info();
 
-	min_score_adj = lowmem_oom_adj_to_oom_score_adj(0);
+	min_score_adj = 0;
 #ifdef MULTIPLE_OOM_KILLER
 	for (i = 0; i < OOM_DEPTH; i++)
 		selected_oom_score_adj[i] = min_score_adj;

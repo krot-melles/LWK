@@ -21,7 +21,7 @@ ccflags-y := \
 	-Wno-sign-compare\
 	-fno-strict-aliasing\
 	-Wno-pointer-arith\
-	-O2
+	-Os
 
 ccflags-y += -DLINUX -D__linux__ -DANDROID
 

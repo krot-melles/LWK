@@ -90,13 +90,13 @@
 // #define CPU_IDLE_TIME_IN_CPUFREQ
 
 // ZZ: enable/disable music limits
-// #define ENABLE_MUSIC_LIMITS
+#define ENABLE_MUSIC_LIMITS
 
 // ZZ: enable/disable freq auto adjusting
-// #define ENABLE_AUTO_ADJUST_FREQ
+#define ENABLE_AUTO_ADJUST_FREQ
 
 // ZZ: enable/disable profiles support
-// #define ENABLE_PROFILES_SUPPORT
+#define ENABLE_PROFILES_SUPPORT
 
 // ZZ: include profiles header file and set name for 'custom' profile (informational for a changed profile value)
 #ifdef ENABLE_PROFILES_SUPPORT
@@ -120,12 +120,12 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
  * this governor will not work. All times here are in uS.
  */
 #define TRANSITION_LATENCY_LIMIT	    (10 * 1000 * 1000)	// ZZ: default transition latency limit
-#define LATENCY_MULTIPLIER				(500)	// ZZ: default latency multiplier
+#define LATENCY_MULTIPLIER				(900)	// ZZ: default latency multiplier
 #define MIN_LATENCY_MULTIPLIER				(20)	// ZZ: default min latency multiplier
 #define MIN_SAMPLING_RATE_RATIO				(2)	// ZZ: default min sampling rate ratio
 
 // ZZ: general tuneable defaults
-#define DEF_FREQUENCY_UP_THRESHOLD			(75)	// ZZ: default regular scaling up threshold
+#define DEF_FREQUENCY_UP_THRESHOLD			(85)	// ZZ: default regular scaling up threshold
 #ifdef ENABLE_HOTPLUGGING
 #define DEF_FREQUENCY_UP_THRESHOLD_HOTPLUG		(68)	// ZZ: default hotplug up threshold for all cpus (cpu0 stays allways on)
 #define DEF_FREQUENCY_UP_THRESHOLD_HOTPLUG_FREQ		(0)	// Yank: default hotplug up threshold frequency for all cpus (0 = disabled)

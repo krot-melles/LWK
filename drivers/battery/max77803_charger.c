@@ -25,11 +25,11 @@
 
 #define RECOVERY_DELAY 	3000
 #define RECOVERY_CNT 	5
-#define REDUCE_CURRENT_STEP	0
-#define MINIMUM_INPUT_CURRENT 1820 //experimental hack (2600*0.7) was 460
+#define REDUCE_CURRENT_STEP	100
+#define MINIMUM_INPUT_CURRENT 460
 
-#define SIOP_INPUT_LIMIT_CURRENT 1820 // Same as above
-#define SIOP_CHARGING_LIMIT_CURRENT 1820 // Same as above
+#define SIOP_INPUT_LIMIT_CURRENT 1300
+#define SIOP_CHARGING_LIMIT_CURRENT 1300
 
 struct max77803_charger_data {
 	struct max77803_dev	*max77803;
