@@ -2168,12 +2168,12 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		0,		// disable_hotplug_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
 #endif /* ENABLE_HOTPLUGGING */
-		20,		// down_threshold
+		50,		// down_threshold
 #ifdef ENABLE_HOTPLUGGING
-		20,		// down_threshold_hotplug1
+		80,		// down_threshold_hotplug1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
-		20,		// down_threshold_hotplug2
-		20,		// down_threshold_hotplug3
+		80,		// down_threshold_hotplug2
+		80,		// down_threshold_hotplug3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
 		55,		// down_threshold_hotplug4
@@ -2204,7 +2204,7 @@ struct zzmoove_profile zzmoove_profiles[] = {
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		1,		// early_demand_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
-		0,		// fast_scaling_up
+		2,		// fast_scaling_up
 		5,		// fast_scaling_down
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		0,		// fast_scaling_sleep_up
@@ -2232,13 +2232,13 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		1,		// block_up_multiplier_hotplug6
 		1,		// block_up_multiplier_hotplug7
 		0,		// hotplug_block_down_cycles
-		1,		// block_down_multiplier_hotplug1
-		1,		// block_down_multiplier_hotplug2
-		1,		// block_down_multiplier_hotplug3
-		1,		// block_down_multiplier_hotplug4
-		1,		// block_down_multiplier_hotplug5
-		1,		// block_down_multiplier_hotplug6
-		1,		// block_down_multiplier_hotplug7
+		2,		// block_down_multiplier_hotplug1
+		2,		// block_down_multiplier_hotplug2
+		2,		// block_down_multiplier_hotplug3
+		2,		// block_down_multiplier_hotplug4
+		2,		// block_down_multiplier_hotplug5
+		2,		// block_down_multiplier_hotplug6
+		2,		// block_down_multiplier_hotplug7
 		1,		// hotplug_stagger_up
 		0,		// hotplug_stagger_down
 		0,		// hotplug_idle_threshold
@@ -2246,7 +2246,7 @@ struct zzmoove_profile zzmoove_profiles[] = {
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		1,		// hotplug_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
-		0,		// hotplug_engage_freq
+		600000,		// hotplug_engage_freq
 		0,		// hotplug_max_limit
 		0,		// hotplug_min_limit
 		0,		// hotplug_lock
@@ -2255,8 +2255,8 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		1,		// sampling_down_factor
 		0,		// sampling_down_max_momentum
 		50,		// sampling_down_momentum_sensitivity
-		30000,		// sampling_rate
-		500000,		// sampling_rate_idle
+		80000,		// sampling_rate
+		200000,		// sampling_rate_idle
 		0,		// sampling_rate_idle_delay
 		40,		// sampling_rate_idle_threshold
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
@@ -2272,11 +2272,11 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		0,		// scaling_block_freq
 		0,		// scaling_block_threshold
 		5,		// scaling_block_force_down
-		300000,	// scaling_fastdown_freq
+		600000,	// scaling_fastdown_freq
 		99,		// scaling_fastdown_up_threshold
-		90,		// scaling_fastdown_down_threshold
-		300000,		// scaling_responsiveness_freq
-		90,		// scaling_responsiveness_up_threshold
+		82,		// scaling_fastdown_down_threshold
+		100000,		// scaling_responsiveness_freq
+		60,		// scaling_responsiveness_up_threshold
 		1,		// scaling_proportional
 #ifdef ENABLE_INPUTBOOSTER
 		0,		// inputboost_cycles
@@ -2298,12 +2298,12 @@ struct zzmoove_profile zzmoove_profiles[] = {
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		0,		// smooth_up_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
-		85,		// up_threshold
+		90,		// up_threshold
 #ifdef ENABLE_HOTPLUGGING
-		45,		// up_threshold_hotplug1
+		95,		// up_threshold_hotplug1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
-		80,		// up_threshold_hotplug2
-		99,		// up_threshold_hotplug3
+		95,		// up_threshold_hotplug2
+		95,		// up_threshold_hotplug3
 #endif /* (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8) */
 #if (MAX_CORES == 6 || MAX_CORES == 8)
 		68,		// up_threshold_hotplug4
