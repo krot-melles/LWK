@@ -28,7 +28,7 @@
 #endif
 #include "synaptics_i2c_rmi.h"
 
-static unsigned int CPU_QOS_FREQ = 600000;
+static unsigned int CPU_QOS_FREQ = 400000;
 static unsigned int MIF_QOS_FREQ = 800000;
 static unsigned int INT_QOS_FREQ = 200000;
 
