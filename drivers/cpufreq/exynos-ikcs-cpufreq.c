@@ -63,11 +63,11 @@ static unsigned int freq_max[CA_END] __read_mostly;	/* Maximum (Big/Little) cloc
  * This value is based on the difference between the dmips value of A15/A7
  * It is used to revise cpu frequency when changing cluster
  */
-#define STEP_LEVEL_CA7_MAX	650000
-#define STEP_LEVEL_CA15_MIN	700000
+#define STEP_LEVEL_CA7_MAX	600000
+#define STEP_LEVEL_CA15_MIN	800000
 
-unsigned int step_level_CA7_max = 650000;
-unsigned int step_level_CA15_min = 700000;
+unsigned int step_level_CA7_max = 600000;
+unsigned int step_level_CA15_min = 800000;
 
 #define LIMIT_COLD_VOLTAGE	1250000
 #define COLD_VOLTAGE_OFFSET	75000
@@ -1383,8 +1383,7 @@ static int __init exynos_cpufreq_init(void)
 
 	INIT_WORK(&blank_qos_change, change_blank_cpu_qos);
 	fb_register_client(&fb_block);
-//Dynamic Hotplug
-	dm_cpu_hotplug_init();
+
 	return 0;
 
 err_cpufreq:

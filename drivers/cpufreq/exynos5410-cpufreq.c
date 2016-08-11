@@ -811,7 +811,8 @@ static void __init set_volt_table_CA7(void)
 				exynos5410_volt_table_CA7[i]);
 	}
 
-	max_support_idx_CA7 = L0;
+	exynos5410_freq_table_CA7[L0].frequency = CPUFREQ_ENTRY_INVALID;
+	max_support_idx_CA7 = L1;
  
 	min_support_idx_CA7 = L11;
 
@@ -842,16 +843,19 @@ static void __init set_volt_table_CA15(void)
 	exynos5410_freq_table_CA15[L1].frequency = CPUFREQ_ENTRY_INVALID;
 	exynos5410_freq_table_CA15[L2].frequency = CPUFREQ_ENTRY_INVALID;
 	exynos5410_freq_table_CA15[L3].frequency = CPUFREQ_ENTRY_INVALID;
+	exynos5410_freq_table_CA15[L4].frequency = CPUFREQ_ENTRY_INVALID;
+	exynos5410_freq_table_CA15[L5].frequency = CPUFREQ_ENTRY_INVALID;
 
-	max_support_idx_CA15 = L4;
+	max_support_idx_CA15 = L6;
 
+	exynos5410_freq_table_CA15[L13].frequency = CPUFREQ_ENTRY_INVALID;
 	exynos5410_freq_table_CA15[L14].frequency = CPUFREQ_ENTRY_INVALID;
 	exynos5410_freq_table_CA15[L15].frequency = CPUFREQ_ENTRY_INVALID;
 	exynos5410_freq_table_CA15[L16].frequency = CPUFREQ_ENTRY_INVALID;
 	exynos5410_freq_table_CA15[L17].frequency = CPUFREQ_ENTRY_INVALID;
 	exynos5410_freq_table_CA15[L18].frequency = CPUFREQ_ENTRY_INVALID;
 
-	min_support_idx_CA15 = L13;
+	min_support_idx_CA15 = L12;
 
 }
 
