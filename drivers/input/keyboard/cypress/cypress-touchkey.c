@@ -38,7 +38,7 @@
 #include "issp_extern.h"
 #include <linux/i2c/touchkey_i2c.h>
 
-static unsigned int qos_cpu_freq = 600000;
+static unsigned int qos_cpu_freq = 400000;
 static unsigned int qos_mif_freq = 800000;
 static unsigned int qos_mif2_freq = 400000;
 static unsigned int qos_int_freq = 200000;
