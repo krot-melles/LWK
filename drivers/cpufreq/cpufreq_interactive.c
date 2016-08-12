@@ -65,8 +65,13 @@ static spinlock_t speedchange_cpumask_lock;
 static struct mutex gov_lock;
 
 /* Hi speed to bump to from lo speed when load burst (default max)
-Battery Saving Tweak , Set it to min possible freq */
+Battery Saving Tweak , Set it to min possible freq 
+Works Great on AOSP but TW lags (as always ) */
+#ifdef CONFIG_TW
+static unsigned int hispeed_freq = 1000000;
+#else
 static unsigned int hispeed_freq = 100000;
+#endif
 
 /* Go to hi speed when CPU load at or above this value. */
 #define DEFAULT_GO_HISPEED_LOAD 90
