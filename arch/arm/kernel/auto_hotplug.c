@@ -58,7 +58,7 @@
 /*
  * MIN_SAMPLING_RATE is scaled based on num_online_cpus()
  */
-#define MIN_SAMPLING_RATE	msecs_to_jiffies(20)
+#define MIN_SAMPLING_RATE	msecs_to_jiffies(150)
 
 /*
  * Load defines:
@@ -69,8 +69,8 @@
  * These two are scaled based on num_online_cpus()
  */
 #define ENABLE_ALL_LOAD_THRESHOLD	(100 * CPUS_AVAILABLE)
-#define ENABLE_LOAD_THRESHOLD		350
-#define DISABLE_LOAD_THRESHOLD		75
+#define ENABLE_LOAD_THRESHOLD		250
+#define DISABLE_LOAD_THRESHOLD		50
 
 /* Control flags */
 unsigned char flags;
