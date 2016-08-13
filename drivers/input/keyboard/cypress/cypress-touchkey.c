@@ -903,6 +903,14 @@ static irqreturn_t touchkey_interrupt(int irq, void *dev_id)
 	keycode_type = (data[0] & TK_BIT_KEYCODE);
 	pressed = !(data[0] & TK_BIT_PRESS_EV);
 
+	if (keycode_data[1] % 2 && keycode_data[2] % 2 &&
+		tkey_i2c->key_power_mode == 1) {
+		input_report_key(tkey_i2c->input_dev, KEY_POWER, 1);
+		input_sync(tkey_i2c->input_dev);
+		input_report_key(tkey_i2c->input_dev, KEY_POWER, 0);
+		input_sync(tkey_i2c->input_dev);
+	}
+
 	if (keycode_type <= 0 || keycode_type >= touchkey_count) {
 		dev_dbg(&tkey_i2c->client->dev, "keycode_type err\n");
 		return IRQ_HANDLED;
@@ -1495,6 +1503,30 @@ static ssize_t set_touchkey_firm_status_show(struct device *dev,
 	return count;
 }
 
+static ssize_t key_power_mode_show(struct device *dev,
+	struct device_attribute *attr, char *buf)
+{
+	struct touchkey_i2c *tkey_i2c = dev_get_drvdata(dev);
+
+	return scnprintf(buf, PAGE_SIZE, "%d\n", tkey_i2c->key_power_mode);
+}
+
+static ssize_t key_power_mode_store(struct device *dev,
+	struct device_attribute *attr, const char *buf, size_t size)
+{
+	int r, data;
+	struct touchkey_i2c *tkey_i2c = dev_get_drvdata(dev);
+
+	r = kstrtoint(buf, 10, &data);
+	if ((r) || (data != 0 && data != 1) ||
+		(tkey_i2c->key_power_mode == data))
+		return -EINVAL;
+
+	tkey_i2c->key_power_mode = data;
+
+	return size;
+}
+
 static DEVICE_ATTR(brightness, S_IRUGO | S_IWUSR | S_IWGRP, NULL,
 		   touchkey_led_control);
 static DEVICE_ATTR(touchkey_menu, S_IRUGO | S_IWUSR | S_IWGRP,
@@ -1546,6 +1578,9 @@ static DEVICE_ATTR(flip_mode, S_IRUGO | S_IWUSR | S_IWGRP, NULL,
 		   flip_cover_mode_enable);
 #endif
 
+static DEVICE_ATTR(key_power_mode, S_IWUSR | S_IRUGO,
+	key_power_mode_show, key_power_mode_store);
+
 static struct attribute *touchkey_attributes[] = {
 	&dev_attr_brightness.attr,
 	&dev_attr_touchkey_menu.attr,
@@ -1581,6 +1616,7 @@ static struct attribute *touchkey_attributes[] = {
 #ifdef TKEY_FLIP_MODE
 	&dev_attr_flip_mode.attr,
 #endif
+&dev_attr_key_power_mode.attr,
 	NULL,
 };
 
@@ -1659,6 +1695,7 @@ static int i2c_touchkey_probe(struct i2c_client *client,
 	for (i = 1; i < touchkey_count; i++)
 		set_bit(touchkey_keycode[i], input_dev->keybit);
 
+	input_set_capability(input_dev, EV_KEY, KEY_POWER);
 	input_set_drvdata(input_dev, tkey_i2c);
 	i2c_set_clientdata(client, tkey_i2c);
 
