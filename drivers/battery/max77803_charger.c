@@ -1548,3 +1548,4 @@ module_exit(max77803_charger_exit);
 MODULE_DESCRIPTION("max77803 charger driver");
 MODULE_AUTHOR("Samsung Electronics");
 MODULE_LICENSE("GPL");
+
