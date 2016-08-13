@@ -248,6 +248,7 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	int other_file = global_page_state(NR_FILE_PAGES) -
 						global_page_state(NR_SHMEM);
 	struct reclaim_state *reclaim_state = current->reclaim_state;
+	struct sysinfo si;
 	struct zone *zone;
 
 #if defined(CONFIG_ZRAM_FOR_ANDROID)  || defined(CONFIG_ZSWAP)
@@ -286,14 +287,18 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 		time_before_eq(jiffies, lowmem_deathpending_timeout))
 		return 0;
 #endif
+	si_meminfo(&si);
+	si_swapinfo(&si);
+
+	other_free += other_file;
+	other_free += si.freeswap;
 
 	if (lowmem_adj_size < array_size)
 		array_size = lowmem_adj_size;
 	if (lowmem_minfree_size < array_size)
 		array_size = lowmem_minfree_size;
 	for (i = 0; i < array_size; i++) {
-		if (other_free < lowmem_minfree[i] &&
-		    other_file < lowmem_minfree[i]) {
+	if (other_free < minfree) {
 			min_score_adj = lowmem_adj[i];
 			break;
 		}
