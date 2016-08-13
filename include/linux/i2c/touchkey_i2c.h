@@ -13,12 +13,12 @@
 #include <linux/irq.h>
 #include <linux/delay.h>
 
-#ifdef CONFIG_HAS_EARLYSUSPEND
-#include <linux/earlysuspend.h>
+#ifdef CONFIG_POWERSUSPEND
+#include <linux/powersuspend.h>
 #endif
 
 /* Touchkey Register */
-#define KEYCODE_REG			0x00
+#define KEYCODE_REG		0x00
 
 #define TK_BIT_PRESS_EV		0x08
 #define TK_BIT_KEYCODE		0x07
@@ -132,8 +132,8 @@ struct touchkey_i2c {
 	struct i2c_client *client;
 	struct input_dev *input_dev;
 	struct completion init_done;
-#ifdef CONFIG_HAS_EARLYSUSPEND
-	struct early_suspend early_suspend;
+#ifdef CONFIG_POWERSUSPEND
+	struct power_suspend power_suspend;
 #endif
 	struct mutex lock;
 	struct device	*dev;
