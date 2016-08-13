@@ -95,7 +95,7 @@ module_param_named(max_pool_percent,
  * compressed page. Any pages that do not compress by at least
  * this ratio will be rejected.
 */
-static unsigned int zswap_max_compression_ratio = 50;
+static unsigned int zswap_max_compression_ratio = 70;
 module_param_named(max_compression_ratio,
 			zswap_max_compression_ratio, uint, 0644);
 
