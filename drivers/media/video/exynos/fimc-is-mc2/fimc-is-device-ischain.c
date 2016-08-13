@@ -3813,8 +3813,11 @@ int fimc_is_ischain_open(struct fimc_is_device_ischain *device,
 	device->is_region = imemory->is_region;
 
 	/*fimc_is_fw_clear_irq1_all(core);*/
-
+#if defined(CONFIG_TW)
+	read_data_from_file("/data/CameraID.txt", buf, 1, &pos);
+#else
 	read_data_from_file("/data/camera/camid", buf, 1, &pos);
+#endif
 	if(buf[0] == '0')
 		cam_id = CAMERA_SINGLE_REAR;
 	else if(buf[0] == '1')
