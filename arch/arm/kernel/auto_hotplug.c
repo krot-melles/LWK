@@ -34,8 +34,8 @@
 #include <linux/workqueue.h>
 #include <linux/sched.h>
 
-#ifdef CONFIG_HAS_EARLYSUSPEND
-#include <linux/earlysuspend.h>
+#ifdef CONFIG_POWERSUSPEND
+#include <linux/powersuspend.h>
 #endif
 
 /*
@@ -58,7 +58,7 @@
 /*
  * MIN_SAMPLING_RATE is scaled based on num_online_cpus()
  */
-#define MIN_SAMPLING_RATE	msecs_to_jiffies(150)
+#define MIN_SAMPLING_RATE	msecs_to_jiffies(80)
 
 /*
  * Load defines:
@@ -68,9 +68,9 @@
  * DISABLE is the load at which a CPU is disabled
  * These two are scaled based on num_online_cpus()
  */
-#define ENABLE_ALL_LOAD_THRESHOLD	(100 * CPUS_AVAILABLE)
-#define ENABLE_LOAD_THRESHOLD		250
-#define DISABLE_LOAD_THRESHOLD		50
+#define ENABLE_ALL_LOAD_THRESHOLD	(110 * CPUS_AVAILABLE)
+#define ENABLE_LOAD_THRESHOLD		300
+#define DISABLE_LOAD_THRESHOLD		70
 
 /* Control flags */
 unsigned char flags;
@@ -90,7 +90,7 @@ struct work_struct hotplug_boost_online_work;
 static unsigned int history[SAMPLING_PERIODS];
 static unsigned int index;
 
-static unsigned int min_online_cpus = 1;
+static unsigned int min_online_cpus = 2;
 
 static int min_online_cpus_fn_set(const char *arg, const struct kernel_param *kp)
 {
@@ -367,7 +367,7 @@ inline void hotplug_boostpulse(void)
 	}
 }
 
-#ifdef CONFIG_HAS_EARLYSUSPEND
+#ifdef CONFIG_POWERSUSPEND
 static void auto_hotplug_early_suspend(struct early_suspend *handler)
 {
 #if DEBUG
@@ -400,7 +400,7 @@ static struct early_suspend auto_hotplug_suspend = {
 	.suspend = auto_hotplug_early_suspend,
 	.resume = auto_hotplug_late_resume,
 };
-#endif /* CONFIG_HAS_EARLYSUSPEND */
+#endif /* CONFIG_POWERSUSPEND */
 
 int __init auto_hotplug_init(void)
 {
@@ -421,7 +421,7 @@ int __init auto_hotplug_init(void)
 	schedule_delayed_work_on(0, &hotplug_decision_work, HZ * 5);
 	schedule_delayed_work(&hotplug_unpause_work, HZ * 10);
 
-#ifdef CONFIG_HAS_EARLYSUSPEND
+#ifdef CONFIG_POWERSUSPEND
 	register_early_suspend(&auto_hotplug_suspend);
 #endif
 	return 0;
