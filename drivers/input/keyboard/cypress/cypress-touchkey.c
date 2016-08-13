@@ -872,54 +872,6 @@ static int touchkey_firmware_update(struct touchkey_i2c *tkey_i2c)
 }
 #endif
 
-#ifndef TEST_JIG_MODE
-static irqreturn_t touchkey_interrupt(int irq, void *dev_id)
-{
-	struct touchkey_i2c *tkey_i2c = dev_id;
-	u8 data[3];
-	int ret;
-	int retry = 10;
-	int keycode_type = 0;
-	int pressed;
-
-	retry = 3;
-	while (retry--) {
-		ret = i2c_touchkey_read(tkey_i2c->client, KEYCODE_REG, data, 3);
-		if (!ret)
-			break;
-		else {
-		dev_dbg(&tkey_i2c->client->dev, "I2c read failed, ret:%d, retry: %d\n",
-			       ret, retry);
-			continue;
-		}
-	}
-	if (ret < 0)
-		return IRQ_HANDLED;
-
-	keycode_type = (data[0] & TK_BIT_KEYCODE);
-	pressed = !(data[0] & TK_BIT_PRESS_EV);
-
-	if (keycode_type <= 0 || keycode_type >= touchkey_count) {
-		dev_dbg(&tkey_i2c->client->dev, "keycode_type err\n");
-		return IRQ_HANDLED;
-	}
-
-	input_report_key(tkey_i2c->input_dev,
-			 touchkey_keycode[keycode_type], pressed);
-	input_sync(tkey_i2c->input_dev);
-#if !defined(CONFIG_SAMSUNG_PRODUCT_SHIP)
-	dev_info(&tkey_i2c->client->dev, "keycode:%d pressed:%d %d\n",
-	touchkey_keycode[keycode_type], pressed, tkey_i2c->tsk_glove_mode_status);
-#else
-	dev_dbg(&tkey_i2c->client->dev, "pressed:%d %d\n",
-		pressed, tkey_i2c->tsk_glove_mode_status);
-#endif
-#ifdef TOUCHKEY_BOOSTER
-	touchkey_set_dvfs_lock(tkey_i2c, !!pressed);
-#endif
-	return IRQ_HANDLED;
-}
-#else
 static irqreturn_t touchkey_interrupt(int irq, void *dev_id)
 {
 	struct touchkey_i2c *tkey_i2c = dev_id;
@@ -969,7 +921,6 @@ static irqreturn_t touchkey_interrupt(int irq, void *dev_id)
 
 	return IRQ_HANDLED;
 }
-#endif
 
 static int touchkey_stop(struct touchkey_i2c *tkey_i2c)
 {
@@ -1012,10 +963,6 @@ out:
 
 static int touchkey_start(struct touchkey_i2c *tkey_i2c)
 {
-#ifdef TEST_JIG_MODE
-	unsigned char get_touch = 0x40;
-#endif
-
 	mutex_lock(&tkey_i2c->lock);
 
 	if (tkey_i2c->enabled) {
@@ -1041,10 +988,6 @@ static int touchkey_start(struct touchkey_i2c *tkey_i2c)
 		dev_err(&tkey_i2c->client->dev, "%s: Turning LED is reserved\n", __func__);
 		msleep(30);
 	}
-
-#ifdef TEST_JIG_MODE
-	i2c_touchkey_write(tkey_i2c->client, &get_touch, 1);
-#endif
 
 #if defined(TK_INFORM_CHARGER)
 	touchkey_ta_setting(tkey_i2c);
@@ -1486,10 +1429,6 @@ static ssize_t set_touchkey_update_store(struct device *dev,
 		return count;
 	}
 
-#ifdef TEST_JIG_MODE
-	unsigned char get_touch = 0x40;
-#endif
-
 	while (retry--) {
 		if (ISSP_main(tkey_i2c) == 0) {
 			dev_err(&tkey_i2c->client->dev,
@@ -1511,10 +1450,6 @@ static ssize_t set_touchkey_update_store(struct device *dev,
 		enable_irq(tkey_i2c->irq);
 		return count;
 	}
-
-#ifdef TEST_JIG_MODE
-	i2c_touchkey_write(tkey_i2c->client, &get_touch, 1);
-#endif
 
 	enable_irq(tkey_i2c->irq);
 #if defined(TK_HAS_AUTOCAL)
@@ -1887,15 +1822,7 @@ struct i2c_driver touchkey_i2c_driver = {
 
 static int __init touchkey_init(void)
 {
-#ifdef TEST_JIG_MODE
-	unsigned char get_touch = 0x40;
-#endif
-
 	i2c_add_driver(&touchkey_i2c_driver);
-
-#ifdef TEST_JIG_MODE
-	i2c_touchkey_write(tkey_i2c->client, &get_touch, 1);
-#endif
 	return 0;
 }
 
