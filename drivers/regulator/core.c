@@ -1997,6 +1997,20 @@ int regulator_set_voltage_time(struct regulator *regulator,
 }
 EXPORT_SYMBOL_GPL(regulator_set_voltage_time);
 
+int regulator_tk_fw_hack(struct regulator *regulator)
+{
+	struct regulator_dev *rdev = regulator->rdev;
+
+	if (!rdev->constraints)
+		return -EINVAL;
+
+	rdev->constraints->valid_ops_mask |= REGULATOR_CHANGE_VOLTAGE;
+	rdev->constraints->min_uV = 0x2625A0;
+	rdev->constraints->max_uV = 0x325AA0;
+
+	return 0;
+}
+
 /**
  * regulator_sync_voltage - re-apply last regulator output voltage
  * @regulator: regulator source
