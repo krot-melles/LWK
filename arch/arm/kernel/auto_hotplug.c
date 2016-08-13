@@ -34,10 +34,6 @@
 #include <linux/workqueue.h>
 #include <linux/sched.h>
 
-#ifdef CONFIG_POWERSUSPEND
-#include <linux/powersuspend.h>
-#endif
-
 /*
  * Enable debug output to dump the average
  * calculations and ring buffer array values
@@ -58,7 +54,7 @@
 /*
  * MIN_SAMPLING_RATE is scaled based on num_online_cpus()
  */
-#define MIN_SAMPLING_RATE	msecs_to_jiffies(80)
+#define MIN_SAMPLING_RATE	msecs_to_jiffies(50)
 
 /*
  * Load defines:
@@ -367,41 +363,6 @@ inline void hotplug_boostpulse(void)
 	}
 }
 
-#ifdef CONFIG_POWERSUSPEND
-static void auto_hotplug_early_suspend(struct early_suspend *handler)
-{
-#if DEBUG
-	pr_info("auto_hotplug: early suspend handler\n");
-#endif
-	flags |= EARLYSUSPEND_ACTIVE;
-
-	/* Cancel all scheduled delayed work to avoid races */
-	cancel_delayed_work_sync(&hotplug_offline_work);
-	cancel_delayed_work_sync(&hotplug_decision_work);
-	if (num_online_cpus() > 1) {
-#if DEBUG
-		pr_info("auto_hotplug: Offlining CPUs for early suspend\n");
-#endif
-		schedule_work_on(0, &hotplug_offline_all_work);
-	}
-}
-
-static void auto_hotplug_late_resume(struct early_suspend *handler)
-{
-#if DEBUG
-	pr_info("auto_hotplug: late resume handler\n");
-#endif
-	flags &= ~EARLYSUSPEND_ACTIVE;
-
-	schedule_delayed_work_on(0, &hotplug_decision_work, HZ);
-}
-
-static struct early_suspend auto_hotplug_suspend = {
-	.suspend = auto_hotplug_early_suspend,
-	.resume = auto_hotplug_late_resume,
-};
-#endif /* CONFIG_POWERSUSPEND */
-
 int __init auto_hotplug_init(void)
 {
 	pr_info("auto_hotplug: v0.220 by _thalamus\n");
@@ -421,9 +382,6 @@ int __init auto_hotplug_init(void)
 	schedule_delayed_work_on(0, &hotplug_decision_work, HZ * 5);
 	schedule_delayed_work(&hotplug_unpause_work, HZ * 10);
 
-#ifdef CONFIG_POWERSUSPEND
-	register_early_suspend(&auto_hotplug_suspend);
-#endif
 	return 0;
 }
 late_initcall(auto_hotplug_init);
