@@ -54,7 +54,7 @@
 /*
  * MIN_SAMPLING_RATE is scaled based on num_online_cpus()
  */
-#define MIN_SAMPLING_RATE	msecs_to_jiffies(50)
+#define MIN_SAMPLING_RATE	msecs_to_jiffies(100)
 
 /*
  * Load defines:
@@ -64,9 +64,9 @@
  * DISABLE is the load at which a CPU is disabled
  * These two are scaled based on num_online_cpus()
  */
-#define ENABLE_ALL_LOAD_THRESHOLD	(110 * CPUS_AVAILABLE)
-#define ENABLE_LOAD_THRESHOLD		300
-#define DISABLE_LOAD_THRESHOLD		70
+#define ENABLE_ALL_LOAD_THRESHOLD	(50 * CPUS_AVAILABLE)
+#define ENABLE_LOAD_THRESHOLD		90
+#define DISABLE_LOAD_THRESHOLD		60
 
 /* Control flags */
 unsigned char flags;
@@ -86,7 +86,7 @@ struct work_struct hotplug_boost_online_work;
 static unsigned int history[SAMPLING_PERIODS];
 static unsigned int index;
 
-static unsigned int min_online_cpus = 2;
+static unsigned int min_online_cpus = 1;
 
 static int min_online_cpus_fn_set(const char *arg, const struct kernel_param *kp)
 {
