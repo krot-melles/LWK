@@ -274,4 +274,3 @@ obj-$(CONFIG_GPS_GSD5T)			+= sec_gps_gsd5t.o
 endif
 
 obj-$(CONFIG_FORCE_FAST_CHARGE) += fastchg.o
-obj-$(CONFIG_INTELLI_PLUG) += intelli_plug.o
