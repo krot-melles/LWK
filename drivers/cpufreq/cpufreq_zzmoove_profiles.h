@@ -2168,7 +2168,7 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		0,		// disable_hotplug_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
 #endif /* ENABLE_HOTPLUGGING */
-		80,		// down_threshold
+		50,		// down_threshold
 #ifdef ENABLE_HOTPLUGGING
 		80,		// down_threshold_hotplug1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
@@ -2198,13 +2198,13 @@ struct zzmoove_profile zzmoove_profiles[] = {
 #endif /* (MAX_CORES == 8) */
 #endif /* ENABLE_HOTPLUGGING */
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
-		86,		// down_threshold_sleep
+		95,		// down_threshold_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
-		1,		// early_demand
+		0,		// early_demand
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
-		1,		// early_demand_sleep
+		0,		// early_demand_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
-		0,		// fast_scaling_up
+		2,		// fast_scaling_up
 		5,		// fast_scaling_down
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		0,		// fast_scaling_sleep_up
@@ -2214,11 +2214,11 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		50,		// afs_threshold2
 		70,		// afs_threshold3
 		90,		// afs_threshold4
-		1000000,		// freq_limit
+		0,		// freq_limit
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
-		100000,		// freq_limit_sleep
+		0,		// freq_limit_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
-		95,		// grad_up_threshold
+		96,		// grad_up_threshold
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		98,		// grad_up_threshold_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
@@ -2254,11 +2254,11 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		0,		// ignore_nice_load
 		1,		// sampling_down_factor
 		0,		// sampling_down_max_momentum
-		50,		// sampling_down_momentum_sensitivity
+		0,		// sampling_down_momentum_sensitivity
 		50000,		// sampling_rate
 		200000,		// sampling_rate_idle
 		0,		// sampling_rate_idle_delay
-		40,		// sampling_rate_idle_threshold
+		0,		// sampling_rate_idle_threshold
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		8,		// sampling_rate_sleep_multiplier
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
@@ -2274,9 +2274,9 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		5,		// scaling_block_force_down
 		600000,	// scaling_fastdown_freq
 		99,		// scaling_fastdown_up_threshold
-		82,		// scaling_fastdown_down_threshold
-		100000,		// scaling_responsiveness_freq
-		60,		// scaling_responsiveness_up_threshold
+		95,		// scaling_fastdown_down_threshold
+		600000,		// scaling_responsiveness_freq
+		50,		// scaling_responsiveness_up_threshold
 		1,		// scaling_proportional
 #ifdef ENABLE_INPUTBOOSTER
 		0,		// inputboost_cycles
@@ -2294,11 +2294,11 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		200000,		// music_min_freq
 		2,		// music_min_cores
 #endif /* ENABLE_MUSIC_LIMITS */
-		95,		// smooth_up
+		96,		// smooth_up
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(USE_LCD_NOTIFIER)
 		0,		// smooth_up_sleep
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND)... */
-		90,		// up_threshold
+		99,		// up_threshold
 #ifdef ENABLE_HOTPLUGGING
 		95,		// up_threshold_hotplug1
 #if (MAX_CORES == 4 || MAX_CORES == 6 || MAX_CORES == 8)
