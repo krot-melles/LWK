@@ -66,7 +66,7 @@
  */
 #define ENABLE_ALL_LOAD_THRESHOLD	(300) // 50 * CPUS_AVAILABLE
 #define ENABLE_LOAD_THRESHOLD		150
-#define DISABLE_LOAD_THRESHOLD		90
+#define DISABLE_LOAD_THRESHOLD		60
 
 /* Control flags */
 unsigned char flags;
