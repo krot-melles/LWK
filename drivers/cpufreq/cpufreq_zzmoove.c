@@ -90,13 +90,13 @@
 // #define CPU_IDLE_TIME_IN_CPUFREQ
 
 // ZZ: enable/disable music limits
-#define ENABLE_MUSIC_LIMITS
+// #define ENABLE_MUSIC_LIMITS
 
 // ZZ: enable/disable freq auto adjusting
-#define ENABLE_AUTO_ADJUST_FREQ
+// #define ENABLE_AUTO_ADJUST_FREQ
 
 // ZZ: enable/disable profiles support
-#define ENABLE_PROFILES_SUPPORT
+// #define ENABLE_PROFILES_SUPPORT
 
 // ZZ: include profiles header file and set name for 'custom' profile (informational for a changed profile value)
 #ifdef ENABLE_PROFILES_SUPPORT
@@ -120,18 +120,18 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
  * this governor will not work. All times here are in uS.
  */
 #define TRANSITION_LATENCY_LIMIT	    (10 * 1000 * 1000)	// ZZ: default transition latency limit
-#define LATENCY_MULTIPLIER				(900)	// ZZ: default latency multiplier
-#define MIN_LATENCY_MULTIPLIER				(20)	// ZZ: default min latency multiplier
+#define LATENCY_MULTIPLIER				(100)	// ZZ: default latency multiplier
+#define MIN_LATENCY_MULTIPLIER				(100)	// ZZ: default min latency multiplier
 #define MIN_SAMPLING_RATE_RATIO				(2)	// ZZ: default min sampling rate ratio
 
 // ZZ: general tuneable defaults
-#define DEF_FREQUENCY_UP_THRESHOLD			(85)	// ZZ: default regular scaling up threshold
+#define DEF_FREQUENCY_UP_THRESHOLD			(95)	// ZZ: default regular scaling up threshold
 #ifdef ENABLE_HOTPLUGGING
 #define DEF_FREQUENCY_UP_THRESHOLD_HOTPLUG		(68)	// ZZ: default hotplug up threshold for all cpus (cpu0 stays allways on)
 #define DEF_FREQUENCY_UP_THRESHOLD_HOTPLUG_FREQ		(0)	// Yank: default hotplug up threshold frequency for all cpus (0 = disabled)
 #endif /* ENABLE_HOTPLUGGING */
-#define DEF_SMOOTH_UP					(75)	// ZZ: default cpu load trigger for 'boosting' scaling frequency
-#define DEF_FREQUENCY_DOWN_THRESHOLD			(52)	// ZZ: default regular scaling down threshold
+#define DEF_SMOOTH_UP					(95)	// ZZ: default cpu load trigger for 'boosting' scaling frequency
+#define DEF_FREQUENCY_DOWN_THRESHOLD			(80)	// ZZ: default regular scaling down threshold
 #ifdef ENABLE_HOTPLUGGING
 #define DEF_FREQUENCY_DOWN_THRESHOLD_HOTPLUG		(55)	// ZZ: default hotplug down threshold for all cpus (cpu0 stays allways on)
 #define DEF_FREQUENCY_DOWN_THRESHOLD_HOTPLUG_FREQ	(0)	// Yank: default hotplug down threshold frequency for all cpus (0 = disabled)
@@ -169,9 +169,9 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
 #define DEF_HOTPLUG_MIN_LIMIT				(0)	// ff: default for hotplug_min_limit. the number of cores we require to be online (0 = disabled)
 #define DEF_HOTPLUG_LOCK				(0)	// ff: default for hotplug_lock. the number of cores we require to be online (0 = disabled)
 #endif /* ENABLE_HOTPLUGGING */
-#define DEF_SCALING_BLOCK_THRESHOLD			(0)	// ZZ: default scaling block threshold
-#define DEF_SCALING_BLOCK_CYCLES			(0)	// ZZ: default scaling block cycles
-#define DEF_SCALING_BLOCK_FREQ				(0)	// ZZ: default scaling block freq
+#define DEF_SCALING_BLOCK_THRESHOLD			(80)	// ZZ: default scaling block threshold
+#define DEF_SCALING_BLOCK_CYCLES			(10)	// ZZ: default scaling block cycles
+#define DEF_SCALING_BLOCK_FREQ				(600000)	// ZZ: default scaling block freq
 #define DEF_SCALING_UP_BLOCK_CYCLES			(0)	// ff: default scaling-up block cycles
 #define DEF_SCALING_UP_BLOCK_FREQ			(0)	// ff: default scaling-up block frequency threshold
 #ifdef CONFIG_EXYNOS4_EXPORT_TEMP
@@ -185,11 +185,11 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
 #endif /* ENABLE_SNAP_THERMAL_SUPPORT */
 #define DEF_SCALING_BLOCK_FORCE_DOWN			(2)	// ZZ: default scaling block force down
 #define DEF_SCALING_FASTDOWN_FREQ			(0)	// ZZ: default scaling fastdown freq. the frequency beyond which we apply a different up_threshold (ffolkes)
-#define DEF_SCALING_FASTDOWN_UP_THRESHOLD		(95)	// ZZ: default scaling fastdown up threshold. the up threshold when scaling fastdown freq has been exceeded (ffolkes)
+#define DEF_SCALING_FASTDOWN_UP_THRESHOLD		(99)	// ZZ: default scaling fastdown up threshold. the up threshold when scaling fastdown freq has been exceeded (ffolkes)
 #define DEF_SCALING_FASTDOWN_DOWN_THRESHOLD		(90)	// ZZ: default scaling fastdown up threshold. the down threshold when scaling fastdown freq has been exceeded (ffolkes)
-#define DEF_SCALING_RESPONSIVENESS_FREQ			(0)	// ZZ: default frequency below which we use a lower up threshold (ffolkes)
-#define DEF_SCALING_RESPONSIVENESS_UP_THRESHOLD		(60)	// ZZ: default up threshold we use when below scaling responsiveness freq (ffolkes)
-#define DEF_SCALING_PROPORTIONAL			(0)	// ZZ: default proportional scaling
+#define DEF_SCALING_RESPONSIVENESS_FREQ			(600000)	// ZZ: default frequency below which we use a lower up threshold (ffolkes)
+#define DEF_SCALING_RESPONSIVENESS_UP_THRESHOLD		(30)	// ZZ: default up threshold we use when below scaling responsiveness freq (ffolkes)
+#define DEF_SCALING_PROPORTIONAL			(2)	// ZZ: default proportional scaling
 
 // ZZ: sampling rate idle and sampling down momentum tuneable defaults
 #define DEF_SAMPLING_RATE_IDLE_THRESHOLD		(0)	// ZZ: default sampling rate idle threshold
@@ -213,7 +213,7 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
 #define DEF_GRAD_UP_THRESHOLD_SLEEP			(30)	// ZZ: default grad up sleep
 #define DEF_FAST_SCALING_SLEEP_UP			(0)	// Yank: default fast scaling sleep for upscaling
 #define DEF_FAST_SCALING_SLEEP_DOWN			(0)	// Yank: default fast scaling sleep for downscaling
-#define DEF_FREQ_LIMIT_SLEEP				(0)	// ZZ: default freq limit sleep
+#define DEF_FREQ_LIMIT_SLEEP				(100000)	// ZZ: default freq limit sleep
 #ifdef ENABLE_HOTPLUGGING
 #define DEF_DISABLE_HOTPLUG_SLEEP			(0)	// ZZ: default hotplug sleep switch
 #endif /* ENABLE_HOTPLUGGING */
@@ -230,7 +230,7 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
 #endif /* ENABLE_HOTPLUGGING */
 
 // ZZ: tuneable defaults for Early Demand
-#define DEF_GRAD_UP_THRESHOLD				(60)	// ZZ: default grad up threshold
+#define DEF_GRAD_UP_THRESHOLD				(90)	// ZZ: default grad up threshold
 #define DEF_EARLY_DEMAND				(0)	// ZZ: default early demand, default off
 
 /*
@@ -243,8 +243,8 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
  * ZZ: Fast Scaling: 0 do not activate fast scaling function
  * values 1-4 to enable fast scaling and 5 for auto fast scaling (insane scaling)
  */
-#define DEF_FAST_SCALING_UP				(0)	// Yank: default fast scaling for upscaling
-#define DEF_FAST_SCALING_DOWN				(0)	// Yank: default fast scaling for downscaling
+#define DEF_FAST_SCALING_UP				(1)	// Yank: default fast scaling for upscaling
+#define DEF_FAST_SCALING_DOWN				(4)	// Yank: default fast scaling for downscaling
 #define DEF_AFS_THRESHOLD1				(25)	// ZZ: default auto fast scaling step one
 #define DEF_AFS_THRESHOLD2				(50)	// ZZ: default auto fast scaling step two
 #define DEF_AFS_THRESHOLD3				(75)	// ZZ: default auto fast scaling step three
