@@ -47,7 +47,7 @@
  * because currently it is a sack of shit.
  */
 
-#define CPUS_AVAILABLE		num_possible_cpus()
+#define CPUS_AVAILABLE		4
 /*
  * SAMPLING_PERIODS * MIN_SAMPLING_RATE is the minimum
  * load history which will be averaged
@@ -67,8 +67,8 @@
  * DISABLE is the load at which a CPU is disabled
  * These two are scaled based on num_online_cpus()
  */
-#define ENABLE_ALL_LOAD_THRESHOLD	290
-#define ENABLE_LOAD_THRESHOLD		250
+#define ENABLE_ALL_LOAD_THRESHOLD	200
+#define ENABLE_LOAD_THRESHOLD		180
 #define DISABLE_LOAD_THRESHOLD		130
 
 /* Control flags */
