@@ -139,6 +139,28 @@ void disable_cpufreq(void)
 static LIST_HEAD(cpufreq_governor_list);
 static DEFINE_MUTEX(cpufreq_governor_mutex);
 
+static inline u64 get_cpu_idle_time_jiffy(unsigned int cpu, u64 *wall)
+{
+	u64 idle_time;
+	u64 cur_wall_time;
+	u64 busy_time;
+
+//	cur_wall_time = jiffies64_to_cputime64(get_jiffies_64());
+
+//	busy_time = kcpustat_cpu(cpu).cpustat[CPUTIME_USER];
+//	busy_time += kcpustat_cpu(cpu).cpustat[CPUTIME_SYSTEM];
+//	busy_time += kcpustat_cpu(cpu).cpustat[CPUTIME_IRQ];
+//	busy_time += kcpustat_cpu(cpu).cpustat[CPUTIME_SOFTIRQ];
+//	busy_time += kcpustat_cpu(cpu).cpustat[CPUTIME_STEAL];
+//	busy_time += kcpustat_cpu(cpu).cpustat[CPUTIME_NICE];
+
+	idle_time = cur_wall_time - busy_time;
+//	if (wall)
+//		*wall = cputime_to_usecs(cur_wall_time);
+
+//	return cputime_to_usecs(idle_time);
+}
+
 u64 get_cpu_idle_time(unsigned int cpu, u64 *wall, int io_busy)
 {
 	u64 idle_time = get_cpu_idle_time_us(cpu, io_busy ? wall : NULL);
@@ -298,7 +320,19 @@ void cpufreq_notify_transition(struct cpufreq_freqs *freqs, unsigned int state)
 }
 EXPORT_SYMBOL_GPL(cpufreq_notify_transition);
 
-
+/**
+ * cpufreq_notify_utilization - notify CPU userspace about CPU utilization
+ * change
+ *
+ * This function is called everytime the CPU load is evaluated by the
+ * ondemand governor. It notifies userspace of cpu load changes via sysfs.
+ */
+/*void cpufreq_notify_utilization(struct cpufreq_policy *policy,
+		unsigned int util)
+{
+	if (policy)
+		policy->util = util;
+}*/
 
 /*********************************************************************
  *                          SYSFS INTERFACE                          *
