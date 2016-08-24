@@ -131,7 +131,7 @@ static struct dbs_tuners {
 	.down_differential = DEF_FREQUENCY_DOWN_DIFFERENTIAL,
 	.down_differential_multi_core = MICRO_FREQUENCY_DOWN_DIFFERENTIAL,
 	.up_threshold_any_cpu_load = DEF_FREQUENCY_UP_THRESHOLD_ANY_CPU,
-	.optimal_freq_speed = 1728000,
+	.optimal_freq_speed = 1000000,
 	.shortcut = 0,
 	.power_save_freq = DEF_POWER_SAVE_FREQUENCY,
 	.two_phase_freq = DEF_TWO_PHASE_FREQUENCY,
