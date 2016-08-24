@@ -29,7 +29,7 @@
 
 
 #define SGX_DEFAULT_CLOCK   350
-#define SGX_DEFAULT_VOLTAGE 925000
+#define SGX_DEFAULT_VOLTAGE 900000
 #define WAKEUP_LOCK_CLOCK   266
 #define WAKEUP_LOCK_VOLTAGE 850000
 
@@ -43,7 +43,7 @@ module_param_named(qos_mif2_threshold, MIF_THRESHHOLD_VALUE_CLK, uint, S_IWUSR |
 
 static int sec_gpu_top_clock;
 static int gpu_voltage_margin;
-int sec_wakeup_lock_state = 1;
+int sec_wakeup_lock_state = 0;
 bool sec_gpu_power_on = false;
 
 module_param(sec_wakeup_lock_state, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
