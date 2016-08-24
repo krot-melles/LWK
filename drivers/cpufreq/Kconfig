@@ -131,11 +131,6 @@ config CPU_FREQ_DEFAULT_GOV_IMPULSE
 	select CPU_FREQ_GOV_IMPULSE
 	help
 	  Use the CPUFreq governor 'interactive' as default.
-
- config CPU_FREQ_DEFAULT_GOV_BARRY_ALLEN
- 	bool "barry_allen"
- 	select CPU_FREQ_GOV_BARRY_ALLEN
- 	help
  
 config CPU_FREQ_DEFAULT_GOV_INTELLIMM
     bool "intelliminmax"
