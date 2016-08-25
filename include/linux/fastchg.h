@@ -20,9 +20,9 @@
 #define _LINUX_FASTCHG_H
 
 #define FAST_CHARGE_VERSION "v1.2 by Yank555.lu"
-#define AC_LEVELS  "1000 1100 1200 1300 1400 1500 1600 1700 1800 1900 2000 2100"
+#define AC_LEVELS  "1000 1100 1200 1300 1400 1500 1600 1700 1800 1900"
 #define USB_LEVELS "460 500 600 700 800 900 1000"
-#define ANY_LEVELS "0 to 2100"
+#define ANY_LEVELS "0 to 1900"
 
 extern int force_fast_charge;
 
@@ -68,6 +68,10 @@ extern int failsafe;
 #define FAIL_SAFE_ENABLED 1	/* default */
 #define FAIL_SAFE_DISABLED 0
 
+#define fast_charge_level 
+#define FAST_CHARGE_900 900
+#define FAST_CHARGE_1500 1500
+#define FAST_CHARGE_2200 1900
 #endif
 
 
