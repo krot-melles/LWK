@@ -59,11 +59,7 @@
 #include "fimc-is-device-ischain.h"
 
 #define SDCARD_FW
-#if defined(CONFIG_TW)
-#define FIMC_IS_SETFILE_SDCARD_PATH		"/data/media/0/"
-#else
 #define FIMC_IS_SETFILE_SDCARD_PATH		"/data/camera/"
-#endif
 #define FIMC_IS_SDCARD_FW			"fimc_is_fw2.bin"
 #define FIMC_IS_GUMI_FW				"fimc_is_gumi_fw2.bin"
 #define FIMC_IS_SEC_FW				"fimc_is_sec_fw2.bin"
@@ -76,18 +72,10 @@
 #define FIMC_IS_6B2_SETF			"setfile_6b2.bin"
 #define FIMC_IS_4E5_SETF			"setfile_4e5.bin"
 
-#if defined(CONFIG_TW)
-#define FIMC_IS_FW_SDCARD			"/data/media/0/fimc_is_fw2.bin"
-#else
 #define FIMC_IS_FW_SDCARD			"/data/camera/fimc_is_fw2.bin"
-#endif
 
 #define FIMC_IS_FW_PATH				"/system/vendor/firmware/"
-#if defined(CONFIG_TW)
-#define FIMC_IS_FW_DUMP_PATH			"/data/"
-#else
 #define FIMC_IS_FW_DUMP_PATH			"/data/camera/"
-#endif
 
 #define FIMC_IS_FW_BASE_MASK			((1 << 26) - 1)
 #define FIMC_IS_VERSION_SIZE			43
@@ -97,11 +85,7 @@
 
 #define BINNING(x, y) ((1 << (((x) / (y)) >> 1)) * 1000)
 
-#if defined(CONFIG_TW)
-#define FIMC_IS_CAL_SDCARD			"/data/cal_data.bin"
-#else
 #define FIMC_IS_CAL_SDCARD			"/data/camera/cal_data.bin"
-#endif
 
 /*#define FIMC_IS_MAX_CAL_SIZE			(20 * 1024)*/
 #define FIMC_IS_MAX_FW_SIZE			(2048 * 1024)
@@ -1630,14 +1614,8 @@ void fimc_is_ischain_savefirm(struct fimc_is_device_ischain *this)
 {
 #ifdef DEBUG_DUMP_FIRMWARE
 	loff_t pos;
-
-#if defined(CONFIG_TW)
-	write_data_to_file("/data/firmware.bin", (char *)this->imemory.kvaddr,
-		(size_t)FIMC_IS_A5_MEM_SIZE, &pos);
-#else
 	write_data_to_file("/data/camera/firmware.bin", (char *)this->imemory.kvaddr,
 		(size_t)FIMC_IS_A5_MEM_SIZE, &pos);
-#endif
 
 #endif
 }
@@ -3813,11 +3791,7 @@ int fimc_is_ischain_open(struct fimc_is_device_ischain *device,
 	device->is_region = imemory->is_region;
 
 	/*fimc_is_fw_clear_irq1_all(core);*/
-#if defined(CONFIG_TW)
-	read_data_from_file("/data/CameraID.txt", buf, 1, &pos);
-#else
 	read_data_from_file("/data/camera/camid", buf, 1, &pos);
-#endif
 	if(buf[0] == '0')
 		cam_id = CAMERA_SINGLE_REAR;
 	else if(buf[0] == '1')
