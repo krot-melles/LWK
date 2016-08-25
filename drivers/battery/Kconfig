@@ -191,9 +191,17 @@ config CHARGER_MAX77803
 	  flash driver.
 	  You have to define MFD_MAX77693
 
+config FORCE_FAST_CHARGE
+	bool "Force fast charging (AC/USB) by Yank555.lu"
+	default y
+	help
+	  A simple sysfs interface to force adapters that
+	  are detected as USB to charge as AC (1A/h) or to set
+	  custom charging currents for AC and USB.
+
 config SAMSUNG_LPM_MODE
 	bool "Off charging mode support in sec battery driver"
-	default n
+	default y
 	help
 	  Say Y to include support for sec off charging support
 	  This value defined at bootloader.
