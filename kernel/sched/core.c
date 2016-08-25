@@ -6184,7 +6184,6 @@ static void update_top_cache_domain(int cpu)
 		} while ((tmp = tmp->child));
 
 		id = cpumask_first(sched_domain_span(sd));
-	}
 		size = cpumask_weight(sched_domain_span(sd));
 	}
 
