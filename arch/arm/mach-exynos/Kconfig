@@ -1469,11 +1469,3 @@ config USER_RESET_DEBUG
 	  This option provides reset history log in user version.
 	  This option enable proc/reset_reason support
 	  It's only support KOR Model
-
-config FORCE_FAST_CHARGE
-	bool "Force fast charging (AC/USB) by Yank555.lu"
-	default y
-	help
-	  A simple sysfs interface to force adapters that
-	  are detected as USB to charge as AC (1A/h) or to set
-	  custom charging currents for AC and USB.

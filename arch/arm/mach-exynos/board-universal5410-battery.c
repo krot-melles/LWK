@@ -45,10 +45,6 @@
 #include <linux/battery/sec_charger.h>
 #include <linux/battery/charger/max77803_charger.h>
 
-#ifdef CONFIG_FORCE_FAST_CHARGE
-#include <linux/fastchg.h>
-#endif
-
 #define SEC_BATTERY_PMIC_NAME ""
 
 static struct s3c_adc_client *adc_client;
@@ -306,53 +302,6 @@ static int sec_bat_get_cable_from_extended_cable_type(
 		is_wpc_cable_attached = true;
 	else
 		is_wpc_cable_attached = false;
-
-#ifdef CONFIG_FORCE_FAST_CHARGE
-	/* We are in basic Fast Charge mode, so we substitute AC to USB
-	   levels */
-	if (force_fast_charge == FAST_CHARGE_FORCE_AC) {
-		switch(cable_type) {
-			/* These are low current USB connections,
-			   apply normal 0.9A AC levels to USB */
-			case POWER_SUPPLY_TYPE_USB:
-			case POWER_SUPPLY_TYPE_USB_ACA:
-			case POWER_SUPPLY_TYPE_CARDOCK:
-			case POWER_SUPPLY_TYPE_OTG:
-				charge_current_max = USB_CHARGE_900;
-				charge_current     = USB_CHARGE_900;
-				break;
-
-		}
-	/* We are in advanced Fast Charge mode, so we apply custom charging
-	   levels for both AC and USB */
-	} else if (force_fast_charge == FAST_CHARGE_FORCE_CUSTOM_MA) {
-		switch(cable_type) {
-			/* These are USB connections, apply custom USB current
-			   for all of them */
-			case POWER_SUPPLY_TYPE_USB:
-			case POWER_SUPPLY_TYPE_USB_DCP:
-			case POWER_SUPPLY_TYPE_USB_CDP:
-			case POWER_SUPPLY_TYPE_USB_ACA:
-			case POWER_SUPPLY_TYPE_CARDOCK:
-			case POWER_SUPPLY_TYPE_OTG:
-				charge_current_max = usb_charge_level;
-				charge_current     = usb_charge_level;
-				break;
-			/* These are AC connections, apply custom AC current
-			   for all of them */
-			case POWER_SUPPLY_TYPE_MAINS:
-				charge_current_max = ac_charge_level;
-				/* but never go above 1.6A */
-				charge_current     =
-					min(ac_charge_level, MAX_CHARGE_LEVEL);
-				break;
-			/* Don't do anything for any other kind of connections
-			   and don't touch when type is unknown */
-			default:
-				break;
-		}
-	}
-#endif
 
 	if (charge_current_max == 0) {
 		charge_current_max =
