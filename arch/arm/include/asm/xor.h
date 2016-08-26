@@ -8,7 +8,10 @@
  * published by the Free Software Foundation.
  */
 #include <linux/hardirq.h>
+#include <linux/hardirq.h>
 #include <asm-generic/xor.h>
+#include <asm/hwcap.h>
+#include <asm/neon.h>
 #include <asm/hwcap.h>
 #include <asm/neon.h>
 
