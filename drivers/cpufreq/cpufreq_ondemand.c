@@ -33,7 +33,7 @@
  * dbs is used in this file as a shortform for demandbased switching
  * It helps to keep variable names smaller, simpler
  */
-#define B_MAX_FREQ	(1900000)
+#define B_MAX_FREQ	(1800000)
 #define L_MAX_FREQ	(650000)
 
 #define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(10)

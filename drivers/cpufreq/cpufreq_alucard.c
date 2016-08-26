@@ -82,7 +82,7 @@ static struct alucard_tuners {
 	atomic_t pump_inc_step;
 	atomic_t pump_dec_step;
 } alucard_tuners_ins = {
-	.sampling_rate = ATOMIC_INIT(80000),
+	.sampling_rate = ATOMIC_INIT(100000),
 	.inc_cpu_load_at_min_freq = ATOMIC_INIT(75),
 	.inc_cpu_load = ATOMIC_INIT(95),
 	.dec_cpu_load_at_min_freq = ATOMIC_INIT(50),

@@ -87,7 +87,7 @@ static struct darkness_tuners {
 	atomic_t force_freqs_step;
 #endif
 } darkness_tuners_ins = {
-	.sampling_rate = ATOMIC_INIT(60000),
+	.sampling_rate = ATOMIC_INIT(100000),
 #ifdef CONFIG_CPU_EXYNOS5410
 	.up_sf_step = ATOMIC_INIT(0),
 	.down_sf_step = ATOMIC_INIT(0),
