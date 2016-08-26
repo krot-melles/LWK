@@ -357,12 +357,12 @@ static void lazyplug_work_fn(struct work_struct *work)
 				if (idle_count < DEF_IDLE_COUNT)
 					idle_count++;
 
-//				if (idle_count == DEF_IDLE_COUNT && persist_count == 0) {
-//					/* take down A57 first */
-//					cpu_down(7);
-//					cpu_down(6);
-//					cpu_down(5);
-//					cpu_down(4);
+				if (idle_count == DEF_IDLE_COUNT && persist_count == 0) {
+					/* take down A57 first */
+					cpu_down(7);
+					cpu_down(6);
+					cpu_down(5);
+					cpu_down(4);
 					/* take down everyone */
 					unplug_cpu(0);
 #ifdef DEBUG_LAZYPLUG
@@ -488,10 +488,10 @@ void lazyplug_enter_lazy(bool enter)
 		lazymode = true;
 
 		/* take down A57 */
-//		cpu_down(7);
-//		cpu_down(6);
-//		cpu_down(5);
-//		cpu_down(4);
+		cpu_down(7);
+		cpu_down(6);
+		cpu_down(5);
+		cpu_down(4);
 	} else if (!enter && lazymode) {
 		pr_info("lazyplug: exiting lazy mode\n");
 		touch_boost_active = Ltouch_boost_active;
