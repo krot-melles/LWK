@@ -30,6 +30,7 @@
 #include <media/videobuf2-core.h>
 #include <mach/smc.h>
 
+extern void lazyplug_enter_lazy(bool enter);
 #include "s5p_mfc_common.h"
 
 #include "s5p_mfc_intr.h"
@@ -1913,6 +1914,7 @@ static int s5p_mfc_open(struct file *file)
 			goto err_hw_init;
 		}
 	}
+	lazyplug_enter_lazy(true);
 
 	mfc_info("MFC instance open completed\n");
 	return ret;
@@ -1998,6 +2000,7 @@ static int s5p_mfc_release(struct file *file)
 		mfc_err("no mfc device to run\n");
 		return -EINVAL;
 	}
+	lazyplug_enter_lazy(false);
 
 	if (need_to_wait_frame_start(ctx)) {
 		ctx->state = MFCINST_ABORT;
