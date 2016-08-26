@@ -350,7 +350,8 @@ CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 CFLAGS_MODULE   = -munaligned-access -mfpu=neon-vfpv4 -marm -fno-pic
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  = --strip-debug
-CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 -marm
+CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 -marm \
+		  -funsafe-math-optimizations
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
