@@ -838,7 +838,12 @@ static void __init set_volt_table_CA15(void)
 				exynos5410_volt_table_CA15[i]);
 	}
 
-	max_support_idx_CA15 = L0;
+	exynos5410_freq_table_CA15[L0].frequency = CPUFREQ_ENTRY_INVALID;
+	exynos5410_freq_table_CA15[L1].frequency = CPUFREQ_ENTRY_INVALID;
+	exynos5410_freq_table_CA15[L2].frequency = CPUFREQ_ENTRY_INVALID;
+	exynos5410_freq_table_CA15[L3].frequency = CPUFREQ_ENTRY_INVALID;
+
+	max_support_idx_CA15 = L4;
 
 	exynos5410_freq_table_CA15[L14].frequency = CPUFREQ_ENTRY_INVALID;
 	exynos5410_freq_table_CA15[L15].frequency = CPUFREQ_ENTRY_INVALID;
