@@ -69,7 +69,7 @@
  */
 #define ENABLE_ALL_LOAD_THRESHOLD	400
 #define ENABLE_LOAD_THRESHOLD		300
-#define DISABLE_LOAD_THRESHOLD		90
+#define DISABLE_LOAD_THRESHOLD		150
 
 /* Control flags */
 unsigned char flags;
