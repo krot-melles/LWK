@@ -414,7 +414,7 @@ inline void hotplug_boostpulse(void)
 	}
 }
 
-//#ifdef CONFIG_HAS_EARLYSUSPEND
+#ifdef CONFIG_HAS_EARLYSUSPEND
 static void auto_hotplug_early_suspend(struct early_suspend *handler)
 {
 	if (debug) {
@@ -446,7 +446,7 @@ static struct early_suspend auto_hotplug_suspend = {
 	.suspend = auto_hotplug_early_suspend,
 	.resume = auto_hotplug_late_resume,
 };
-//#endif /* CONFIG_HAS_EARLYSUSPEND */
+#endif /* CONFIG_HAS_EARLYSUSPEND */
 
 static int __init auto_hotplug_init(void)
 {
@@ -471,9 +471,9 @@ static int __init auto_hotplug_init(void)
 	schedule_delayed_work_on(0, &hotplug_decision_work, HZ * 5);
 	schedule_delayed_work(&hotplug_unpause_work, HZ * 10);
 
-//#ifdef CONFIG_HAS_EARLYSUSPEND
+#ifdef CONFIG_HAS_EARLYSUSPEND
 	register_early_suspend(&auto_hotplug_suspend);
-//#endif
+#endif
 	return 0;
 }
 late_initcall(auto_hotplug_init);
