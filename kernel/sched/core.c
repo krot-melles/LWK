@@ -2233,12 +2233,12 @@ unsigned long avg_cpu_nr_running(unsigned int cpu)
 	* the changes are happening right now, just read current value
 	* directly.
 	*/
-	seqcnt = read_seqcount_begin(&q->ave_seqcnt);
-	ave_nr_running = do_avg_nr_running(q);
-	if (read_seqcount_retry(&q->ave_seqcnt, seqcnt)) {
-		read_seqcount_begin(&q->ave_seqcnt);
-		ave_nr_running = q->ave_nr_running;
-	}
+//	seqcnt = read_seqcount_begin(&q->ave_seqcnt);
+//	ave_nr_running = do_avg_nr_running(q);
+//	if (read_seqcount_retry(&q->ave_seqcnt, seqcnt)) {
+//		read_seqcount_begin(&q->ave_seqcnt);
+//		ave_nr_running = q->ave_nr_running;
+//	}
 	return ave_nr_running;
 }
 
