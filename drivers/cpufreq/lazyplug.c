@@ -86,14 +86,14 @@
 #define LAZYPLUG_MAJOR_VERSION	1
 #define LAZYPLUG_MINOR_VERSION	0
 
-#define DEF_SAMPLING_MS			(268)
-#define DEF_IDLE_COUNT			(19) /* 268 * 19 = 5092, almost equals to 5 seconds */
+#define DEF_SAMPLING_MS			(100)
+#define DEF_IDLE_COUNT			(10) /* 100 * 10 = 1000, equals to 1 second */
 
-#define DUAL_PERSISTENCE		(2500 / DEF_SAMPLING_MS)
-#define TRI_PERSISTENCE			(1700 / DEF_SAMPLING_MS)
-#define QUAD_PERSISTENCE		(1000 / DEF_SAMPLING_MS)
+#define DUAL_PERSISTENCE		(250 / DEF_SAMPLING_MS)
+#define TRI_PERSISTENCE			(170 / DEF_SAMPLING_MS)
+#define QUAD_PERSISTENCE		(100 / DEF_SAMPLING_MS)
 
-#define BUSY_PERSISTENCE		(3500 / DEF_SAMPLING_MS)
+#define BUSY_PERSISTENCE		(350 / DEF_SAMPLING_MS)
 
 static DEFINE_MUTEX(lazyplug_mutex);
 static DEFINE_MUTEX(lazymode_mutex);
@@ -104,13 +104,13 @@ static struct delayed_work lazyplug_boost;
 static struct workqueue_struct *lazyplug_wq;
 static struct workqueue_struct *lazyplug_boost_wq;
 
-static unsigned int __read_mostly lazyplug_active = 0;
+static unsigned int __read_mostly lazyplug_active = 1;
 module_param(lazyplug_active, uint, 0664);
 
 static unsigned int __read_mostly touch_boost_active = 1;
 module_param(touch_boost_active, uint, 0664);
 
-static unsigned int __read_mostly nr_run_profile_sel = 0;
+static unsigned int __read_mostly nr_run_profile_sel = 5;
 module_param(nr_run_profile_sel, uint, 0664);
 
 /* default to something sane rather than zero */
@@ -130,7 +130,9 @@ static DEFINE_PER_CPU(struct ip_cpu_info, ip_info);
 
 #define CAPACITY_RESERVE	50
 
-#if defined(CONFIG_ARCH_APQ8084) || defined(CONFIG_ARM64)
+#if defined(CONFIG_SOC_EXYNOS5410)
+#define THREAD_CAPACITY (339 - CAPACITY_RESERVE)
+#elif defined(CONFIG_ARCH_APQ8084) || defined(CONFIG_ARM64)
 #define THREAD_CAPACITY (430 - CAPACITY_RESERVE)
 #elif defined(CONFIG_ARCH_MSM8960) || defined(CONFIG_ARCH_APQ8064) || \
 defined(CONFIG_ARCH_MSM8974)
