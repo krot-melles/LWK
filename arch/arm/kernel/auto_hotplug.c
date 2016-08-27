@@ -57,7 +57,7 @@
 /*
  * MIN_SAMPLING_RATE is scaled based on num_online_cpus()
  */
-#define MIN_SAMPLING_RATE	50
+#define MIN_SAMPLING_RATE	100
 
 /*
  * Load defines:
