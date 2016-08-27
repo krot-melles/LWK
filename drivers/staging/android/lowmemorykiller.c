@@ -84,8 +84,8 @@ static uint32_t minimum_reclaim_pages = MIN_RECLAIM_PAGES;
 static uint32_t minimum_interval_time = MIN_CSWAP_INTERVAL;
 #endif /* CONFIG_ZRAM_FOR_ANDROID */
 
-// #define ENHANCED_LMK_ROUTINE
-// #define LMK_COUNT_READ
+#define ENHANCED_LMK_ROUTINE
+#define LMK_COUNT_READ
 
 #ifdef ENHANCED_LMK_ROUTINE
 #define LOWMEM_DEATHPENDING_DEPTH 3
@@ -126,23 +126,21 @@ static uint32_t oom_count = 0;
 
 #endif /* CONFIG_INTERNAL_ISP_START_CAMERA */
 
-static uint32_t lowmem_debug_level = 0;
+static uint32_t lowmem_debug_level = 1;
 static int lowmem_adj[6] = {
 	0,
 	1,
 	6,
 	12,
 };
-static int lowmem_adj_size = 6;
+static int lowmem_adj_size = 4;
 static int lowmem_minfree[6] = {
-	 3 *  512,	/* Foreground App: 	6 MB	*/
-	 2 * 1024,	/* Visible App: 	8 MB	*/
-	 4 * 1024,	/* Secondary Server: 	16 MB	*/
-	16 * 1024,	/* Hidden App: 		64 MB	*/
-	28 * 1024,	/* Content Provider: 	112 MB	*/
-	32 * 1024,	/* Empty App: 		128 MB	*/
+	3 * 512,	/* 6MB */
+	2 * 1024,	/* 8MB */
+	4 * 1024,	/* 16MB */
+	16 * 1024,	/* 64MB */
 };
-static int lowmem_minfree_size = 6;
+static int lowmem_minfree_size = 4;
 
 
 static unsigned int offlining;
@@ -218,37 +216,10 @@ static int lmk_hotplug_callback(struct notifier_block *self,
 }
 #endif
 
-#ifdef CONFIG_ANDROID_LMK_ADJ_RBTREE
-static struct task_struct *pick_next_from_adj_tree(struct task_struct *task);
-static struct task_struct *pick_first_task(void);
-static struct task_struct *pick_last_task(void);
+#if defined(CONFIG_ZSWAP)
+extern atomic_t zswap_pool_pages;
+extern atomic_t zswap_stored_pages;
 #endif
-
-static bool avoid_to_kill(uid_t uid)
-{
-	/* 
-	 * uid info
-	 * uid == 0 > root
-	 * uid == 1001 > radio
-	 * uid == 1002 > bluetooth
-	 * uid == 1010 > wifi
-	 * uid == 1014 > dhcp
-	 */
-	if (uid == 0 || uid == 1001 || uid == 1002 || uid == 1010 ||
-			uid == 1014)
-		return 1;
-	return 0;
-}
-
-static bool protected_apps(char *comm)
-{
-	if (strcmp(comm, "d.process.acore") == 0 ||
-			strcmp(comm, "ndroid.systemui") == 0 ||
-			strcmp(comm, "ndroid.contacts") == 0 ||
-			strcmp(comm, "system:ui") == 0)
-		return 1;
-	return 0;
-}
 
 static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 {
@@ -258,8 +229,6 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 #else
 	struct task_struct *selected = NULL;
 #endif
-	const struct cred *pcred;
-	unsigned int uid = 0;
 	int rem = 0;
 	int tasksize;
 	int i;
@@ -278,10 +247,9 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	int other_file = global_page_state(NR_FILE_PAGES) -
 						global_page_state(NR_SHMEM);
 	struct reclaim_state *reclaim_state = current->reclaim_state;
-	struct sysinfo si;
 	struct zone *zone;
 
-#if defined(CONFIG_ZRAM_FOR_ANDROID)  || defined(CONFIG_ZSWAP)
+#if defined(CONFIG_ZRAM_FOR_ANDROID) || defined(CONFIG_ZSWAP)
 	other_file -= total_swapcache_pages;
 #endif
 
@@ -317,16 +285,14 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 		time_before_eq(jiffies, lowmem_deathpending_timeout))
 		return 0;
 #endif
-	si_meminfo(&si);
-
-	other_free += other_file;
 
 	if (lowmem_adj_size < array_size)
 		array_size = lowmem_adj_size;
 	if (lowmem_minfree_size < array_size)
 		array_size = lowmem_minfree_size;
 	for (i = 0; i < array_size; i++) {
-	if (other_free < lowmem_minfree[i]) {
+		if (other_free < lowmem_minfree[i] &&
+		    other_file < lowmem_minfree[i]) {
 			min_score_adj = lowmem_adj[i];
 			break;
 		}
@@ -356,13 +322,7 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	atomic_set(&s_reclaim.lmk_running, 1);
 #endif
 	read_lock(&tasklist_lock);
-#ifdef CONFIG_ANDROID_LMK_ADJ_RBTREE
-	for (tsk = pick_first_task();
-		tsk != pick_last_task();
-		tsk = pick_next_from_adj_tree(tsk)) {
-#else
 	for_each_process(tsk) {
-#endif
 		struct task_struct *p;
 		int oom_score_adj;
 #ifdef ENHANCED_LMK_ROUTINE
@@ -381,6 +341,14 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 			continue;
 		}
 		tasksize = get_mm_rss(p->mm);
+#if defined(CONFIG_ZSWAP)
+		if (atomic_read(&zswap_stored_pages)) {
+			lowmem_print(3, "shown tasksize : %d\n", tasksize);
+			tasksize += atomic_read(&zswap_pool_pages) * get_mm_counter(p->mm, MM_SWAPENTS)
+				/ atomic_read(&zswap_stored_pages);
+			lowmem_print(3, "real tasksize : %d\n", tasksize);
+		}
+#endif
 
 		task_unlock(p);
 		if (tasksize <= 0)
@@ -426,11 +394,7 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 #else
 		if (selected) {
 			if (oom_score_adj < selected_oom_score_adj)
-#ifdef CONFIG_ANDROID_LMK_ADJ_RBTREE
-				break;
-#else
 				continue;
-#endif
 			if (oom_score_adj == selected_oom_score_adj &&
 			    tasksize <= selected_tasksize)
 				continue;
@@ -593,15 +557,6 @@ static int android_oom_handler(struct notifier_block *nb,
 		oom_score_adj = p->signal->oom_score_adj;
 		if (oom_score_adj < min_score_adj) {
 			task_unlock(p);
-#ifdef CONFIG_ANDROID_LMK_ADJ_RBTREE
-			break;
-#else
-			continue;
-#endif
-		}
-		if (fatal_signal_pending(p)) {
-			lowmem_print(2, "skip slow dying process %d\n", p->pid);
-			task_unlock(p);
 			continue;
 		}
 		tasksize = get_mm_rss(p->mm);
@@ -656,25 +611,11 @@ static int android_oom_handler(struct notifier_block *nb,
 			    tasksize <= selected_tasksize)
 				continue;
 		}
-	pcred = __task_cred(p);
-		uid = pcred->uid;
-		if (avoid_to_kill(uid) || protected_apps(p->comm)){
-			if (tasksize * (long)(PAGE_SIZE / 1024) >= 100000){
-				selected = p;
-				selected_tasksize = tasksize;
-				selected_oom_score_adj = oom_score_adj;
-				lowmem_print(3, "select protected %d (%s), adj %hd, size %d, to kill\n",
-				     	p->pid, p->comm, oom_score_adj, tasksize);
-			} else
-			lowmem_print(3, "skip protected %d (%s), adj %hd, size %d, to kill\n",
-			     	p->pid, p->comm, oom_score_adj, tasksize);
-		} else {
-			selected = p;
-			selected_tasksize = tasksize;
-			selected_oom_score_adj = oom_score_adj;
-			lowmem_print(3, "select %d (%s), adj %hd, size %d, to kill\n",
-			     	p->pid, p->comm, oom_score_adj, tasksize);
-		}
+		selected = p;
+		selected_tasksize = tasksize;
+		selected_oom_score_adj = oom_score_adj;
+		lowmem_print(2, "oom: select %d (%s), adj %d, size %d, to kill\n",
+			     p->pid, p->comm, oom_score_adj, tasksize);
 #endif
 	}
 #ifdef MULTIPLE_OOM_KILLER
@@ -1070,27 +1011,8 @@ static struct notifier_block kcompcache_idle_nb = {
 
 static struct shrinker lowmem_shrinker = {
 	.shrink = lowmem_shrink,
-	.seeks = 32
+	.seeks = DEFAULT_SEEKS * 16
 };
-
-#ifdef CONFIG_ANDROID_BG_SCAN_MEM
-static int lmk_task_migration_notify(struct notifier_block *nb,
-					unsigned long data, void *arg)
-{
-	struct shrink_control sc = {
-		.gfp_mask = GFP_KERNEL,
-		.nr_to_scan = 1,
-	};
-
-	lowmem_shrink(&lowmem_shrinker, &sc);
-
-	return NOTIFY_OK;
-}
-
-static struct notifier_block tsk_migration_nb = {
-	.notifier_call = lmk_task_migration_notify,
-};
-#endif
 
 static int __init lowmem_init(void)
 {
@@ -1125,20 +1047,12 @@ static int __init lowmem_init(void)
 		class_destroy(kcompcache_class);
 	}
 #endif /* CONFIG_ZRAM_FOR_ANDROID */
-#ifdef CONFIG_ANDROID_BG_SCAN_MEM
-	raw_notifier_chain_register(&bgtsk_migration_notifier_head,
-					&tsk_migration_nb);
-#endif
 	return 0;
 }
 
 static void __exit lowmem_exit(void)
 {
 	unregister_shrinker(&lowmem_shrinker);
-#ifdef CONFIG_ANDROID_BG_SCAN_MEM
-	raw_notifier_chain_unregister(&bgtsk_migration_notifier_head,
-					&tsk_migration_nb);
-#endif
 	task_free_unregister(&task_nb);
 
 #ifdef CONFIG_ZRAM_FOR_ANDROID
@@ -1191,8 +1105,8 @@ static void lowmem_autodetect_oom_adj_values(void)
 		oom_adj = lowmem_adj[i];
 		oom_score_adj = lowmem_oom_adj_to_oom_score_adj(oom_adj);
 		lowmem_adj[i] = oom_score_adj;
-	lowmem_print(1, "oom_adj %hd => oom_score_adj %hd\n",
- 			     oom_adj, oom_score_adj);
+		lowmem_print(1, "oom_adj %d => oom_score_adj %d\n",
+			     oom_adj, oom_score_adj);
 	}
 }
 
@@ -1233,91 +1147,12 @@ static const struct kparam_array __param_arr_adj = {
 };
 #endif
 
-#ifdef CONFIG_ANDROID_LMK_ADJ_RBTREE
-DEFINE_SPINLOCK(lmk_lock);
-struct rb_root tasks_scoreadj = RB_ROOT;
-void add_2_adj_tree(struct task_struct *task)
-{
-	struct rb_node **link = &tasks_scoreadj.rb_node;
-	struct rb_node *parent = NULL;
-	struct task_struct *task_entry;
-	s64 key = task->signal->oom_score_adj;
-	/*
-	 * Find the right place in the rbtree:
-	 */
-	spin_lock(&lmk_lock);
-	while (*link) {
-		parent = *link;
-		task_entry = rb_entry(parent, struct task_struct, adj_node);
-
-		if (key < task_entry->signal->oom_score_adj)
-			link = &parent->rb_right;
-		else
-			link = &parent->rb_left;
-	}
-
-	rb_link_node(&task->adj_node, parent, link);
-	rb_insert_color(&task->adj_node, &tasks_scoreadj);
-	spin_unlock(&lmk_lock);
-}
-
-void delete_from_adj_tree(struct task_struct *task)
-{
-	spin_lock(&lmk_lock);
-	rb_erase(&task->adj_node, &tasks_scoreadj);
-	spin_unlock(&lmk_lock);
-}
-
-
-static struct task_struct *pick_next_from_adj_tree(struct task_struct *task)
-{
-	struct rb_node *next;
-
-	spin_lock(&lmk_lock);
-	next = rb_next(&task->adj_node);
-	spin_unlock(&lmk_lock);
-
-	if (!next)
-		return NULL;
-
-	 return rb_entry(next, struct task_struct, adj_node);
-}
-
-static struct task_struct *pick_first_task(void)
-{
-	struct rb_node *left;
-
-	spin_lock(&lmk_lock);
-	left = rb_first(&tasks_scoreadj);
-	spin_unlock(&lmk_lock);
-
-	if (!left)
-		return NULL;
-
-	return rb_entry(left, struct task_struct, adj_node);
-}
-
-static struct task_struct *pick_last_task(void)
-{
-	struct rb_node *right;
-
-	spin_lock(&lmk_lock);
-	right = rb_last(&tasks_scoreadj);
-	spin_unlock(&lmk_lock);
-
-	if (!right)
-		return NULL;
-
-	return rb_entry(right, struct task_struct, adj_node);
-}
-#endif
-
 module_param_named(cost, lowmem_shrinker.seeks, int, S_IRUGO | S_IWUSR);
 #ifdef CONFIG_ANDROID_LOW_MEMORY_KILLER_AUTODETECT_OOM_ADJ_VALUES
 __module_param_call(MODULE_PARAM_PREFIX, adj,
 		    &lowmem_adj_array_ops,
 		    .arr = &__param_arr_adj,
-		    S_IRUGO | S_IWUSR, 0644);
+		    S_IRUGO | S_IWUSR, -1);
 __MODULE_PARM_TYPE(adj, "array of int");
 #else
 module_param_array_named(adj, lowmem_adj, int, &lowmem_adj_size,
