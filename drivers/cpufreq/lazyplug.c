@@ -226,7 +226,7 @@ static unsigned int nr_run_last;
 
 static unsigned int idle_count = 0;
 
-extern unsigned long avg_running(void);
+extern unsigned long avg_nr_running(void);
 extern unsigned long avg_cpu_nr_running(unsigned int cpu);
 
 static void __ref cpu_all_ctrl(bool online) {
@@ -253,7 +253,7 @@ static void __ref cpu_all_ctrl(bool online) {
 
 static unsigned int calculate_thread_stats(void)
 {
-	unsigned int avg_nr_run = avg_running();
+	unsigned int avg_nr_run = avg_nr_running();
 	unsigned int nr_run;
 	unsigned int threshold_size;
 	unsigned int *current_profile;

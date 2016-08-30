@@ -13,5 +13,4 @@ obj-$(CONFIG_CHARGER_BQ24190)	+= bq24190_charger.o
 obj-$(CONFIG_CHARGER_BQ24191)	+= bq24190_charger.o
 obj-$(CONFIG_CHARGER_BQ24260)	+= bq24260_charger.o sec_charger.o
 obj-$(CONFIG_CHARGER_MAX77803)  += max77803_charger.o
-obj-$(CONFIG_FORCE_FAST_CHARGE) += fastchg.o
 obj-$(CONFIG_CHARGER_MAX77693)	+= max77693_charger.o
