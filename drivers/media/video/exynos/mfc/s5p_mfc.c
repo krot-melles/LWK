@@ -1915,7 +1915,6 @@ static int s5p_mfc_open(struct file *file)
 		}
 	}
 	lazyplug_enter_lazy(true);
-
 	mfc_info("MFC instance open completed\n");
 	return ret;
 
@@ -2000,7 +1999,6 @@ static int s5p_mfc_release(struct file *file)
 		mfc_err("no mfc device to run\n");
 		return -EINVAL;
 	}
-	lazyplug_enter_lazy(false);
 
 	if (need_to_wait_frame_start(ctx)) {
 		ctx->state = MFCINST_ABORT;
@@ -2015,7 +2013,7 @@ static int s5p_mfc_release(struct file *file)
 			mfc_err("no mfc encoder to run\n");
 			return -EINVAL;
 		}
-
+	lazyplug_enter_lazy(false);
 		if (enc->in_slice) {
 			ctx->state = MFCINST_ABORT_INST;
 			spin_lock_irq(&dev->condlock);

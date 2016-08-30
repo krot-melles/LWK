@@ -21,7 +21,7 @@
 #define __SYSUTILS_H__
 
 u64 _time_get_ns(void);
-unsigned int inline _clz(unsigned int input);
+static unsigned int inline _clz(unsigned int input);
 void sgx_hw_start(void);
 void sgx_hw_end(void);
 void utilization_init(void);

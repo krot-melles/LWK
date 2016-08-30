@@ -105,7 +105,7 @@ IMG_VOID SysSGXIdleTransition(IMG_BOOL bSGXIdle)
 	#endif
 }
 
-unsigned int inline _clz(unsigned int input)
+static unsigned int inline _clz(unsigned int input)
 {
 	return 32-fls(input);
 }

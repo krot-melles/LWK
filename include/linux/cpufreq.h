@@ -48,7 +48,6 @@ static inline int cpufreq_unregister_notifier(struct notifier_block *nb,
 }
 static inline void disable_cpufreq(void) { }
 #endif		/* CONFIG_CPU_FREQ */
-u64 get_cpu_idle_time(unsigned int cpu, u64 *wall, int io_busy);
 
 /* if (cpufreq_driver->target) exists, the ->governor decides what frequency
  * within the limits is used. If (cpufreq_driver->setpolicy> exists, these

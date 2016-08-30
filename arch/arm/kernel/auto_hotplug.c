@@ -57,7 +57,7 @@
 /*
  * MIN_SAMPLING_RATE is scaled based on num_online_cpus()
  */
-#define MIN_SAMPLING_RATE	250
+#define MIN_SAMPLING_RATE	50
 
 /*
  * Load defines:
@@ -67,9 +67,9 @@
  * DISABLE is the load at which a CPU is disabled
  * These two are scaled based on num_online_cpus()
  */
-#define ENABLE_ALL_LOAD_THRESHOLD	400
-#define ENABLE_LOAD_THRESHOLD		90
-#define DISABLE_LOAD_THRESHOLD		75
+#define ENABLE_ALL_LOAD_THRESHOLD	500
+#define ENABLE_LOAD_THRESHOLD		110
+#define DISABLE_LOAD_THRESHOLD		95
 
 /* Control flags */
 unsigned char flags;

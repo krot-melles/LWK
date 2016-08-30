@@ -138,6 +138,41 @@ static unsigned int ignore_nice;
 
 /*************** End of tunables ***************/
 
+
+static inline u64 get_cpu_idle_time_jiffy(unsigned int cpu, u64 *wall)
+{
+	u64 idle_time;
+	u64 cur_wall_time;
+	u64 busy_time;
+
+	cur_wall_time = jiffies64_to_cputime64(get_jiffies_64());
+
+	busy_time  = kcpustat_cpu(cpu).cpustat[CPUTIME_USER];
+	busy_time += kcpustat_cpu(cpu).cpustat[CPUTIME_SYSTEM];
+	busy_time += kcpustat_cpu(cpu).cpustat[CPUTIME_IRQ];
+	busy_time += kcpustat_cpu(cpu).cpustat[CPUTIME_SOFTIRQ];
+	busy_time += kcpustat_cpu(cpu).cpustat[CPUTIME_STEAL];
+	busy_time += kcpustat_cpu(cpu).cpustat[CPUTIME_NICE];
+
+	idle_time = cur_wall_time - busy_time;
+	if (wall)
+		*wall = jiffies_to_usecs(cur_wall_time);
+
+	return jiffies_to_usecs(idle_time);
+}
+
+static inline cputime64_t get_cpu_idle_time(unsigned int cpu, cputime64_t *wall)
+{
+	u64 idle_time = get_cpu_idle_time_us(cpu, NULL);
+
+	if (idle_time == -1ULL)
+		return get_cpu_idle_time_jiffy(cpu, wall);
+	else
+		idle_time += get_cpu_iowait_time_us(cpu, wall);
+
+	return idle_time;
+}
+
 static unsigned int dbs_enable; /* number of CPUs using this policy */
 
 static void do_dbs_timer(struct work_struct *work);
@@ -446,7 +481,7 @@ static void cpufreq_smartmax_timer(struct smartmax_info_s *this_smartmax) {
 
 		j_this_smartmax = &per_cpu(smartmax_info, j);
 
-		cur_idle_time = get_cpu_idle_time(j, &cur_wall_time, io_is_busy);
+		cur_idle_time = get_cpu_idle_time(j, &cur_wall_time);
 		cur_iowait_time = get_cpu_iowait_time(j, &cur_wall_time);
 
 		wall_time = cur_wall_time - j_this_smartmax->prev_cpu_wall;
@@ -558,7 +593,7 @@ static void update_idle_time(bool online) {
 		j_this_smartmax = &per_cpu(smartmax_info, j);
 
 		j_this_smartmax->prev_cpu_idle = get_cpu_idle_time(j,
-				&j_this_smartmax->prev_cpu_wall, io_is_busy);
+				&j_this_smartmax->prev_cpu_wall);
 		if (ignore_nice)
 			j_this_smartmax->prev_cpu_nice = kcpustat_cpu(j).cpustat[CPUTIME_NICE];
 
@@ -985,7 +1020,7 @@ static int cpufreq_smartmax_boost_task(void *data) {
 			dprintk(SMARTMAX_DEBUG_BOOST, "%s %llu %llu\n", __func__, now, boost_end_time);
 
 			target_freq(policy, this_smartmax, cur_boost_freq, this_smartmax->old_freq, CPUFREQ_RELATION_H);
-			this_smartmax->prev_cpu_idle = get_cpu_idle_time(0, &this_smartmax->prev_cpu_wall, io_is_busy);
+			this_smartmax->prev_cpu_idle = get_cpu_idle_time(0, &this_smartmax->prev_cpu_wall);
 		}
 		mutex_unlock(&this_smartmax->timer_mutex);
 				
