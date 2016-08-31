@@ -416,8 +416,6 @@ static void cpufreq_smartmax_freq_change(struct smartmax_info_s *this_smartmax) 
 			// scaling of load vs. frequency, the load in the new frequency
 			// will be max_cpu_load:
 			new_freq = old_freq * this_smartmax->cur_cpu_load / max_cpu_load;
-			if (new_freq > old_freq) min_cpu_load > max_cpu_load ?!
-				new_freq = old_freq - 1;
 		}
 	}
 
@@ -1007,9 +1005,6 @@ static int cpufreq_smartmax_boost_task(void *data) {
 		if (!policy)
 			continue;
 
-		if (lock_policy_rwsem_write(0) < 0)
-			continue;
-
 		mutex_lock(&this_smartmax->timer_mutex);
 
 		if (policy->cur < cur_boost_freq) {
@@ -1023,8 +1018,6 @@ static int cpufreq_smartmax_boost_task(void *data) {
 			this_smartmax->prev_cpu_idle = get_cpu_idle_time(0, &this_smartmax->prev_cpu_wall);
 		}
 		mutex_unlock(&this_smartmax->timer_mutex);
-				
-		unlock_policy_rwsem_write(0);
 	}
 
 	return 0;
