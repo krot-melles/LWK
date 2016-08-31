@@ -486,8 +486,8 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 	unsigned int load, load_freq;
 	int freq_avg;
 	struct cpuidle_device * j_cpuidle_dev = NULL;
-//	struct cpuidle_state * deepidle_state = NULL;
-//	unsigned long long deepidle_time, deepidle_usage;
+	struct cpuidle_state * deepidle_state = NULL;
+	unsigned long long deepidle_time, deepidle_usage;
 
 	j_dbs_info = &per_cpu(od_cpu_dbs_info, j);
 

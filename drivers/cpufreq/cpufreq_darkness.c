@@ -132,7 +132,7 @@ show_one(down_sf_step, down_sf_step);
 show_one(force_freqs_step, force_freqs_step);
 #endif
 
-/*#define show_freqlimit_param(file_name, cpu)		\
+#define show_freqlimit_param(file_name, cpu)		\
 static ssize_t show_##file_name##_##cpu		\
 (struct kobject *kobj, struct attribute *attr, char *buf)		\
 {									\
@@ -154,31 +154,31 @@ static ssize_t store_##file_name##_##cpu		\
 	}	\
 	atomic_set(&file_name[cpu], input);			\
 	return count;							\
-}*/
+}
 
 /* min freq limit for awaking */
-/*show_freqlimit_param(min_freq_limit, 0);
+show_freqlimit_param(min_freq_limit, 0);
 show_freqlimit_param(min_freq_limit, 1);
 #if NR_CPUS >= 4
 show_freqlimit_param(min_freq_limit, 2);
 show_freqlimit_param(min_freq_limit, 3);
-#endif*/
+#endif
 /* max freq limit for awaking */
-/*show_freqlimit_param(max_freq_limit, 0);
+show_freqlimit_param(max_freq_limit, 0);
 show_freqlimit_param(max_freq_limit, 1);
 #if NR_CPUS >= 4
 show_freqlimit_param(max_freq_limit, 2);
 show_freqlimit_param(max_freq_limit, 3);
-#endif*/
+#endif
 /* min freq limit for awaking */
-/*store_freqlimit_param(min_freq_limit, 0);
+store_freqlimit_param(min_freq_limit, 0);
 store_freqlimit_param(min_freq_limit, 1);
 #if NR_CPUS >= 4
 store_freqlimit_param(min_freq_limit, 2);
 store_freqlimit_param(min_freq_limit, 3);
-#endif*/
+#endif
 /* max freq limit for awaking */
-/*store_freqlimit_param(max_freq_limit, 0);
+store_freqlimit_param(max_freq_limit, 0);
 store_freqlimit_param(max_freq_limit, 1);
 #if NR_CPUS >= 4
 store_freqlimit_param(max_freq_limit, 2);
@@ -195,7 +195,7 @@ define_one_global_rw(max_freq_limit_1);
 #if NR_CPUS >= 4
 define_one_global_rw(max_freq_limit_2);
 define_one_global_rw(max_freq_limit_3);
-#endif*/
+#endif
 
 /**
  * update_sampling_rate - update sampling rate effective immediately if needed.
