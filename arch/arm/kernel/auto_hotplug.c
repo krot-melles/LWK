@@ -68,8 +68,8 @@
  * These two are scaled based on num_online_cpus()
  */
 #define ENABLE_ALL_LOAD_THRESHOLD	500
-#define ENABLE_LOAD_THRESHOLD		110
-#define DISABLE_LOAD_THRESHOLD		95
+#define ENABLE_LOAD_THRESHOLD		300
+#define DISABLE_LOAD_THRESHOLD		110
 
 /* Control flags */
 unsigned char flags;
@@ -94,7 +94,7 @@ static unsigned int enable_load_threshold = ENABLE_LOAD_THRESHOLD;
 static unsigned int disable_load_threshold = DISABLE_LOAD_THRESHOLD;
 static unsigned int enable_all_load_threshold = ENABLE_ALL_LOAD_THRESHOLD;
 static unsigned int min_sampling_rate = MIN_SAMPLING_RATE;
-static unsigned int min_online_cpus = 1;
+static unsigned int min_online_cpus = 2;
 static unsigned int max_online_cpus = 4;
 
 module_param(debug, int, 0775);
