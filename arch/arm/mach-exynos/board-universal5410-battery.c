@@ -58,18 +58,18 @@ unsigned int lpcharge;
 EXPORT_SYMBOL(lpcharge);
 
 static sec_charging_current_t charging_current_table[] = {
-	{1900,	1900,	200,	40 * 60},
+	{1900,	1600,	200,	40 * 60},
 	{0,	0,	0,	0},
 	{0,	0,	0,	0},
-	{1900,	1900,	200,	40*60},
+	{1900,	1600,	200,	40*60},
+	{460,	460,	200,	40*60},
 	{1000,	1000,	200,	40*60},
 	{1000,	1000,	200,	40*60},
-	{1000,	1000,	200,	40*60},
-	{1000,	1000,	200,	40*60},
-	{1900,	1900,	200,	40*60},
+	{460,	460,	200,	40*60},
+	{1700,	1600,	200,	40*60},
 	{0,	0,	0,	0},
-	{750,	750,	200,	40*60},
-	{1900,	1900,	200,	40*60},
+	{650,	750,	200,	40*60},
+	{1900,	1600,	200,	40*60},
 	{0,	0,	0,	0},
 	{0,	0,	0,	0},
 	{0, 0,	0,	0},/*lan hub*/
@@ -139,6 +139,16 @@ static int sec_bat_is_lpm_check(char *str)
 	return lpcharge;
 }
 __setup("androidboot.mode=", sec_bat_is_lpm_check);
+
+static int legacy_sec_bat_is_lpm_check(char *str)
+{
+	get_option(&str, &lpcharge);
+
+	pr_info("%s: Low power charging mode: %d\n", __func__, lpcharge);
+
+	return lpcharge;
+}
+__setup("lpcharge=", legacy_sec_bat_is_lpm_check);
 
 static bool sec_bat_is_lpm(void)
 {
@@ -255,8 +265,8 @@ static int sec_bat_get_cable_from_extended_cable_type(
 				break;
 			case ONLINE_POWER_TYPE_MHL_500:
 				cable_type = POWER_SUPPLY_TYPE_MISC;
-				charge_current_max = 460;
-				charge_current = 460;
+				charge_current_max = 400;
+				charge_current = 400;
 				break;
 			case ONLINE_POWER_TYPE_MHL_900:
 				cable_type = POWER_SUPPLY_TYPE_MISC;
@@ -285,7 +295,7 @@ static int sec_bat_get_cable_from_extended_cable_type(
 		case ONLINE_SUB_TYPE_SMART_NOTG:
 			cable_type = POWER_SUPPLY_TYPE_MAINS;
 			charge_current_max = 1900;
-			charge_current = 1900;
+			charge_current = 1600;
 			break;
 		default:
 			cable_type = cable_main;
@@ -449,10 +459,10 @@ static sec_bat_adc_region_t cable_adc_value_table[] = {
 };
 
 static int polling_time_table[] = {
-	60,	/* BASIC */
-	60,	/* CHARGING */
-	60,	/* DISCHARGING */
-	60,	/* NOT_CHARGING */
+	10,	/* BASIC */
+	30,	/* CHARGING */
+	30,	/* DISCHARGING */
+	30,	/* NOT_CHARGING */
 	3600,	/* SLEEP */
 };
 
@@ -461,10 +471,21 @@ static int polling_time_table[] = {
 static struct battery_data_t adonis_battery_data[] = {
 /* SDI battery data (High voltage 4.35V) */
 	{
+#if defined(CONFIG_TARGET_LOCALE_KOR)
+#if defined(CONFIG_MACH_JA_KOR_SKT) || \
+	defined(CONFIG_MACH_JA_KOR_KT) || \
+	defined(CONFIG_MACH_JA_KOR_LGT)
+		.RCOMP0 = 0x6C,
+		.RCOMP_charging = 0x79,
+		.temp_cohot = -850,
+		.temp_cocold = -4200,
+#endif
+#else
 		.RCOMP0 = 0x76,
 		.RCOMP_charging = 0x76,
 		.temp_cohot = -700,
 		.temp_cocold = -4875,
+#endif
 		.is_using_model_data = true,
 		.type_str = "SDI",
 	}
@@ -574,6 +595,49 @@ sec_battery_platform_data_t sec_battery_pdata = {
 
 	.temp_check_type = SEC_BATTERY_TEMP_CHECK_TEMP,
 	.temp_check_count = 1,
+#if defined(CONFIG_TARGET_LOCALE_KOR)
+#if defined(CONFIG_MACH_JA_KOR_SKT) || \
+	defined(CONFIG_MACH_JA_KOR_KT)
+	.temp_high_threshold_event = 635,
+	.temp_high_recovery_event = 430,
+	.temp_low_threshold_event = -50,
+	.temp_low_recovery_event = 0,
+	.temp_high_threshold_normal = 635,
+	.temp_high_recovery_normal = 430,
+	.temp_low_threshold_normal = -50,
+	.temp_low_recovery_normal = 0,
+	.temp_high_threshold_lpm = 635,
+	.temp_high_recovery_lpm = 430,
+	.temp_low_threshold_lpm = -50,
+	.temp_low_recovery_lpm = 0,
+#elif defined(CONFIG_MACH_JA_KOR_LGT)
+	.temp_high_threshold_event = 655,
+	.temp_high_recovery_event = 430,
+	.temp_low_threshold_event = -50,
+	.temp_low_recovery_event = 0,
+	.temp_high_threshold_normal = 655,
+	.temp_high_recovery_normal = 430,
+	.temp_low_threshold_normal = -50,
+	.temp_low_recovery_normal = 0,
+	.temp_high_threshold_lpm = 655,
+	.temp_high_recovery_lpm = 430,
+	.temp_low_threshold_lpm = -50,
+	.temp_low_recovery_lpm = 0,
+#endif /* KOR model */
+#elif defined(CONFIG_MACH_J_CHN_CTC)
+	.temp_high_threshold_event = 645,
+	.temp_high_recovery_event = 420,
+	.temp_low_threshold_event = -30,
+	.temp_low_recovery_event = 10,
+	.temp_high_threshold_normal = 645,
+	.temp_high_recovery_normal = 420,
+	.temp_low_threshold_normal = -30,
+	.temp_low_recovery_normal = 10,
+	.temp_high_threshold_lpm = 645,
+	.temp_high_recovery_lpm = 420,
+	.temp_low_threshold_lpm = -30,
+	.temp_low_recovery_lpm = 10,
+#else
 	.temp_high_threshold_event = 700,
 	.temp_high_recovery_event = 415,
 	.temp_low_threshold_event = -30,
@@ -586,6 +650,7 @@ sec_battery_platform_data_t sec_battery_pdata = {
 	.temp_high_recovery_lpm = 400,
 	.temp_low_threshold_lpm = -50,
 	.temp_low_recovery_lpm = 0,
+#endif
 	.full_check_type = SEC_BATTERY_FULLCHARGED_CHGPSY,
 	.full_check_type_2nd = SEC_BATTERY_FULLCHARGED_TIME,
 	.full_check_count = 1,
@@ -595,7 +660,12 @@ sec_battery_platform_data_t sec_battery_pdata = {
 		SEC_BATTERY_FULL_CONDITION_NOTIMEFULL |
 		SEC_BATTERY_FULL_CONDITION_VCELL,
 	.full_condition_soc = 97,
+#if defined(CONFIG_MACH_J_CHN_CTC)
+	.full_condition_vcell = 4150,
+#else
 	.full_condition_vcell = 4300,
+#endif
+
 	.recharge_check_count = 2,
 	.recharge_condition_type =
 		SEC_BATTERY_RECHARGE_CONDITION_VCELL,
@@ -708,3 +778,5 @@ void __init exynos5_universal5410_battery_init(void)
 }
 
 #endif
+
+

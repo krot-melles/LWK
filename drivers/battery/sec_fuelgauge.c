@@ -519,3 +519,4 @@ module_exit(sec_fuelgauge_exit);
 MODULE_DESCRIPTION("Samsung Fuel Gauge Driver");
 MODULE_AUTHOR("Samsung Electronics");
 MODULE_LICENSE("GPL");
+

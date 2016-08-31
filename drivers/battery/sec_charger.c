@@ -407,3 +407,4 @@ module_exit(sec_charger_exit);
 MODULE_DESCRIPTION("Samsung Charger Driver");
 MODULE_AUTHOR("Samsung Electronics");
 MODULE_LICENSE("GPL");
+

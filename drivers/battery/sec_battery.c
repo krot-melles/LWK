@@ -1588,7 +1588,20 @@ static void sec_bat_get_battery_info(
 	value.intval = 0;
 	psy_do_property("sec-fuelgauge", get,
 		POWER_SUPPLY_PROP_CAPACITY, value);
+#ifdef CONFIG_MACH_J_CHN_CTC
+	if (battery->status == POWER_SUPPLY_STATUS_DISCHARGING) {
+		if ((battery->capacity > 0) && (battery->capacity < 100)
+					&& (battery->capacity < value.intval))
+			pr_info("%s: SOC invalid (%d, %d)\n",	__func__,
+				battery->capacity, value.intval);
+		else
+			battery->capacity = value.intval;
+	} else {
+		battery->capacity = value.intval;
+	}
+#else
 	battery->capacity = value.intval;
+#endif
 
 	switch (battery->pdata->thermal_source) {
 	case SEC_BATTERY_THERMAL_SOURCE_FG:
@@ -1899,6 +1912,8 @@ continue_monitor:
 
 	power_supply_changed(&battery->psy_bat);
 
+	dev_info(battery->dev,
+			"%s: Call sec_bat_set_polling\n", __func__);
 	skip_monitor:
 	sec_bat_set_polling(battery);
 
@@ -1964,11 +1979,6 @@ static void sec_bat_cable_work(struct work_struct *work)
 			val.intval = POWER_SUPPLY_TYPE_BATTERY;
 			psy_do_property("sec-fuelgauge", set,
 					POWER_SUPPLY_PROP_CHARGE_FULL, val);
-			/* To get SOC value (NOT raw SOC), need to reset value */
-			val.intval = 0;
-			psy_do_property("sec-fuelgauge", get,
-					POWER_SUPPLY_PROP_CAPACITY, val);
-			battery->capacity = val.intval;
 		}
 		battery->charging_mode = SEC_BATTERY_CHARGING_NONE;
 		battery->is_recharging = false;
@@ -2029,8 +2039,7 @@ static void sec_bat_cable_work(struct work_struct *work)
 	queue_delayed_work(battery->monitor_wqueue, &battery->monitor_work,
 					msecs_to_jiffies(500));
 end_of_cable_work:
-	if (battery->cable_type == POWER_SUPPLY_TYPE_BATTERY)
-		wake_unlock(&battery->cable_wake_lock);
+	wake_unlock(&battery->cable_wake_lock);
 	dev_dbg(battery->dev, "%s: End\n", __func__);
 }
 
@@ -2522,6 +2531,33 @@ ssize_t sec_bat_store_attrs(
 			ret = count;
 		}
 		break;
+#if defined(CONFIG_SAMSUNG_BATTERY_ENG_TEST)
+	case BATT_TEST_CHARGE_CURRENT:
+		if (sscanf(buf, "%d\n", &x) == 1) {
+			if (x >= 0 && x <= 2000) {
+				union power_supply_propval value;
+				dev_err(battery->dev,
+					"%s: BATT_TEST_CHARGE_CURRENT(%d)\n", __func__, x);
+				battery->pdata->charging_current[
+					POWER_SUPPLY_TYPE_USB].input_current_limit = x;
+				battery->pdata->charging_current[
+					POWER_SUPPLY_TYPE_USB].fast_charging_current = x;
+				if (x > 500) {
+					battery->pdata->temp_check_type =
+						SEC_BATTERY_TEMP_CHECK_NONE;
+					battery->pdata->charging_total_time =
+						10000 * 60 * 60;
+				}
+				if (battery->cable_type == POWER_SUPPLY_TYPE_USB) {
+					value.intval = x;
+					psy_do_property("sec-charger", set,
+						POWER_SUPPLY_PROP_POWER_NOW, value);
+				}
+			}
+			ret = count;
+		}
+		break;
+#endif
 	default:
 		ret = -EINVAL;
 	}
@@ -2612,6 +2648,7 @@ static int sec_bat_set_property(struct power_supply *psy,
 				battery->extended_cable_type);
 		 } else
 			current_cable_type = val->intval;
+		sec_bat_reset_discharge(battery);
 
 		  /* if another cable is connected,
 		  * ignore wireless charing event
@@ -2677,25 +2714,19 @@ static int sec_bat_get_property(struct power_supply *psy,
 
 	switch (psp) {
 	case POWER_SUPPLY_PROP_STATUS:
-		if ((battery->health == POWER_SUPPLY_HEALTH_OVERVOLTAGE) ||
-			(battery->health == POWER_SUPPLY_HEALTH_UNDERVOLTAGE)) {
-				val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
-		} else {
-			if ((battery->pdata->cable_check_type &
-			     SEC_BATTERY_CABLE_CHECK_NOUSBCHARGE) &&
-			     !battery->pdata->is_lpm()) {
-				switch (battery->cable_type) {
-				case POWER_SUPPLY_TYPE_USB:
-				case POWER_SUPPLY_TYPE_USB_DCP:
-				case POWER_SUPPLY_TYPE_USB_CDP:
-				case POWER_SUPPLY_TYPE_USB_ACA:
-					val->intval =
-						POWER_SUPPLY_STATUS_DISCHARGING;
-					return 0;
-				}
+		if (battery->pdata->cable_check_type &
+			SEC_BATTERY_CABLE_CHECK_NOUSBCHARGE) {
+			switch (battery->cable_type) {
+			case POWER_SUPPLY_TYPE_USB:
+			case POWER_SUPPLY_TYPE_USB_DCP:
+			case POWER_SUPPLY_TYPE_USB_CDP:
+			case POWER_SUPPLY_TYPE_USB_ACA:
+				val->intval =
+					POWER_SUPPLY_STATUS_DISCHARGING;
+				return 0;
 			}
-			val->intval = battery->status;
 		}
+		val->intval = battery->status;
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
 		psy_do_property("sec-charger", get,
@@ -2734,8 +2765,6 @@ static int sec_bat_get_property(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_CURRENT_AVG:
 		val->intval = battery->current_avg;
 		break;
-	case POWER_SUPPLY_PROP_CURRENT_MAX:
-		break;
 	/* charging mode (differ from power supply) */
 	case POWER_SUPPLY_PROP_CHARGE_NOW:
 		val->intval = battery->charging_mode;
@@ -2769,12 +2798,6 @@ static int sec_usb_get_property(struct power_supply *psy,
 	if (psp != POWER_SUPPLY_PROP_ONLINE)
 		return -EINVAL;
 
-	if ((battery->health == POWER_SUPPLY_HEALTH_OVERVOLTAGE) ||
-		(battery->health == POWER_SUPPLY_HEALTH_UNDERVOLTAGE)) {
-		val->intval = 0;
-		return 0;
-	}
-
 	/* Set enable=1 only if the USB charger is connected */
 	switch (battery->cable_type) {
 	case POWER_SUPPLY_TYPE_USB:
@@ -2800,12 +2823,6 @@ static int sec_ac_get_property(struct power_supply *psy,
 
 	if (psp != POWER_SUPPLY_PROP_ONLINE)
 		return -EINVAL;
-
-	if ((battery->health == POWER_SUPPLY_HEALTH_OVERVOLTAGE) ||
-		(battery->health == POWER_SUPPLY_HEALTH_UNDERVOLTAGE)) {
-			val->intval = 0;
-			return 0;
-	}
 
 	/* Set enable=1 only if the AC charger is connected */
 	switch (battery->cable_type) {
@@ -3271,8 +3288,6 @@ static int sec_battery_prepare(struct device *dev)
 
 	battery->polling_in_sleep = true;
 
-	dev_info(battery->dev,
-			"%s: Call sec_bat_set_polling\n", __func__);
 	sec_bat_set_polling(battery);
 
 	/* cancel work for polling
