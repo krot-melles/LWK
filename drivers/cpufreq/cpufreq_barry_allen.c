@@ -74,7 +74,7 @@ static inline cputime64_t get_cpu_idle_time(unsigned int cpu, cputime64_t *wall)
 
 static int active_count;
 
-static bool ba_locked = false;
+static bool ba_locked = true;
 
 struct cpufreq_barry_allen_cpuinfo {
 	struct timer_list cpu_timer;
@@ -166,9 +166,9 @@ static bool boosted;
 #define DEFAULT_TIMER_SLACK (4 * DEFAULT_TIMER_RATE)
 static int timer_slack_val = DEFAULT_TIMER_SLACK;
 
-#define TOP_STOCK_FREQ 1900000
+#define TOP_STOCK_FREQ 1600000
 
-static bool io_is_busy;
+static bool io_is_busy = 0;
 
 /*
  * If the max load among other CPUs is higher than up_threshold_any_cpu_load

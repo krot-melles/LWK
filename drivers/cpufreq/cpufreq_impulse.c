@@ -149,13 +149,13 @@ static int timer_slack_val = DEFAULT_TIMER_RATE;
  * use_sched_load is true, this flag is ignored and windows
  * will always be aligned.
  */
-static bool align_windows = true;
+static bool align_windows = false;
 
 /*
  * Stay at max freq for at least max_freq_hysteresis before dropping
  * frequency.
  */
-static unsigned int max_freq_hysteresis = 80000;
+static unsigned int max_freq_hysteresis = 20000;
 
 /* Round to starting jiffy of next evaluation window */
 static u64 round_to_nw_start(u64 jif)
