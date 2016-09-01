@@ -81,8 +81,8 @@ static unsigned int Pdirty_expire_interval;
 
 static void drop_caches_suspend(struct work_struct *work)
 {
-	/* sleep for 5000ms */
-	msleep(5000);
+	/* sleep for 200ms */
+	msleep(200);
 
 	/* loosen writeback */
 	Pdirty_background_ratio = dirty_background_ratio;
