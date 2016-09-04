@@ -795,6 +795,14 @@ config MACH_UNIVERSAL5410
 	help
 	  Machine support for Universal board based on EXYNOS5410
 
+config FORCE_FAST_CHARGE
+	bool "Force fast charging (AC/USB) by Yank555.lu"
+	default y
+	help
+	  A simple sysfs interface to force adapters that
+	  are detected as USB to charge as AC (1A/h) or to set
+	  custom charging currents for AC and USB.
+
 comment "EXYNOS5410_CHN_CTC Boards"
 config MACH_J_CHN_CTC
 	bool "EXYNOS5410_CHN_CTC board"
@@ -812,14 +820,6 @@ config MACH_J_CHN_OPEN
 	bool "EXYNOS5410_CHN_OPEN board"
 	help
 	  Machine support for J_CHN_OPEN board based on EXYNOS5410
-
-config FORCE_FAST_CHARGE
-	bool "Force fast charging (AC/USB) by Yank555.lu"
-	default y
-	help
-	  A simple sysfs interface to force adapters that
-	  are detected as USB to charge as AC (1A/h) or to set
-	  custom charging currents for AC and USB.
 
 endif
 

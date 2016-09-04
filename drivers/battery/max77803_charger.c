@@ -16,7 +16,6 @@
 #include <linux/host_notify.h>
 #include <mach/usb3-drd.h>
 #endif
-#include <linux/fastchg.h>
 
 #define DEBUG
 
@@ -428,7 +427,7 @@ static void max77803_recovery_work(struct work_struct *work)
 		pr_info("%s: try to recovery, cnt(%d)\n", __func__,
 				(charger->soft_reg_recovery_cnt + 1));
 
-		if (screen_on_current_limit && chg_data->siop_level < 100 &&
+		if (charger->siop_level < 100 &&
 			charger->cable_type == POWER_SUPPLY_TYPE_MAINS) {
 			pr_info("%s : LCD on status and revocer current\n", __func__);
 			max77803_set_input_current(charger,
@@ -865,7 +864,7 @@ static int sec_chg_set_property(struct power_supply *psy,
 				set_charging_current_max =
 					charger->charging_current_max;
 
-			if (screen_on_current_limit && charger->siop_level < 100 &&
+			if (charger->siop_level < 100 &&
 				val->intval == POWER_SUPPLY_TYPE_MAINS) {
 				set_charging_current_max = SIOP_INPUT_LIMIT_CURRENT;
 				if (set_charging_current > SIOP_CHARGING_LIMIT_CURRENT)
@@ -930,7 +929,7 @@ static int sec_chg_set_property(struct power_supply *psy,
 				current_now = usb_charging_current;
 
 			if (charger->cable_type == POWER_SUPPLY_TYPE_MAINS) {
-				if (screen_on_current_limit && charger->siop_level < 100 )
+				if (charger->siop_level < 100 ) {
 					set_charging_current_max =
 						SIOP_INPUT_LIMIT_CURRENT;
 				} else
