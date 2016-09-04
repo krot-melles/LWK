@@ -39,6 +39,10 @@
 #include <plat/adc.h>
 #endif
 
+#ifdef CONFIG_FORCE_FAST_CHARGE
+#include <linux/fastchg.h>
+#endif
+
 #if defined(CONFIG_BATTERY_SAMSUNG)
 #include <linux/battery/sec_battery.h>
 #include <linux/battery/sec_fuelgauge.h>
@@ -265,23 +269,23 @@ static int sec_bat_get_cable_from_extended_cable_type(
 				break;
 			case ONLINE_POWER_TYPE_MHL_500:
 				cable_type = POWER_SUPPLY_TYPE_MISC;
-				charge_current_max = 400;
-				charge_current = 400;
+				charge_current_max = 500;
+				charge_current = 500;
 				break;
 			case ONLINE_POWER_TYPE_MHL_900:
 				cable_type = POWER_SUPPLY_TYPE_MISC;
-				charge_current_max = 700;
-				charge_current = 700;
+				charge_current_max = 900;
+				charge_current = 900;
 				break;
 			case ONLINE_POWER_TYPE_MHL_1500:
 				cable_type = POWER_SUPPLY_TYPE_MISC;
-				charge_current_max = 1300;
-				charge_current = 1300;
+				charge_current_max = 1500;
+				charge_current = 1500;
 				break;
 			case ONLINE_POWER_TYPE_USB:
 				cable_type = POWER_SUPPLY_TYPE_USB;
-				charge_current_max = 300;
-				charge_current = 300;
+				charge_current_max = 500;
+				charge_current = 500;
 				break;
 			default:
 				cable_type = cable_main;
@@ -295,7 +299,7 @@ static int sec_bat_get_cable_from_extended_cable_type(
 		case ONLINE_SUB_TYPE_SMART_NOTG:
 			cable_type = POWER_SUPPLY_TYPE_MAINS;
 			charge_current_max = 1900;
-			charge_current = 1600;
+			charge_current = 1800;
 			break;
 		default:
 			cable_type = cable_main;
@@ -312,6 +316,53 @@ static int sec_bat_get_cable_from_extended_cable_type(
 		is_wpc_cable_attached = true;
 	else
 		is_wpc_cable_attached = false;
+
+#ifdef CONFIG_FORCE_FAST_CHARGE
+	/* We are in basic Fast Charge mode, so we substitute AC to USB
+	   levels */
+	if (force_fast_charge == FAST_CHARGE_FORCE_AC) {
+		switch(cable_type) {
+			/* These are low current USB connections,
+			   apply 1.A level to USB */
+			case POWER_SUPPLY_TYPE_USB:
+			case POWER_SUPPLY_TYPE_USB_ACA:
+			case POWER_SUPPLY_TYPE_CARDOCK:
+			case POWER_SUPPLY_TYPE_OTG:
+				charge_current_max = USB_CHARGE_1000;
+				charge_current     = USB_CHARGE_1000;
+				break;
+
+		}
+	/* We are in advanced Fast Charge mode, so we apply custom charging
+	   levels for both AC and USB */
+	} else if (force_fast_charge == FAST_CHARGE_FORCE_CUSTOM_MA) {
+		switch(cable_type) {
+			/* These are USB connections, apply custom USB current
+			   for all of them */
+			case POWER_SUPPLY_TYPE_USB:
+			case POWER_SUPPLY_TYPE_USB_DCP:
+			case POWER_SUPPLY_TYPE_USB_CDP:
+			case POWER_SUPPLY_TYPE_USB_ACA:
+			case POWER_SUPPLY_TYPE_CARDOCK:
+			case POWER_SUPPLY_TYPE_OTG:
+				charge_current_max = usb_charge_level;
+				charge_current     = usb_charge_level;
+				break;
+			/* These are AC connections, apply custom AC current
+			   for all of them */
+			case POWER_SUPPLY_TYPE_MAINS:
+				charge_current_max = ac_charge_level;
+				/* but never go above 1.9A */
+				charge_current     =
+					min(ac_charge_level, MAX_CHARGE_LEVEL);
+				break;
+			/* Don't do anything for any other kind of connections
+			   and don't touch when type is unknown */
+			default:
+				break;
+		}
+	}
+#endif
 
 	if (charge_current_max == 0) {
 		charge_current_max =
