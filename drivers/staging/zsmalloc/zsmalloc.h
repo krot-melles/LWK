@@ -28,7 +28,7 @@ enum zs_mapmode {
 
 struct zs_pool;
 
-struct zs_pool *zs_create_pool(const char *name, gfp_t flags);
+struct zs_pool *zs_create_pool(gfp_t flags);
 void zs_destroy_pool(struct zs_pool *pool);
 
 unsigned long zs_malloc(struct zs_pool *pool, size_t size);
@@ -41,3 +41,4 @@ void zs_unmap_object(struct zs_pool *pool, unsigned long handle);
 u64 zs_get_total_size_bytes(struct zs_pool *pool);
 
 #endif
+
