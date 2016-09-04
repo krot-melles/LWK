@@ -74,3 +74,4 @@ obj-$(CONFIG_TOUCHSCREEN_TPS6507X)	+= tps6507x-ts.o
 obj-$(CONFIG_TOUCHSCREEN_MELFAS)	+= mms_ts.o
 obj-$(CONFIG_TOUCHSCREEN_ATMEL_MXTS)        += mxts.o
 obj-$(CONFIG_TOUCHSCREEN_SYNAPTICS_I2C_RMI)	+= synaptics_i2c_rmi.o rmi_dev.o rmi_fw_update.o rmi_f54.o
+obj-$(CONFIG_TOUCHSCREEN_SWEEP2WAKE) 	+= sweep2wake.o
