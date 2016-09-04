@@ -111,7 +111,7 @@ static unsigned int sampling_rate;
 #define DEFAULT_INPUT_BOOST_DURATION 50000000
 static unsigned int input_boost_duration;
 
-static unsigned int touch_poke_freq = 900000;
+static unsigned int touch_poke_freq = 600000;
 static bool touch_poke = true;
 
 /*

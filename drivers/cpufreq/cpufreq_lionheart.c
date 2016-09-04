@@ -43,13 +43,13 @@
 #include <linux/slab.h>
 
 #define DEF_FREQUENCY_UP_THRESHOLD		(90)
-#define DEF_FREQUENCY_DOWN_THRESHOLD		(60)
+#define DEF_FREQUENCY_DOWN_THRESHOLD		(70)
 #define MIN_SAMPLING_RATE_RATIO			(2)
 
 static unsigned int min_sampling_rate;
 
-#define LATENCY_MULTIPLIER			(1000)
-#define MIN_LATENCY_MULTIPLIER			(100)
+#define LATENCY_MULTIPLIER			(600)
+#define MIN_LATENCY_MULTIPLIER			(20)
 #define DEF_SAMPLING_DOWN_FACTOR		(1)
 #define MAX_SAMPLING_DOWN_FACTOR		(10)
 #define TRANSITION_LATENCY_LIMIT		(10 * 1000 * 1000)
