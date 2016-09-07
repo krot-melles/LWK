@@ -231,11 +231,6 @@ static int lmk_hotplug_callback(struct notifier_block *self,
 }
 #endif
 
-#if defined(CONFIG_ZSWAP)
-extern atomic_t zswap_pool_pages;
-extern atomic_t zswap_stored_pages;
-#endif
-
 static bool avoid_to_kill(uid_t uid)
 {
 	/* 
@@ -384,14 +379,6 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 			continue;
 		}
 		tasksize = get_mm_rss(p->mm);
-#if defined(CONFIG_ZSWAP)
-		if (atomic_read(&zswap_stored_pages)) {
-			lowmem_print(3, "shown tasksize : %d\n", tasksize);
-			tasksize += atomic_read(&zswap_pool_pages) * get_mm_counter(p->mm, MM_SWAPENTS)
-				/ atomic_read(&zswap_stored_pages);
-			lowmem_print(3, "real tasksize : %d\n", tasksize);
-		}
-#endif
 
 		task_unlock(p);
 		if (tasksize <= 0)
