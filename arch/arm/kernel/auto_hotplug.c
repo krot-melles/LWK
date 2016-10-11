@@ -68,7 +68,7 @@
  * These two are scaled based on num_online_cpus()
  */
 #define ENABLE_ALL_LOAD_THRESHOLD	600
-#define ENABLE_LOAD_THRESHOLD		150
+#define ENABLE_LOAD_THRESHOLD		300
 #define DISABLE_LOAD_THRESHOLD		90
 
 /* Control flags */
