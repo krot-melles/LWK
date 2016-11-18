@@ -110,7 +110,7 @@ module_param(lazyplug_active, uint, 0664);
 static unsigned int __read_mostly touch_boost_active = 1;
 module_param(touch_boost_active, uint, 0664);
 
-static unsigned int __read_mostly nr_run_profile_sel;
+static unsigned int __read_mostly nr_run_profile_sel = 1;
 module_param(nr_run_profile_sel, uint, 0664);
 
 /* default to something sane rather than zero */
