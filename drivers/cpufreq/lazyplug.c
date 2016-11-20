@@ -119,8 +119,8 @@ static unsigned int __read_mostly sampling_time = DEF_SAMPLING_MS;
 static int persist_count = 0;
 
 static bool __read_mostly suspended = false;
-static bool __read_mostly cac_bool = true;
-static bool __read_mostly lazymode = false;
+static bool __read_mostly cac_bool = false;
+static bool __read_mostly lazymode = true;
 
 struct ip_cpu_info {
 	unsigned int sys_max;
@@ -133,7 +133,7 @@ static DEFINE_PER_CPU(struct ip_cpu_info, ip_info);
 #define CAPACITY_RESERVE	50
 
 #if defined(CONFIG_SOC_EXYNOS5410)
-#define THREAD_CAPACITY (150 - CAPACITY_RESERVE)
+#define THREAD_CAPACITY (200 - CAPACITY_RESERVE)
 #elif defined(CONFIG_ARCH_APQ8084) || defined(CONFIG_ARM64)
 #define THREAD_CAPACITY (430 - CAPACITY_RESERVE)
 #elif defined(CONFIG_ARCH_MSM8960) || defined(CONFIG_ARCH_APQ8064) || \
@@ -196,14 +196,14 @@ static unsigned int __read_mostly *nr_run_profiles[] = {
 	nr_run_thresholds_disable,
 };
 
-#define NR_RUN_ECO_MODE_PROFILE 	4
+#define NR_RUN_ECO_MODE_PROFILE 4
 #define NR_RUN_HYSTERESIS_QUAD	8
 #define NR_RUN_HYSTERESIS_DUAL	4
 
 #define CPU_NR_THRESHOLD	((THREAD_CAPACITY << 1) + (THREAD_CAPACITY / 2))
 
 static unsigned int __read_mostly nr_possible_cores;
-module_param(nr_possible_cores, uint, 0444);
+module_param(nr_possible_cores, uint, 0664);
 
 static unsigned int __read_mostly cpu_nr_run_threshold = CPU_NR_THRESHOLD;
 module_param(cpu_nr_run_threshold, uint, 0664);
