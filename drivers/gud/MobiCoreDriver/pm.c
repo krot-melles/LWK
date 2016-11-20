@@ -181,11 +181,11 @@ int mc_pm_initialize(struct mc_context *context)
 	ret = register_pm_notifier(&mc_notif_block);
 	if (ret)
 		MCDRV_DBG_ERROR(mcd, "device pm register failed");
-#ifdef MC_BL_NOTIFIER
+/*#ifdef MC_BL_NOTIFIER
 	if (register_bL_swicher_notifier(&switcher_nb))
 		MCDRV_DBG_ERROR(mcd,
 				"Failed to register to bL_switcher_notifier");
-#endif
+#endif*/
 
 	return ret;
 }
@@ -195,11 +195,11 @@ int mc_pm_free(void)
 	int ret = unregister_pm_notifier(&mc_notif_block);
 	if (ret)
 		MCDRV_DBG_ERROR(mcd, "device pm unregister failed");
-#ifdef MC_BL_NOTIFIER
+/*#ifdef MC_BL_NOTIFIER
 	ret = unregister_bL_swicher_notifier(&switcher_nb);
 	if (ret)
 		MCDRV_DBG_ERROR(mcd, "device bl unregister failed");
-#endif
+#endif*/
 	return ret;
 }
 

@@ -52,12 +52,12 @@
  * SAMPLING_PERIODS * MIN_SAMPLING_RATE is the minimum
  * load history which will be averaged
  */
-#define SAMPLING_PERIODS	10
+#define SAMPLING_PERIODS	20
 #define INDEX_MAX_VALUE		(SAMPLING_PERIODS - 1)
 /*
  * MIN_SAMPLING_RATE is scaled based on num_online_cpus()
  */
-#define MIN_SAMPLING_RATE	200
+#define MIN_SAMPLING_RATE	20
 
 /*
  * Load defines:
@@ -67,9 +67,9 @@
  * DISABLE is the load at which a CPU is disabled
  * These two are scaled based on num_online_cpus()
  */
-#define ENABLE_ALL_LOAD_THRESHOLD	600
-#define ENABLE_LOAD_THRESHOLD		300
-#define DISABLE_LOAD_THRESHOLD		90
+#define ENABLE_ALL_LOAD_THRESHOLD	500
+#define ENABLE_LOAD_THRESHOLD		100
+#define DISABLE_LOAD_THRESHOLD		50
 
 /* Control flags */
 unsigned char flags;
@@ -94,8 +94,8 @@ static unsigned int enable_load_threshold = ENABLE_LOAD_THRESHOLD;
 static unsigned int disable_load_threshold = DISABLE_LOAD_THRESHOLD;
 static unsigned int enable_all_load_threshold = ENABLE_ALL_LOAD_THRESHOLD;
 static unsigned int min_sampling_rate = MIN_SAMPLING_RATE;
-static unsigned int min_online_cpus = 2;
-static unsigned int max_online_cpus = 4;
+static unsigned int min_online_cpus = 1;
+static unsigned int max_online_cpus = 8;
 
 module_param(debug, int, 0775);
 module_param(enable_load_threshold, int, 0775);

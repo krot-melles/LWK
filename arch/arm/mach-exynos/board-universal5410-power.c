@@ -64,7 +64,7 @@ static struct exynos_devfreq_platdata universal5410_qos_int_pd __initdata = {
 };
 #endif
 
-#ifdef CONFIG_ARM_EXYNOS_IKS_CPUFREQ
+//#ifdef CONFIG_ARM_EXYNOS_IKS_CPUFREQ
 static struct exynos_tmu_platform_data exynos5_tmu_data = {
 	.trigger_levels[0] = 90,
 	.trigger_levels[1] = 95,
@@ -112,7 +112,7 @@ static struct exynos_tmu_platform_data exynos5_tmu_data = {
 	.freq_tab_count = 3,
 	.type = SOC_ARCH_EXYNOS5,
 };
-#else
+/*#else
 static struct exynos_tmu_platform_data exynos5_tmu_data = {
 	.trigger_levels[0] = 90,
 	.trigger_levels[1] = 95,
@@ -154,7 +154,7 @@ static struct exynos_tmu_platform_data exynos5_tmu_data = {
 	.freq_tab_count = 4,
 	.type = SOC_ARCH_EXYNOS5,
 };
-#endif
+#endif*/
 
 static struct platform_device *universal5410_power_devices[] __initdata = {
 	&exynos5_device_hs_i2c1,
