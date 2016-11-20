@@ -95,7 +95,7 @@ static unsigned int disable_load_threshold = DISABLE_LOAD_THRESHOLD;
 static unsigned int enable_all_load_threshold = ENABLE_ALL_LOAD_THRESHOLD;
 static unsigned int min_sampling_rate = MIN_SAMPLING_RATE;
 static unsigned int min_online_cpus = 1;
-static unsigned int max_online_cpus = 8;
+static unsigned int max_online_cpus = 4;
 
 module_param(debug, int, 0775);
 module_param(enable_load_threshold, int, 0775);
