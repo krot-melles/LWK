@@ -120,7 +120,7 @@ static int persist_count = 0;
 
 static bool __read_mostly suspended = false;
 static bool __read_mostly cac_bool = false;
-static bool __read_mostly lazymode = true;
+static bool __read_mostly lazymode = false;
 
 struct ip_cpu_info {
 	unsigned int sys_max;
