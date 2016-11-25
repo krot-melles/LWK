@@ -171,7 +171,9 @@ struct touchkey_i2c {
 #ifdef TKEY_FLIP_MODE
 	bool enabled_flip;
 #endif
-
+#ifdef CONFIG_KEYBOARD_CYPRESS_TOUCH_POWER_KEY
+	int key_power_mode;
+#endif
 };
 
 extern struct class *sec_class;
