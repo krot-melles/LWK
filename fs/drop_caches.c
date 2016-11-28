@@ -82,7 +82,7 @@ static unsigned int Pdirty_expire_interval;
 static void drop_caches_suspend(struct work_struct *work)
 {
 	/* sleep for 200ms */
-	msleep(5000);
+	msleep(200);
 
 	/* loosen writeback */
 	Pdirty_background_ratio = dirty_background_ratio;
@@ -91,9 +91,9 @@ static void drop_caches_suspend(struct work_struct *work)
 	Pvm_dirty_bytes = vm_dirty_bytes;
 	Pdirty_expire_interval = dirty_expire_interval;
 
-	dirty_background_ratio = 0;
+	dirty_background_ratio = 70;
 	dirty_background_bytes = 1 * 1024 * 1024; /* 1MB */
-	vm_dirty_ratio = 0;
+	vm_dirty_ratio = 90;
 	vm_dirty_bytes = 1 * 1024 * 1024; /* 1MB */
 	dirty_expire_interval = 1 * 100; /* 1 second */
 
