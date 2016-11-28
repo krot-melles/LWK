@@ -29,7 +29,7 @@
 #define BASE_UP_STEP_LEVEL		1
 #define BASE_DOWN_STEP_LEVEL		1
 #define BASE_WAKE_UP_LEVEL		0
-#define DOWN_REQUIREMENT_THRESHOLD	2
+#define DOWN_REQUIREMENT_THRESHOLD	3
 #define GPU_DVFS_MAX_LEVEL		4
 #define G3D_MAX_VOLT			1000000
 
@@ -65,13 +65,13 @@ struct gpu_dvfs_data gdata[MAX_DVFS_LEVEL];
 
 int sgx_dvfs_level = -1;
 /* this value is dvfs mode- 0: auto, others: custom lock */
-int sgx_dvfs_custom_clock = 0;
-int sgx_dvfs_min_lock;
-int sgx_dvfs_max_lock;
-int sgx_dvfs_down_requirement;
+int sgx_dvfs_custom_clock = 1;
+int sgx_dvfs_min_lock = 266;
+int sgx_dvfs_max_lock = 480;
+int sgx_dvfs_down_requirement = 3;
 
-int custom_min_lock_level;
-int custom_max_lock_level;
+int custom_min_lock_level = 266;
+int custom_max_lock_level = 480;
 
 char sgx_dvfs_table_string[256]={0};
 char* sgx_dvfs_table;
