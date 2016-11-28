@@ -86,8 +86,8 @@
 #define LAZYPLUG_MAJOR_VERSION	1
 #define LAZYPLUG_MINOR_VERSION	0
 
-#define DEF_SAMPLING_MS			(250)
-#define DEF_IDLE_COUNT			(20) /* 250 * 20 = 5000, equals to 5 seconds */
+#define DEF_SAMPLING_MS			(100)
+#define DEF_IDLE_COUNT			(1) /* 100 * 1 = 100, equals to .1 seconds */
 
 #define DUAL_PERSISTENCE		(2500 / DEF_SAMPLING_MS)
 #define TRI_PERSISTENCE			(1700 / DEF_SAMPLING_MS)
@@ -110,7 +110,7 @@ module_param(lazyplug_active, uint, 0664);
 static unsigned int __read_mostly touch_boost_active = 0;
 module_param(touch_boost_active, uint, 0664);
 
-static unsigned int __read_mostly nr_run_profile_sel = 4;
+static unsigned int __read_mostly nr_run_profile_sel = 6;
 module_param(nr_run_profile_sel, uint, 0664);
 
 /* default to something sane rather than zero */
@@ -131,20 +131,7 @@ struct ip_cpu_info {
 static DEFINE_PER_CPU(struct ip_cpu_info, ip_info);
 
 #define CAPACITY_RESERVE	50
-
-#if defined(CONFIG_SOC_EXYNOS5410)
-#define THREAD_CAPACITY (300 - CAPACITY_RESERVE)
-#elif defined(CONFIG_ARCH_APQ8084) || defined(CONFIG_ARM64)
-#define THREAD_CAPACITY (430 - CAPACITY_RESERVE)
-#elif defined(CONFIG_ARCH_MSM8960) || defined(CONFIG_ARCH_APQ8064) || \
-defined(CONFIG_ARCH_MSM8974)
-#define THREAD_CAPACITY	(339 - CAPACITY_RESERVE)
-#elif defined(CONFIG_ARCH_MSM8226) || defined (CONFIG_ARCH_MSM8926) || \
-defined (CONFIG_ARCH_MSM8610) || defined (CONFIG_ARCH_MSM8228)
-#define THREAD_CAPACITY (190 - CAPACITY_RESERVE)
-#else
 #define THREAD_CAPACITY	(250 - CAPACITY_RESERVE)
-#endif
 
 #define MULT_FACTOR	4
 #define DIV_FACTOR	100000
@@ -196,7 +183,7 @@ static unsigned int __read_mostly *nr_run_profiles[] = {
 	nr_run_thresholds_disable,
 };
 
-#define NR_RUN_ECO_MODE_PROFILE 4
+#define NR_RUN_ECO_MODE_PROFILE 3
 #define NR_RUN_HYSTERESIS_QUAD	4
 #define NR_RUN_HYSTERESIS_DUAL	4
 
