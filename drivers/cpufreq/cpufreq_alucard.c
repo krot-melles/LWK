@@ -84,13 +84,13 @@ static struct alucard_tuners {
 } alucard_tuners_ins = {
 	.sampling_rate = ATOMIC_INIT(80000),
 	.inc_cpu_load_at_min_freq = ATOMIC_INIT(90),
-	.inc_cpu_load = ATOMIC_INIT(90),
+	.inc_cpu_load = ATOMIC_INIT(99),
 	.dec_cpu_load_at_min_freq = ATOMIC_INIT(80),
-	.dec_cpu_load = ATOMIC_INIT(80),
+	.dec_cpu_load = ATOMIC_INIT(89),
 #ifdef CONFIG_CPU_EXYNOS5410
-	.freq_responsiveness = ATOMIC_INIT(200000),
+	.freq_responsiveness = ATOMIC_INIT(100000),
 #else
-	.freq_responsiveness = ATOMIC_INIT(200000),
+	.freq_responsiveness = ATOMIC_INIT(100000),
 #endif
 	.pump_inc_step = ATOMIC_INIT(1),
 	.pump_dec_step = ATOMIC_INIT(3),
