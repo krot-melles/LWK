@@ -86,8 +86,8 @@
 #define LAZYPLUG_MAJOR_VERSION	1
 #define LAZYPLUG_MINOR_VERSION	0
 
-#define DEF_SAMPLING_MS			(100)
-#define DEF_IDLE_COUNT			(1) /* 100 * 1 = 100, equals to .1 seconds */
+#define DEF_SAMPLING_MS			(20)
+#define DEF_IDLE_COUNT			(1) /* 20 * 1 = 20, equals to .02 seconds */
 
 #define DUAL_PERSISTENCE		(2500 / DEF_SAMPLING_MS)
 #define TRI_PERSISTENCE			(1700 / DEF_SAMPLING_MS)
