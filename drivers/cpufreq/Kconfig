@@ -205,15 +205,5 @@ config LAZYPLUG
 	  This enables the conservative hotplugging, lazyplug by arter97
 	  based on intelli_plug. Refer to the comments for more info.
 
-config GENERIC_CPUFREQ_CPU0
-	tristate "Generic CPU0 cpufreq driver"
-	depends on HAVE_CLK && REGULATOR && PM_OPP && OF
-	select CPU_FREQ_TABLE
-	help
-	This adds a generic cpufreq driver for CPU0 frequency management.
-	It supports both uniprocessor (UP) and symmetric multiprocessor (SMP)
-	systems which share clock and voltage across all CPUs.
-	If in doubt, say N.
-
 endif
 endmenu
