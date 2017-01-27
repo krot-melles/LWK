@@ -83,8 +83,8 @@ static struct alucard_tuners {
 	atomic_t pump_dec_step;
 } alucard_tuners_ins = {
 	.sampling_rate = ATOMIC_INIT(1000000),
-	.inc_cpu_load_at_min_freq = ATOMIC_INIT(50),
-	.inc_cpu_load = ATOMIC_INIT(80),
+	.inc_cpu_load_at_min_freq = ATOMIC_INIT(80),
+	.inc_cpu_load = ATOMIC_INIT(90),
 	.dec_cpu_load_at_min_freq = ATOMIC_INIT(20),
 	.dec_cpu_load = ATOMIC_INIT(40),
 #ifdef CONFIG_CPU_EXYNOS5410
