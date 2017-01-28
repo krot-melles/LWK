@@ -33,7 +33,7 @@
  * dbs is used in this file as a shortform for demandbased switching
  * It helps to keep variable names smaller, simpler
  */
-#define B_MAX_FREQ	(2000000)
+#define B_MAX_FREQ	(1900000)
 #define L_MAX_FREQ	(650000)
 
 #define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(3)
@@ -42,8 +42,8 @@
 #define DEF_FREQUENCY_STEP_ZONE			(700000)
 #define MAX_SAMPLING_DOWN_FACTOR		(100000)
 #define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(3)
-#define MICRO_FREQUENCY_UP_THRESHOLD		(90)
-#define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(80000)
+#define MICRO_FREQUENCY_UP_THRESHOLD		(95)
+#define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(50000)
 #define MIN_FREQUENCY_UP_THRESHOLD		(10)
 #define MAX_FREQUENCY_UP_THRESHOLD		(100)
 #define MAX_FREQ_BLANK				B_MAX_FREQ
@@ -59,7 +59,7 @@
 #define MICRO_FREQUENCY_UP_THRESHOLD_L		(70)
 #define MICRO_FREQUENCY_UP_STEP_LEVEL_B		(1200000)
 #define MICRO_FREQUENCY_UP_STEP_LEVEL_L		L_MAX_FREQ
-#define MICRO_FREQUENCY_DOWN_STEP_LEVEL		(700000)
+#define MICRO_FREQUENCY_DOWN_STEP_LEVEL		(100000)
 #define MICRO_FREQUENCY_DOWN_DIFFER_L		(3)
 #define MIN_FREQUENCY_UP_STEP_LEVEL		(100000)
 #define MAX_FREQUENCY_UP_STEP_LEVEL		B_MAX_FREQ
@@ -74,11 +74,11 @@
  * this governor will not work.
  * All times here are in uS.
  */
-#define MIN_SAMPLING_RATE_RATIO			(1)
+#define MIN_SAMPLING_RATE_RATIO			(2)
 
 static unsigned int min_sampling_rate;
 
-#define LATENCY_MULTIPLIER			(800)
+#define LATENCY_MULTIPLIER			(600)
 #define MIN_LATENCY_MULTIPLIER			(20)
 #define TRANSITION_LATENCY_LIMIT		(10 * 1000 * 1000)
 
