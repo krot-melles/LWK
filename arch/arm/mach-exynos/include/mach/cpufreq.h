@@ -124,7 +124,7 @@ extern unsigned int exynos_cpufreq_direct_scale(unsigned int target_freq,
 						enum op_state state);
 extern int exynos_init_bL_info(struct cpu_info_alter *info);
 
-#ifdef CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG
+#ifdef CONFIG_HOTPLUG
 extern void dm_cpu_hotplug_init(void);
 #endif
 
