@@ -60,13 +60,13 @@ static const bool queue_idling_enabled[] = {
 
 /* Default values for row queues quantums in each dispatch cycle */
 static const int queue_quantum[] = {
-	50,	/* ROWQ_PRIO_HIGH_READ */
-	50,	/* ROWQ_PRIO_REG_READ */
-	4,	/* ROWQ_PRIO_HIGH_SWRITE */
-	2,	/* ROWQ_PRIO_REG_SWRITE */
-	2,	/* ROWQ_PRIO_REG_WRITE */
-	4,	/* ROWQ_PRIO_LOW_READ */
-	2	/* ROWQ_PRIO_LOW_SWRITE */
+	10,	/* ROWQ_PRIO_HIGH_READ */
+	100,	/* ROWQ_PRIO_REG_READ */
+	1,	/* ROWQ_PRIO_HIGH_SWRITE */
+	1,	/* ROWQ_PRIO_REG_SWRITE */
+	1,	/* ROWQ_PRIO_REG_WRITE */
+	1,	/* ROWQ_PRIO_LOW_READ */
+	1	/* ROWQ_PRIO_LOW_SWRITE */
 };
 
 /* Default values for idling on read queues */
