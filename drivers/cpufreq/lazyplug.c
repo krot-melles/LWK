@@ -87,7 +87,7 @@
 #define LAZYPLUG_MINOR_VERSION	0
 
 #define DEF_SAMPLING_MS			(20)
-#define DEF_IDLE_COUNT			(1) /* 20 * 1 = 20, equals to .02 seconds */
+#define DEF_IDLE_COUNT			(10) /* 20 * 10 = 200, equals to .2 seconds */
 
 #define DUAL_PERSISTENCE		(2500 / DEF_SAMPLING_MS)
 #define TRI_PERSISTENCE			(1700 / DEF_SAMPLING_MS)
@@ -110,7 +110,7 @@ module_param(lazyplug_active, uint, 0664);
 static unsigned int __read_mostly touch_boost_active = 0;
 module_param(touch_boost_active, uint, 0664);
 
-static unsigned int __read_mostly nr_run_profile_sel = 6;
+static unsigned int __read_mostly nr_run_profile_sel = 4;
 module_param(nr_run_profile_sel, uint, 0664);
 
 /* default to something sane rather than zero */
