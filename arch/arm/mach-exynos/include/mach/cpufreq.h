@@ -91,7 +91,7 @@ extern void exynos_thermal_unthrottle(void);
  */
 #define PERF_FACTOR		18
 
-#define b_to_L_threshold	95
+#define b_to_L_threshold	75
 
 typedef enum {
 	CA7,
