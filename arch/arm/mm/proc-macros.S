@@ -299,11 +299,7 @@ ENTRY(\name\()_processor_functions)
 ENTRY(\name\()_cache_fns)
 	.long	\name\()_flush_icache_all
 	.long	\name\()_flush_kern_cache_all
-	.if \cachelevel
-	.long	\name\()_flush_kern_dcache_level
-	.else
-	.long	\name\()_flush_kern_cache_all
-	.endif
+	.long   \name\()_flush_kern_cache_louis
 	.long	\name\()_flush_user_cache_all
 	.long	\name\()_flush_user_cache_range
 	.long	\name\()_coherent_kern_range
