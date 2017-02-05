@@ -39,7 +39,7 @@ static struct workqueue_struct *boost_rem_wq;
 static unsigned int boost_ms = 50;
 module_param(boost_ms, uint, 0644);
 
-static unsigned int sync_threshold;
+static unsigned int sync_threshold = 900000;
 module_param(sync_threshold, uint, 0644);
 /*
  * The CPUFREQ_ADJUST notifier is used to override the current policy min to
@@ -184,8 +184,8 @@ static int cpu_boost_init(void)
 		s->thread = kthread_run(boost_mig_sync_thread, (void *)cpu,
 					"boost_sync/%d", cpu);
 	}
-	atomic_notifier_chain_register(&migration_notifier_head,
-					&boost_migration_nb);
+//	atomic_notifier_chain_register(&migration_notifier_head,
+//					&boost_migration_nb);
 
 	return 0;
 }

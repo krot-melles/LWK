@@ -126,7 +126,7 @@ static uint32_t oom_count = 0;
 #define CAM_DEPTH_MAX 30
 
 /* max adj for starting camera kill - up to SERVICE B */
-#define CAM_MAX_ADJ 8
+#define CAM_MAX_ADJ 4
 
 #define REAR_MAX_COUNT 23
 #define REAR_MIN_COUNT 10
@@ -139,7 +139,7 @@ static uint32_t oom_count = 0;
 
 #endif /* CONFIG_INTERNAL_ISP_START_CAMERA */
 
-static uint32_t lowmem_debug_level = 1;
+static uint32_t lowmem_debug_level = 0;
 static int lowmem_adj[6] = {
 	0,
 	1,
